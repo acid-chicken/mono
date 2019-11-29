@@ -25,11 +25,8 @@ class NuGetBinary(Package):
         ensure_dir(os.path.dirname(launcher))
         with open(launcher, "w") as output:
             output.write("#!/bin/sh\n")
-            output.write(
-                'exec {0}/bin/mono $MONO_OPTIONS {1} "$@"\n'.format(
-                    self.staged_prefix, target
-                )
-            )
+            output.write('exec {0}/bin/mono $MONO_OPTIONS {1} "$@"\n'.format(
+                self.staged_prefix, target))
         os.chmod(launcher, 0o755)
 
 
