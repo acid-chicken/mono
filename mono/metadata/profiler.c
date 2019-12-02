@@ -26,96 +26,96 @@ typedef void (*MonoProfilerInitializer) (const char *);
 static gboolean
 load_profiler (MonoDl *module, const char *name, const char *desc)
 {
-	g_assert (module);
+    g_assert (module);
 
-	char *err, *old_name = g_strdup_printf (OLD_INITIALIZER_NAME);
-	MonoProfilerInitializer func;
+    char *err, *old_name = g_strdup_printf (OLD_INITIALIZER_NAME);
+    MonoProfilerInitializer func;
 
-	if (!(err = mono_dl_symbol (module, old_name, (gpointer*) &func))) {
-		mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Found old-style startup symbol '%s' for the '%s' profiler; it has not been migrated to the new API.", old_name, name);
-		g_free (old_name);
-		return FALSE;
-	}
+    if (!(err = mono_dl_symbol (module, old_name, (gpointer*) &func))) {
+        mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Found old-style startup symbol '%s' for the '%s' profiler; it has not been migrated to the new API.", old_name, name);
+        g_free (old_name);
+        return FALSE;
+    }
 
-	g_free (err);
-	g_free (old_name);
+    g_free (err);
+    g_free (old_name);
 
-	char *new_name = g_strdup_printf (NEW_INITIALIZER_NAME "_%s", name);
+    char *new_name = g_strdup_printf (NEW_INITIALIZER_NAME "_%s", name);
 
-	if ((err = mono_dl_symbol (module, new_name, (gpointer *) &func))) {
-		g_free (err);
-		g_free (new_name);
-		return FALSE;
-	}
+    if ((err = mono_dl_symbol (module, new_name, (gpointer *) &func))) {
+        g_free (err);
+        g_free (new_name);
+        return FALSE;
+    }
 
-	g_free (new_name);
+    g_free (new_name);
 
-	func (desc);
+    func (desc);
 
-	return TRUE;
+    return TRUE;
 }
 
 static gboolean
 load_profiler_from_executable (const char *name, const char *desc)
 {
-	char *err;
+    char *err;
 
-	/*
-	 * Some profilers (such as ours) may need to call back into the runtime
-	 * from their sampling callback (which is called in async-signal context).
-	 * They need to be able to know that all references back to the runtime
-	 * have been resolved; otherwise, calling runtime functions may result in
-	 * invoking the dynamic linker which is not async-signal-safe. Passing
-	 * MONO_DL_EAGER will ask the dynamic linker to resolve everything upfront.
-	 */
-	MonoDl *module = mono_dl_open (NULL, MONO_DL_EAGER, &err);
+    /*
+     * Some profilers (such as ours) may need to call back into the runtime
+     * from their sampling callback (which is called in async-signal context).
+     * They need to be able to know that all references back to the runtime
+     * have been resolved; otherwise, calling runtime functions may result in
+     * invoking the dynamic linker which is not async-signal-safe. Passing
+     * MONO_DL_EAGER will ask the dynamic linker to resolve everything upfront.
+     */
+    MonoDl *module = mono_dl_open (NULL, MONO_DL_EAGER, &err);
 
-	if (!module) {
-		mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Could not open main executable: %s", err);
-		g_free (err);
-		return FALSE;
-	}
+    if (!module) {
+        mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Could not open main executable: %s", err);
+        g_free (err);
+        return FALSE;
+    }
 
-	return load_profiler (module, name, desc);
+    return load_profiler (module, name, desc);
 }
 
 static gboolean
 load_profiler_from_directory (const char *directory, const char *libname, const char *name, const char *desc)
 {
-	char *path, *err;
-	void *iter = NULL;
+    char *path, *err;
+    void *iter = NULL;
 
-	while ((path = mono_dl_build_path (directory, libname, &iter))) {
-		MonoDl *module = mono_dl_open (path, MONO_DL_EAGER, &err);
+    while ((path = mono_dl_build_path (directory, libname, &iter))) {
+        MonoDl *module = mono_dl_open (path, MONO_DL_EAGER, &err);
 
-		if (!module) {
-			mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Could not open from directory \"%s\": %s", path, err);
-			g_free (err);
-			g_free (path);
-			continue;
-		}
+        if (!module) {
+            mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Could not open from directory \"%s\": %s", path, err);
+            g_free (err);
+            g_free (path);
+            continue;
+        }
 
-		g_free (path);
+        g_free (path);
 
-		return load_profiler (module, name, desc);
-	}
+        return load_profiler (module, name, desc);
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 static gboolean
 load_profiler_from_installation (const char *libname, const char *name, const char *desc)
 {
-	char *err;
-	MonoDl *module = mono_dl_open_runtime_lib (libname, MONO_DL_EAGER, &err);
+    char *err;
+    MonoDl *module = mono_dl_open_runtime_lib (libname, MONO_DL_EAGER, &err);
 
-	if (!module) {
-		mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Could not open from installation: %s", err);
-		g_free (err);
-		return FALSE;
-	}
+    if (!module) {
+        mono_trace (G_LOG_LEVEL_DEBUG, MONO_TRACE_PROFILER, "Could not open from installation: %s", err);
+        g_free (err);
+        return FALSE;
+    }
 
-	return load_profiler (module, name, desc);
+    return load_profiler (module, name, desc);
 }
 
 /**
@@ -143,40 +143,40 @@ load_profiler_from_installation (const char *libname, const char *name, const ch
 void
 mono_profiler_load (const char *desc)
 {
-	const char *col;
-	char *mname, *libname;
+    const char *col;
+    char *mname, *libname;
 
-	mname = libname = NULL;
+    mname = libname = NULL;
 
-	if (!desc || !strcmp ("default", desc))
-		desc = "log:report";
+    if (!desc || !strcmp ("default", desc))
+        desc = "log:report";
 
-	if ((col = strchr (desc, ':')) != NULL) {
-		mname = (char *) g_memdup (desc, col - desc + 1);
-		mname [col - desc] = 0;
-	} else {
-		mname = g_strdup (desc);
-	}
+    if ((col = strchr (desc, ':')) != NULL) {
+        mname = (char *) g_memdup (desc, col - desc + 1);
+        mname [col - desc] = 0;
+    } else {
+        mname = g_strdup (desc);
+    }
 
-	if (load_profiler_from_executable (mname, desc))
-		goto done;
+    if (load_profiler_from_executable (mname, desc))
+        goto done;
 
-	libname = g_strdup_printf ("mono-profiler-%s", mname);
+    libname = g_strdup_printf ("mono-profiler-%s", mname);
 
-	if (load_profiler_from_installation (libname, mname, desc))
-		goto done;
+    if (load_profiler_from_installation (libname, mname, desc))
+        goto done;
 
-	if (mono_config_get_assemblies_dir () && load_profiler_from_directory (mono_assembly_getrootdir (), libname, mname, desc))
-		goto done;
+    if (mono_config_get_assemblies_dir () && load_profiler_from_directory (mono_assembly_getrootdir (), libname, mname, desc))
+        goto done;
 
-	if (load_profiler_from_directory (NULL, libname, mname, desc))
-		goto done;
+    if (load_profiler_from_directory (NULL, libname, mname, desc))
+        goto done;
 
-	mono_trace (G_LOG_LEVEL_CRITICAL, MONO_TRACE_PROFILER, "The '%s' profiler wasn't found in the main executable nor could it be loaded from '%s'.", mname, libname);
+    mono_trace (G_LOG_LEVEL_CRITICAL, MONO_TRACE_PROFILER, "The '%s' profiler wasn't found in the main executable nor could it be loaded from '%s'.", mname, libname);
 
 done:
-	g_free (mname);
-	g_free (libname);
+    g_free (mname);
+    g_free (libname);
 }
 
 /**
@@ -209,14 +209,14 @@ done:
 MonoProfilerHandle
 mono_profiler_create (MonoProfiler *prof)
 {
-	MonoProfilerHandle handle = g_new0 (struct _MonoProfilerDesc, 1);
+    MonoProfilerHandle handle = g_new0 (struct _MonoProfilerDesc, 1);
 
-	handle->prof = prof;
-	handle->next = mono_profiler_state.profilers;
+    handle->prof = prof;
+    handle->next = mono_profiler_state.profilers;
 
-	mono_profiler_state.profilers = handle;
+    mono_profiler_state.profilers = handle;
 
-	return handle;
+    return handle;
 }
 
 /**
@@ -232,7 +232,7 @@ mono_profiler_create (MonoProfiler *prof)
 void
 mono_profiler_set_cleanup_callback (MonoProfilerHandle handle, MonoProfilerCleanupCallback cb)
 {
-	mono_atomic_store_ptr (&handle->cleanup_callback, (gpointer) cb);
+    mono_atomic_store_ptr (&handle->cleanup_callback, (gpointer) cb);
 }
 
 /**
@@ -252,16 +252,16 @@ mono_profiler_set_cleanup_callback (MonoProfilerHandle handle, MonoProfilerClean
 mono_bool
 mono_profiler_enable_coverage (void)
 {
-	if (mono_profiler_state.startup_done)
-		return FALSE;
+    if (mono_profiler_state.startup_done)
+        return FALSE;
 
-	mono_os_mutex_init (&mono_profiler_state.coverage_mutex);
-	mono_profiler_state.coverage_hash = g_hash_table_new (NULL, NULL);
+    mono_os_mutex_init (&mono_profiler_state.coverage_mutex);
+    mono_profiler_state.coverage_hash = g_hash_table_new (NULL, NULL);
 
-	if (!mono_debug_enabled ())
-		mono_debug_init (MONO_DEBUG_FORMAT_MONO);
+    if (!mono_debug_enabled ())
+        mono_debug_init (MONO_DEBUG_FORMAT_MONO);
 
-	return mono_profiler_state.code_coverage = TRUE;
+    return mono_profiler_state.code_coverage = TRUE;
 }
 
 /**
@@ -282,19 +282,19 @@ mono_profiler_enable_coverage (void)
 void
 mono_profiler_set_coverage_filter_callback (MonoProfilerHandle handle, MonoProfilerCoverageFilterCallback cb)
 {
-	mono_atomic_store_ptr (&handle->coverage_filter, (gpointer) cb);
+    mono_atomic_store_ptr (&handle->coverage_filter, (gpointer) cb);
 }
 
 static void
 coverage_lock (void)
 {
-	mono_os_mutex_lock (&mono_profiler_state.coverage_mutex);
+    mono_os_mutex_lock (&mono_profiler_state.coverage_mutex);
 }
 
 static void
 coverage_unlock (void)
 {
-	mono_os_mutex_unlock (&mono_profiler_state.coverage_mutex);
+    mono_os_mutex_unlock (&mono_profiler_state.coverage_mutex);
 }
 
 /**
@@ -313,137 +313,137 @@ coverage_unlock (void)
 mono_bool
 mono_profiler_get_coverage_data (MonoProfilerHandle handle, MonoMethod *method, MonoProfilerCoverageCallback cb)
 {
-	if (!mono_profiler_state.code_coverage)
-		return FALSE;
+    if (!mono_profiler_state.code_coverage)
+        return FALSE;
 
-	if ((method->flags & METHOD_ATTRIBUTE_ABSTRACT) || (method->iflags & METHOD_IMPL_ATTRIBUTE_RUNTIME) || (method->iflags & METHOD_IMPL_ATTRIBUTE_INTERNAL_CALL) || (method->flags & METHOD_ATTRIBUTE_PINVOKE_IMPL))
-		return FALSE;
+    if ((method->flags & METHOD_ATTRIBUTE_ABSTRACT) || (method->iflags & METHOD_IMPL_ATTRIBUTE_RUNTIME) || (method->iflags & METHOD_IMPL_ATTRIBUTE_INTERNAL_CALL) || (method->flags & METHOD_ATTRIBUTE_PINVOKE_IMPL))
+        return FALSE;
 
-	coverage_lock ();
+    coverage_lock ();
 
-	MonoProfilerCoverageInfo *info = (MonoProfilerCoverageInfo*)g_hash_table_lookup (mono_profiler_state.coverage_hash, method);
+    MonoProfilerCoverageInfo *info = (MonoProfilerCoverageInfo*)g_hash_table_lookup (mono_profiler_state.coverage_hash, method);
 
-	coverage_unlock ();
+    coverage_unlock ();
 
-	MonoMethodHeaderSummary header;
+    MonoMethodHeaderSummary header;
 
-	g_assert (mono_method_get_header_summary (method, &header));
+    g_assert (mono_method_get_header_summary (method, &header));
 
-	guint32 size = header.code_size;
-	const unsigned char *start = header.code;
-	const unsigned char *end = start + size;
-	MonoDebugMethodInfo *minfo = mono_debug_lookup_method (method);
+    guint32 size = header.code_size;
+    const unsigned char *start = header.code;
+    const unsigned char *end = start + size;
+    MonoDebugMethodInfo *minfo = mono_debug_lookup_method (method);
 
-	if (!info) {
-		int i, n_il_offsets;
-		int *source_files;
-		GPtrArray *source_file_list;
-		MonoSymSeqPoint *sym_seq_points;
+    if (!info) {
+        int i, n_il_offsets;
+        int *source_files;
+        GPtrArray *source_file_list;
+        MonoSymSeqPoint *sym_seq_points;
 
-		if (!minfo)
-			return TRUE;
+        if (!minfo)
+            return TRUE;
 
-		/* Return 0 counts for all locations */
+        /* Return 0 counts for all locations */
 
-		mono_debug_get_seq_points (minfo, NULL, &source_file_list, &source_files, &sym_seq_points, &n_il_offsets);
-		for (i = 0; i < n_il_offsets; ++i) {
-			MonoSymSeqPoint *sp = &sym_seq_points [i];
-			const char *srcfile = "";
+        mono_debug_get_seq_points (minfo, NULL, &source_file_list, &source_files, &sym_seq_points, &n_il_offsets);
+        for (i = 0; i < n_il_offsets; ++i) {
+            MonoSymSeqPoint *sp = &sym_seq_points [i];
+            const char *srcfile = "";
 
-			if (source_files [i] != -1) {
-				MonoDebugSourceInfo *sinfo = (MonoDebugSourceInfo *)g_ptr_array_index (source_file_list, source_files [i]);
-				srcfile = sinfo->source_file;
-			}
+            if (source_files [i] != -1) {
+                MonoDebugSourceInfo *sinfo = (MonoDebugSourceInfo *)g_ptr_array_index (source_file_list, source_files [i]);
+                srcfile = sinfo->source_file;
+            }
 
-			MonoProfilerCoverageData data;
-			memset (&data, 0, sizeof (data));
-			data.method = method;
-			data.il_offset = sp->il_offset;
-			data.counter = 0;
-			data.file_name = srcfile;
-			data.line = sp->line;
-			data.column = 0;
+            MonoProfilerCoverageData data;
+            memset (&data, 0, sizeof (data));
+            data.method = method;
+            data.il_offset = sp->il_offset;
+            data.counter = 0;
+            data.file_name = srcfile;
+            data.line = sp->line;
+            data.column = 0;
 
-			cb (handle->prof, &data);
-		}
+            cb (handle->prof, &data);
+        }
 
-		g_free (source_files);
-		g_free (sym_seq_points);
-		g_ptr_array_free (source_file_list, TRUE);
+        g_free (source_files);
+        g_free (sym_seq_points);
+        g_ptr_array_free (source_file_list, TRUE);
 
-		return TRUE;
-	}
+        return TRUE;
+    }
 
-	for (guint32 i = 0; i < info->entries; i++) {
-		guchar *cil_code = info->data [i].cil_code;
+    for (guint32 i = 0; i < info->entries; i++) {
+        guchar *cil_code = info->data [i].cil_code;
 
-		if (cil_code && cil_code >= start && cil_code < end) {
-			guint32 offset = cil_code - start;
+        if (cil_code && cil_code >= start && cil_code < end) {
+            guint32 offset = cil_code - start;
 
-			MonoProfilerCoverageData data;
-			memset (&data, 0, sizeof (data));
-			data.method = method;
-			data.il_offset = offset;
-			data.counter = info->data [i].count;
-			data.line = 1;
-			data.column = 1;
+            MonoProfilerCoverageData data;
+            memset (&data, 0, sizeof (data));
+            data.method = method;
+            data.il_offset = offset;
+            data.counter = info->data [i].count;
+            data.line = 1;
+            data.column = 1;
 
-			if (minfo) {
-				MonoDebugSourceLocation *loc = mono_debug_method_lookup_location (minfo, offset);
+            if (minfo) {
+                MonoDebugSourceLocation *loc = mono_debug_method_lookup_location (minfo, offset);
 
-				if (loc) {
-					data.file_name = g_strdup (loc->source_file);
-					data.line = loc->row;
-					data.column = loc->column;
+                if (loc) {
+                    data.file_name = g_strdup (loc->source_file);
+                    data.line = loc->row;
+                    data.column = loc->column;
 
-					mono_debug_free_source_location (loc);
-				}
-			}
+                    mono_debug_free_source_location (loc);
+                }
+            }
 
-			cb (handle->prof, &data);
+            cb (handle->prof, &data);
 
-			g_free ((char *) data.file_name);
-		}
-	}
+            g_free ((char *) data.file_name);
+        }
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 gboolean
 mono_profiler_coverage_instrumentation_enabled (MonoMethod *method)
 {
-	gboolean cover = FALSE;
+    gboolean cover = FALSE;
 
-	for (MonoProfilerHandle handle = mono_profiler_state.profilers; handle; handle = handle->next) {
-		MonoProfilerCoverageFilterCallback cb = (MonoProfilerCoverageFilterCallback)handle->coverage_filter;
+    for (MonoProfilerHandle handle = mono_profiler_state.profilers; handle; handle = handle->next) {
+        MonoProfilerCoverageFilterCallback cb = (MonoProfilerCoverageFilterCallback)handle->coverage_filter;
 
-		if (cb)
-			cover |= cb (handle->prof, method);
-	}
+        if (cb)
+            cover |= cb (handle->prof, method);
+    }
 
-	return cover;
+    return cover;
 }
 
 MonoProfilerCoverageInfo *
 mono_profiler_coverage_alloc (MonoMethod *method, guint32 entries)
 {
-	if (!mono_profiler_state.code_coverage)
-		return NULL;
+    if (!mono_profiler_state.code_coverage)
+        return NULL;
 
-	if (!mono_profiler_coverage_instrumentation_enabled (method))
-		return NULL;
+    if (!mono_profiler_coverage_instrumentation_enabled (method))
+        return NULL;
 
-	coverage_lock ();
+    coverage_lock ();
 
-	MonoProfilerCoverageInfo *info = g_malloc0 (sizeof (MonoProfilerCoverageInfo) + sizeof (MonoProfilerCoverageInfoEntry) * entries);
+    MonoProfilerCoverageInfo *info = g_malloc0 (sizeof (MonoProfilerCoverageInfo) + sizeof (MonoProfilerCoverageInfoEntry) * entries);
 
-	info->entries = entries;
+    info->entries = entries;
 
-	g_hash_table_insert (mono_profiler_state.coverage_hash, method, info);
+    g_hash_table_insert (mono_profiler_state.coverage_hash, method, info);
 
-	coverage_unlock ();
+    coverage_unlock ();
 
-	return info;
+    return info;
 }
 
 /**
@@ -468,18 +468,18 @@ mono_profiler_coverage_alloc (MonoMethod *method, guint32 entries)
 mono_bool
 mono_profiler_enable_sampling (MonoProfilerHandle handle)
 {
-	if (mono_profiler_state.startup_done)
-		return FALSE;
+    if (mono_profiler_state.startup_done)
+        return FALSE;
 
-	if (mono_profiler_state.sampling_owner)
-		return TRUE;
+    if (mono_profiler_state.sampling_owner)
+        return TRUE;
 
-	mono_profiler_state.sampling_owner = handle;
-	mono_profiler_state.sample_mode = MONO_PROFILER_SAMPLE_MODE_NONE;
-	mono_profiler_state.sample_freq = 100;
-	mono_os_sem_init (&mono_profiler_state.sampling_semaphore, 0);
+    mono_profiler_state.sampling_owner = handle;
+    mono_profiler_state.sample_mode = MONO_PROFILER_SAMPLE_MODE_NONE;
+    mono_profiler_state.sample_freq = 100;
+    mono_os_sem_init (&mono_profiler_state.sampling_semaphore, 0);
 
-	return TRUE;
+    return TRUE;
 }
 
 /**
@@ -495,15 +495,15 @@ mono_profiler_enable_sampling (MonoProfilerHandle handle)
 mono_bool
 mono_profiler_set_sample_mode (MonoProfilerHandle handle, MonoProfilerSampleMode mode, uint32_t freq)
 {
-	if (handle != mono_profiler_state.sampling_owner)
-		return FALSE;
+    if (handle != mono_profiler_state.sampling_owner)
+        return FALSE;
 
-	mono_profiler_state.sample_mode = mode;
-	mono_profiler_state.sample_freq = freq;
+    mono_profiler_state.sample_mode = mode;
+    mono_profiler_state.sample_freq = freq;
 
-	mono_profiler_sampling_thread_post ();
+    mono_profiler_sampling_thread_post ();
 
-	return TRUE;
+    return TRUE;
 }
 
 /**
@@ -518,31 +518,31 @@ mono_profiler_set_sample_mode (MonoProfilerHandle handle, MonoProfilerSampleMode
 mono_bool
 mono_profiler_get_sample_mode (MonoProfilerHandle handle, MonoProfilerSampleMode *mode, uint32_t *freq)
 {
-	if (mode)
-		*mode = mono_profiler_state.sample_mode;
+    if (mode)
+        *mode = mono_profiler_state.sample_mode;
 
-	if (freq)
-		*freq = mono_profiler_state.sample_freq;
+    if (freq)
+        *freq = mono_profiler_state.sample_freq;
 
-	return handle == mono_profiler_state.sampling_owner;
+    return handle == mono_profiler_state.sampling_owner;
 }
 
 gboolean
 mono_profiler_sampling_enabled (void)
 {
-	return !!mono_profiler_state.sampling_owner;
+    return !!mono_profiler_state.sampling_owner;
 }
 
 void
 mono_profiler_sampling_thread_post (void)
 {
-	mono_os_sem_post (&mono_profiler_state.sampling_semaphore);
+    mono_os_sem_post (&mono_profiler_state.sampling_semaphore);
 }
 
 void
 mono_profiler_sampling_thread_wait (void)
 {
-	mono_os_sem_wait (&mono_profiler_state.sampling_semaphore, MONO_SEM_FLAGS_NONE);
+    mono_os_sem_wait (&mono_profiler_state.sampling_semaphore, MONO_SEM_FLAGS_NONE);
 }
 
 /**
@@ -562,10 +562,10 @@ mono_profiler_sampling_thread_wait (void)
 mono_bool
 mono_profiler_enable_allocations (void)
 {
-	if (mono_profiler_state.startup_done)
-		return FALSE;
+    if (mono_profiler_state.startup_done)
+        return FALSE;
 
-	return mono_profiler_state.allocations = TRUE;
+    return mono_profiler_state.allocations = TRUE;
 }
 
 /**
@@ -585,10 +585,10 @@ mono_profiler_enable_allocations (void)
 mono_bool
 mono_profiler_enable_clauses (void)
 {
-	if (mono_profiler_state.startup_done)
-		return FALSE;
+    if (mono_profiler_state.startup_done)
+        return FALSE;
 
-	return mono_profiler_state.clauses = TRUE;
+    return mono_profiler_state.clauses = TRUE;
 }
 
 /**
@@ -619,7 +619,7 @@ mono_profiler_enable_clauses (void)
 void
 mono_profiler_set_call_instrumentation_filter_callback (MonoProfilerHandle handle, MonoProfilerCallInstrumentationFilterCallback cb)
 {
-	mono_atomic_store_ptr (&handle->call_instrumentation_filter, (gpointer) cb);
+    mono_atomic_store_ptr (&handle->call_instrumentation_filter, (gpointer) cb);
 }
 
 /**
@@ -640,12 +640,12 @@ mono_profiler_set_call_instrumentation_filter_callback (MonoProfilerHandle handl
 mono_bool
 mono_profiler_enable_call_context_introspection (void)
 {
-	if (mono_profiler_state.startup_done)
-		return FALSE;
+    if (mono_profiler_state.startup_done)
+        return FALSE;
 
-	mono_profiler_state.context_enable ();
+    mono_profiler_state.context_enable ();
 
-	return mono_profiler_state.call_contexts = TRUE;
+    return mono_profiler_state.call_contexts = TRUE;
 }
 
 /**
@@ -666,10 +666,10 @@ mono_profiler_enable_call_context_introspection (void)
 void *
 mono_profiler_call_context_get_this (MonoProfilerCallContext *context)
 {
-	if (!mono_profiler_state.call_contexts)
-		return NULL;
+    if (!mono_profiler_state.call_contexts)
+        return NULL;
 
-	return mono_profiler_state.context_get_this (context);
+    return mono_profiler_state.context_get_this (context);
 }
 
 /**
@@ -690,10 +690,10 @@ mono_profiler_call_context_get_this (MonoProfilerCallContext *context)
 void *
 mono_profiler_call_context_get_argument (MonoProfilerCallContext *context, uint32_t position)
 {
-	if (!mono_profiler_state.call_contexts)
-		return NULL;
+    if (!mono_profiler_state.call_contexts)
+        return NULL;
 
-	return mono_profiler_state.context_get_argument (context, position);
+    return mono_profiler_state.context_get_argument (context, position);
 }
 
 /**
@@ -714,10 +714,10 @@ mono_profiler_call_context_get_argument (MonoProfilerCallContext *context, uint3
 void *
 mono_profiler_call_context_get_local (MonoProfilerCallContext *context, uint32_t position)
 {
-	if (!mono_profiler_state.call_contexts)
-		return NULL;
+    if (!mono_profiler_state.call_contexts)
+        return NULL;
 
-	return mono_profiler_state.context_get_local (context, position);
+    return mono_profiler_state.context_get_local (context, position);
 }
 
 /**
@@ -740,10 +740,10 @@ mono_profiler_call_context_get_local (MonoProfilerCallContext *context, uint32_t
 void *
 mono_profiler_call_context_get_result (MonoProfilerCallContext *context)
 {
-	if (!mono_profiler_state.call_contexts)
-		return NULL;
+    if (!mono_profiler_state.call_contexts)
+        return NULL;
 
-	return mono_profiler_state.context_get_result (context);
+    return mono_profiler_state.context_get_result (context);
 }
 
 /**
@@ -758,7 +758,7 @@ mono_profiler_call_context_get_result (MonoProfilerCallContext *context)
 void
 mono_profiler_call_context_free_buffer (void *buffer)
 {
-	mono_profiler_state.context_free_buffer (buffer);
+    mono_profiler_state.context_free_buffer (buffer);
 }
 
 G_ENUM_FUNCTIONS (MonoProfilerCallInstrumentationFlags)
@@ -766,28 +766,28 @@ G_ENUM_FUNCTIONS (MonoProfilerCallInstrumentationFlags)
 MonoProfilerCallInstrumentationFlags
 mono_profiler_get_call_instrumentation_flags (MonoMethod *method)
 {
-	MonoProfilerCallInstrumentationFlags flags = MONO_PROFILER_CALL_INSTRUMENTATION_NONE;
+    MonoProfilerCallInstrumentationFlags flags = MONO_PROFILER_CALL_INSTRUMENTATION_NONE;
 
-	for (MonoProfilerHandle handle = mono_profiler_state.profilers; handle; handle = handle->next) {
-		MonoProfilerCallInstrumentationFilterCallback cb = (MonoProfilerCallInstrumentationFilterCallback)handle->call_instrumentation_filter;
+    for (MonoProfilerHandle handle = mono_profiler_state.profilers; handle; handle = handle->next) {
+        MonoProfilerCallInstrumentationFilterCallback cb = (MonoProfilerCallInstrumentationFilterCallback)handle->call_instrumentation_filter;
 
-		if (cb)
-			flags |= cb (handle->prof, method);
-	}
+        if (cb)
+            flags |= cb (handle->prof, method);
+    }
 
-	return flags;
+    return flags;
 }
 
 void
 mono_profiler_started (void)
 {
-	mono_profiler_state.startup_done = TRUE;
+    mono_profiler_state.startup_done = TRUE;
 }
 
 void
 mono_profiler_cleanup (void)
 {
-	for (MonoProfilerHandle handle = mono_profiler_state.profilers; handle; handle = handle->next) {
+    for (MonoProfilerHandle handle = mono_profiler_state.profilers; handle; handle = handle->next) {
 #define _MONO_PROFILER_EVENT(name) \
 	mono_profiler_set_ ## name ## _callback (handle, NULL); \
 	g_assert (!handle->name ## _cb);
@@ -811,7 +811,7 @@ mono_profiler_cleanup (void)
 #undef MONO_PROFILER_EVENT_4
 #undef MONO_PROFILER_EVENT_5
 #undef _MONO_PROFILER_EVENT
-	}
+    }
 
 #define _MONO_PROFILER_EVENT(name, type) \
 	g_assert (!mono_profiler_state.name ## _count);
@@ -836,62 +836,62 @@ mono_profiler_cleanup (void)
 #undef MONO_PROFILER_EVENT_5
 #undef _MONO_PROFILER_EVENT
 
-	MonoProfilerHandle head = mono_profiler_state.profilers;
+    MonoProfilerHandle head = mono_profiler_state.profilers;
 
-	while (head) {
-		MonoProfilerCleanupCallback cb = (MonoProfilerCleanupCallback)head->cleanup_callback;
+    while (head) {
+        MonoProfilerCleanupCallback cb = (MonoProfilerCleanupCallback)head->cleanup_callback;
 
-		if (cb)
-			cb (head->prof);
+        if (cb)
+            cb (head->prof);
 
-		MonoProfilerHandle cur = head;
-		head = head->next;
+        MonoProfilerHandle cur = head;
+        head = head->next;
 
-		g_free (cur);
-	}
+        g_free (cur);
+    }
 
-	if (mono_profiler_state.code_coverage) {
-		mono_os_mutex_destroy (&mono_profiler_state.coverage_mutex);
+    if (mono_profiler_state.code_coverage) {
+        mono_os_mutex_destroy (&mono_profiler_state.coverage_mutex);
 
-		GHashTableIter iter;
+        GHashTableIter iter;
 
-		g_hash_table_iter_init (&iter, mono_profiler_state.coverage_hash);
+        g_hash_table_iter_init (&iter, mono_profiler_state.coverage_hash);
 
-		MonoProfilerCoverageInfo *info;
+        MonoProfilerCoverageInfo *info;
 
-		while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &info))
-			g_free (info);
+        while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &info))
+            g_free (info);
 
-		g_hash_table_destroy (mono_profiler_state.coverage_hash);
-	}
+        g_hash_table_destroy (mono_profiler_state.coverage_hash);
+    }
 
-	if (mono_profiler_state.sampling_owner)
-		mono_os_sem_destroy (&mono_profiler_state.sampling_semaphore);
+    if (mono_profiler_state.sampling_owner)
+        mono_os_sem_destroy (&mono_profiler_state.sampling_semaphore);
 }
 
 static void
 update_callback (volatile gpointer *location, gpointer new_, volatile gint32 *counter)
 {
-	gpointer old;
+    gpointer old;
 
-	do {
-		old = mono_atomic_load_ptr (location);
-	} while (mono_atomic_cas_ptr (location, new_, old) != old);
+    do {
+        old = mono_atomic_load_ptr (location);
+    } while (mono_atomic_cas_ptr (location, new_, old) != old);
 
-	/*
-	 * At this point, we could have installed a NULL callback while the counter
-	 * is still non-zero, i.e. setting the callback and modifying the counter
-	 * is not a single atomic operation. This is fine as we make sure callbacks
-	 * are non-NULL before invoking them (see the code below that generates the
-	 * raise functions), and besides, updating callbacks at runtime is an
-	 * inherently racy operation.
-	 */
+    /*
+     * At this point, we could have installed a NULL callback while the counter
+     * is still non-zero, i.e. setting the callback and modifying the counter
+     * is not a single atomic operation. This is fine as we make sure callbacks
+     * are non-NULL before invoking them (see the code below that generates the
+     * raise functions), and besides, updating callbacks at runtime is an
+     * inherently racy operation.
+     */
 
-	if (old)
-		mono_atomic_dec_i32 (counter);
+    if (old)
+        mono_atomic_dec_i32 (counter);
 
-	if (new_)
-		mono_atomic_inc_i32 (counter);
+    if (new_)
+        mono_atomic_inc_i32 (counter);
 }
 
 #define _MONO_PROFILER_EVENT(name, type) \
@@ -955,19 +955,19 @@ update_callback (volatile gpointer *location, gpointer new_, volatile gint32 *co
 
 
 struct _MonoProfiler {
-	MonoProfilerHandle handle;
-	MonoLegacyProfiler *profiler;
-	MonoLegacyProfileFunc shutdown_callback;
-	MonoLegacyProfileThreadFunc thread_start, thread_end;
-	MonoLegacyProfileGCFunc gc_event;
-	MonoLegacyProfileGCResizeFunc gc_heap_resize;
-	MonoLegacyProfileJitResult jit_end2;
-	MonoLegacyProfileAllocFunc allocation;
-	MonoLegacyProfileMethodFunc enter;
-	MonoLegacyProfileMethodFunc leave;
-	MonoLegacyProfileExceptionFunc throw_callback;
-	MonoLegacyProfileMethodFunc exc_method_leave;
-	MonoLegacyProfileExceptionClauseFunc clause_callback;
+    MonoProfilerHandle handle;
+    MonoLegacyProfiler *profiler;
+    MonoLegacyProfileFunc shutdown_callback;
+    MonoLegacyProfileThreadFunc thread_start, thread_end;
+    MonoLegacyProfileGCFunc gc_event;
+    MonoLegacyProfileGCResizeFunc gc_heap_resize;
+    MonoLegacyProfileJitResult jit_end2;
+    MonoLegacyProfileAllocFunc allocation;
+    MonoLegacyProfileMethodFunc enter;
+    MonoLegacyProfileMethodFunc leave;
+    MonoLegacyProfileExceptionFunc throw_callback;
+    MonoLegacyProfileMethodFunc exc_method_leave;
+    MonoLegacyProfileExceptionClauseFunc clause_callback;
 };
 
 static MonoProfiler *current;
@@ -975,179 +975,179 @@ static MonoProfiler *current;
 static void
 shutdown_cb (MonoProfiler *prof)
 {
-	prof->shutdown_callback (prof->profiler);
+    prof->shutdown_callback (prof->profiler);
 }
 
 void
 mono_profiler_install (MonoLegacyProfiler *prof, MonoLegacyProfileFunc callback)
 {
-	current = g_new0 (MonoProfiler, 1);
-	current->handle = mono_profiler_create (current);
-	current->profiler = prof;
-	current->shutdown_callback = callback;
+    current = g_new0 (MonoProfiler, 1);
+    current->handle = mono_profiler_create (current);
+    current->profiler = prof;
+    current->shutdown_callback = callback;
 
-	if (callback)
-		mono_profiler_set_runtime_shutdown_end_callback (current->handle, shutdown_cb);
+    if (callback)
+        mono_profiler_set_runtime_shutdown_end_callback (current->handle, shutdown_cb);
 }
 
 static void
 thread_start_cb (MonoProfiler *prof, uintptr_t tid)
 {
-	prof->thread_start (prof->profiler, tid);
+    prof->thread_start (prof->profiler, tid);
 }
 
 static void
 thread_stop_cb (MonoProfiler *prof, uintptr_t tid)
 {
-	prof->thread_end (prof->profiler, tid);
+    prof->thread_end (prof->profiler, tid);
 }
 
 void
 mono_profiler_install_thread (MonoLegacyProfileThreadFunc start, MonoLegacyProfileThreadFunc end)
 {
-	current->thread_start = start;
-	current->thread_end = end;
+    current->thread_start = start;
+    current->thread_end = end;
 
-	if (start)
-		mono_profiler_set_thread_started_callback (current->handle, thread_start_cb);
+    if (start)
+        mono_profiler_set_thread_started_callback (current->handle, thread_start_cb);
 
-	if (end)
-		mono_profiler_set_thread_stopped_callback (current->handle, thread_stop_cb);
+    if (end)
+        mono_profiler_set_thread_stopped_callback (current->handle, thread_stop_cb);
 }
 
 static void
 gc_event_cb (MonoProfiler *prof, MonoProfilerGCEvent event, uint32_t generation, gboolean is_serial)
 {
-	prof->gc_event (prof->profiler, event, generation);
+    prof->gc_event (prof->profiler, event, generation);
 }
 
 static void
 gc_resize_cb (MonoProfiler *prof, uintptr_t size)
 {
-	prof->gc_heap_resize (prof->profiler, size);
+    prof->gc_heap_resize (prof->profiler, size);
 }
 
 void
 mono_profiler_install_gc (MonoLegacyProfileGCFunc callback, MonoLegacyProfileGCResizeFunc heap_resize_callback)
 {
-	current->gc_event = callback;
-	current->gc_heap_resize = heap_resize_callback;
+    current->gc_event = callback;
+    current->gc_heap_resize = heap_resize_callback;
 
-	if (callback)
-		mono_profiler_set_gc_event_callback (current->handle, gc_event_cb);
+    if (callback)
+        mono_profiler_set_gc_event_callback (current->handle, gc_event_cb);
 
-	if (heap_resize_callback)
-		mono_profiler_set_gc_resize_callback (current->handle, gc_resize_cb);
+    if (heap_resize_callback)
+        mono_profiler_set_gc_resize_callback (current->handle, gc_resize_cb);
 }
 
 static void
 jit_done_cb (MonoProfiler *prof, MonoMethod *method, MonoJitInfo *jinfo)
 {
-	prof->jit_end2 (prof->profiler, method, jinfo, 0);
+    prof->jit_end2 (prof->profiler, method, jinfo, 0);
 }
 
 static void
 jit_failed_cb (MonoProfiler *prof, MonoMethod *method)
 {
-	prof->jit_end2 (prof->profiler, method, NULL, 1);
+    prof->jit_end2 (prof->profiler, method, NULL, 1);
 }
 
 void
 mono_profiler_install_jit_end (MonoLegacyProfileJitResult end)
 {
-	current->jit_end2 = end;
+    current->jit_end2 = end;
 
-	if (end) {
-		mono_profiler_set_jit_done_callback (current->handle, jit_done_cb);
-		mono_profiler_set_jit_failed_callback (current->handle, jit_failed_cb);
-	}
+    if (end) {
+        mono_profiler_set_jit_done_callback (current->handle, jit_done_cb);
+        mono_profiler_set_jit_failed_callback (current->handle, jit_failed_cb);
+    }
 }
 
 void
 mono_profiler_set_events (int flags)
 {
-	/* Do nothing. */
+    /* Do nothing. */
 }
 
 static void
 allocation_cb (MonoProfiler *prof, MonoObject* object)
 {
-	prof->allocation (prof->profiler, object, object->vtable->klass);
+    prof->allocation (prof->profiler, object, object->vtable->klass);
 }
 
 void
 mono_profiler_install_allocation (MonoLegacyProfileAllocFunc callback)
 {
-	current->allocation = callback;
+    current->allocation = callback;
 
-	if (callback)
-		mono_profiler_set_gc_allocation_callback (current->handle, allocation_cb);
+    if (callback)
+        mono_profiler_set_gc_allocation_callback (current->handle, allocation_cb);
 }
 
 static void
 enter_cb (MonoProfiler *prof, MonoMethod *method, MonoProfilerCallContext *context)
 {
-	prof->enter (prof->profiler, method);
+    prof->enter (prof->profiler, method);
 }
 
 static void
 leave_cb (MonoProfiler *prof, MonoMethod *method, MonoProfilerCallContext *context)
 {
-	prof->leave (prof->profiler, method);
+    prof->leave (prof->profiler, method);
 }
 
 static void
 tail_call_cb (MonoProfiler *prof, MonoMethod *method, MonoMethod *target)
 {
-	prof->leave (prof->profiler, method);
+    prof->leave (prof->profiler, method);
 }
 
 void
 mono_profiler_install_enter_leave (MonoLegacyProfileMethodFunc enter, MonoLegacyProfileMethodFunc fleave)
 {
-	current->enter = enter;
-	current->leave = fleave;
+    current->enter = enter;
+    current->leave = fleave;
 
-	if (enter)
-		mono_profiler_set_method_enter_callback (current->handle, enter_cb);
+    if (enter)
+        mono_profiler_set_method_enter_callback (current->handle, enter_cb);
 
-	if (fleave) {
-		mono_profiler_set_method_leave_callback (current->handle, leave_cb);
-		mono_profiler_set_method_tail_call_callback (current->handle, tail_call_cb);
-	}
+    if (fleave) {
+        mono_profiler_set_method_leave_callback (current->handle, leave_cb);
+        mono_profiler_set_method_tail_call_callback (current->handle, tail_call_cb);
+    }
 }
 
 static void
 throw_callback_cb (MonoProfiler *prof, MonoObject *exception)
 {
-	prof->throw_callback (prof->profiler, exception);
+    prof->throw_callback (prof->profiler, exception);
 }
 
 static void
 exc_method_leave_cb (MonoProfiler *prof, MonoMethod *method, MonoObject *exception)
 {
-	prof->exc_method_leave (prof->profiler, method);
+    prof->exc_method_leave (prof->profiler, method);
 }
 
 static void
 clause_callback_cb (MonoProfiler *prof, MonoMethod *method, uint32_t index, MonoExceptionEnum type, MonoObject *exception)
 {
-	prof->clause_callback (prof->profiler, method, type, index);
+    prof->clause_callback (prof->profiler, method, type, index);
 }
 
 void
 mono_profiler_install_exception (MonoLegacyProfileExceptionFunc throw_callback, MonoLegacyProfileMethodFunc exc_method_leave, MonoLegacyProfileExceptionClauseFunc clause_callback)
 {
-	current->throw_callback = throw_callback;
-	current->exc_method_leave = exc_method_leave;
-	current->clause_callback = clause_callback;
+    current->throw_callback = throw_callback;
+    current->exc_method_leave = exc_method_leave;
+    current->clause_callback = clause_callback;
 
-	if (throw_callback)
-		mono_profiler_set_exception_throw_callback (current->handle, throw_callback_cb);
+    if (throw_callback)
+        mono_profiler_set_exception_throw_callback (current->handle, throw_callback_cb);
 
-	if (exc_method_leave)
-		mono_profiler_set_method_exception_leave_callback (current->handle, exc_method_leave_cb);
+    if (exc_method_leave)
+        mono_profiler_set_method_exception_leave_callback (current->handle, exc_method_leave_cb);
 
-	if (clause_callback)
-		mono_profiler_set_exception_clause_callback (current->handle, clause_callback_cb);
+    if (clause_callback)
+        mono_profiler_set_exception_clause_callback (current->handle, clause_callback_cb);
 }
