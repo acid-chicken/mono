@@ -4,19 +4,19 @@
 
 DIE=0
 
-srcdir=`dirname $0`
+srcdir=`dirname "$0"`
 test -z "$srcdir" && srcdir=.
 
 if [ -n "$MONO_PATH" ]; then
 	# from -> /mono/lib:/another/mono/lib
 	# to -> /mono /another/mono
-	for i in `echo ${MONO_PATH} | tr ":" " "`; do
-		i=`dirname ${i}`
-		if [ -n "{i}" -a -d "${i}/share/aclocal" ]; then
-			ACLOCAL_FLAGS="-I ${i}/share/aclocal $ACLOCAL_FLAGS"
+	for i in "$(echo "$MONO_PATH" | tr ":" " ")"; do
+		i=`dirname "$i"`
+		if [ -n "{i}" -a -d "$i/share/aclocal" ]; then
+			ACLOCAL_FLAGS="-I $i/share/aclocal $ACLOCAL_FLAGS"
 		fi
-		if [ -n "{i}" -a -d "${i}/bin" ]; then
-			PATH="${i}/bin:$PATH"
+		if [ -n "{i}" -a -d "$i/bin" ]; then
+			PATH="$i/bin:$PATH"
 		fi
 	done
 	export PATH
@@ -37,8 +37,8 @@ if [ -z "$LIBTOOLIZE" ]; then
   fi
 fi
 
-(grep "^AM_PROG_LIBTOOL" $srcdir/configure.ac >/dev/null) && {
-  ($LIBTOOLIZE --version) < /dev/null > /dev/null 2>&1 || {
+(grep "^AM_PROG_LIBTOOL" "$srcdir"/configure.ac >/dev/null) && {
+  ("$LIBTOOLIZE" --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`libtoolize' installed to compile Mono."
     echo "Get ftp://ftp.gnu.org/gnu/libtool/libtool-1.2.tar.gz"
@@ -47,8 +47,8 @@ fi
   }
 }
 
-grep "^AM_GNU_GETTEXT" $srcdir/configure.ac >/dev/null && {
-  grep "sed.*POTFILES" $srcdir/configure.ac >/dev/null || \
+grep "^AM_GNU_GETTEXT" "$srcdir"/configure.ac >/dev/null && {
+  grep "sed.*POTFILES" "$srcdir"/configure.ac >/dev/null || \
   (gettext --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`gettext' installed to compile Mono."
@@ -82,10 +82,10 @@ if test "$DIE" -eq 1; then
   exit 1
 fi
 
-if test x$NOCONFIGURE = x && test -z "$*"; then
+if test x"$NOCONFIGURE" = x && test -z "$*"; then
   echo "**Warning**: I am going to run \`configure' with no arguments."
   echo "If you wish to pass any to it, please specify them on the"
-  echo \`$0\'" command line."
+  echo \`"$0"\'" command line."
   echo
 fi
 
@@ -100,7 +100,7 @@ esac
 if grep "^AM_PROG_LIBTOOL" configure.ac >/dev/null; then
   if test -z "$NO_LIBTOOLIZE" ; then 
     echo "Running libtoolize..."
-    $LIBTOOLIZE --force --copy
+    "$LIBTOOLIZE" --force --copy
   fi
 fi
 
@@ -112,7 +112,7 @@ for PARAM; do
     if [[ $PARAM =~ "--enable-extension-module" ]] ; then
         has_ext_mod=true
         if [[ $PARAM =~ "=" ]] ; then
-            ext_mod_args=`echo $PARAM | cut -d= -f2`
+            ext_mod_args=`echo "$PARAM" | cut -d= -f2`
         fi
     fi
     if [[ $PARAM =~ "--disable-boehm" ]] ; then
@@ -123,9 +123,9 @@ done
 #
 # Plug in the extension module
 #
-if test x$has_ext_mod = xtrue; then
-	pushd $top_srcdir../mono-extensions/scripts
-	sh ./prepare-repo.sh $ext_mod_args || exit 1
+if test x"$has_ext_mod" = xtrue; then
+	pushd "$top_srcdir"../mono-extensions/scripts
+	sh ./prepare-repo.sh "$ext_mod_args" || exit 1
 	popd
 else
 	cat mono/mini/Makefile.am.in > mono/mini/Makefile.am
@@ -133,7 +133,7 @@ fi
 
 
 echo "Running aclocal -I m4 -I . $ACLOCAL_FLAGS ..."
-aclocal -Wnone -I m4 -I . $ACLOCAL_FLAGS || {
+aclocal -Wnone -I m4 -I . "$ACLOCAL_FLAGS" || {
   echo
   echo "**Error**: aclocal failed. This may mean that you have not"
   echo "installed all of the packages you need, or you may need to"
@@ -149,23 +149,23 @@ if grep "^AC_CONFIG_HEADERS" configure.ac >/dev/null; then
 fi
 
 echo "Running automake $am_opt ..."
-automake $am_opt ||
+automake "$am_opt" ||
   { echo "**Error**: automake failed."; exit 1; }
 echo "Running autoconf ..."
 autoconf || { echo "**Error**: autoconf failed."; exit 1; }
 
 # Update all submodules recursively to ensure everything is checked out
-if test -e $srcdir/scripts/update_submodules.sh; then
-  (cd $srcdir && scripts/update_submodules.sh)
+if test -e "$srcdir"/scripts/update_submodules.sh; then
+  (cd "$srcdir" && scripts/update_submodules.sh)
 fi
 
-if test x$has_disable_boehm = xfalse -a -d $srcdir/external/bdwgc; then
+if test x"$has_disable_boehm" = xfalse -a -d "$srcdir"/external/bdwgc; then
   echo Running external/bdwgc/autogen.sh ...
-  (cd $srcdir/external/bdwgc ; NOCONFIGURE=1 ./autogen.sh "$@")
+  (cd "$srcdir"/external/bdwgc ; NOCONFIGURE=1 ./autogen.sh "$@")
   echo Done running external/bdwgc/autogen.sh ...
 fi
 
-if test x$MONO_EXTRA_CONFIGURE_FLAGS != x; then
+if test x"$MONO_EXTRA_CONFIGURE_FLAGS" != x; then
 	echo "MONO_EXTRA_CONFIGURE_FLAGS is $MONO_EXTRA_CONFIGURE_FLAGS"
 fi
 
@@ -183,10 +183,10 @@ esac
 
 conf_flags="$MONO_EXTRA_CONFIGURE_FLAGS --enable-maintainer-mode --enable-compile-warnings $host_conf_flag" #--enable-iso-c
 
-if test x$NOCONFIGURE = x; then
-  echo Running $srcdir/configure $conf_flags "$@" ...
-  $srcdir/configure $conf_flags "$@" \
-  && echo Now type \`make\' to compile $PKG_NAME || exit 1
+if test x"$NOCONFIGURE" = x; then
+  echo Running "$srcdir"/configure "$conf_flags" "$@" ...
+  "$srcdir"/configure "$conf_flags" "$@" \
+  && echo Now type \`make\' to compile "$PKG_NAME" || exit 1
 else
   echo Skipping configure process.
 fi
