@@ -22,7 +22,7 @@ MONO_BEGIN_DECLS
 typedef mono_bool (*MonoThreadManageCallback) (MonoThread* thread);
 
 MONO_API void mono_thread_init (MonoThreadStartCB start_cb,
-			      MonoThreadAttachCB attach_cb);
+                                MonoThreadAttachCB attach_cb);
 MONO_API void mono_thread_cleanup (void);
 MONO_API MONO_RT_EXTERNAL_ONLY
 void mono_thread_manage(void);
@@ -35,7 +35,7 @@ MONO_API MonoThread *mono_thread_get_main (void);
 MONO_API MONO_RT_EXTERNAL_ONLY void mono_thread_stop (MonoThread *thread);
 
 MONO_API void mono_thread_new_init (intptr_t tid, void* stack_start,
-				  void* func);
+                                    void* func);
 
 MONO_API MONO_RT_EXTERNAL_ONLY void
 mono_thread_create (MonoDomain *domain, void* func, void* arg);
