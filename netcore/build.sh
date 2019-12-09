@@ -125,13 +125,13 @@ fi
 
 # run .././autogen.sh only once or if "--rebuild" argument is provided
 if [[ "$force_rebuild" == "true" || ! -f .configured ]]; then
-  (cd .. && ./autogen.sh --with-core=only $autogen_params CFLAGS="$EXTRA_CFLAGS" CXXFLAGS="$EXTRA_CXXFLAGS") || (Write-PipelineTelemetryError -c "configure" -e 1 "Error running autogen" && exit 1)
+  (cd .. && ./autogen.sh --with-core=only "$autogen_params" CFLAGS="$EXTRA_CFLAGS" CXXFLAGS="$EXTRA_CXXFLAGS") || (Write-PipelineTelemetryError -c "configure" -e 1 "Error running autogen" && exit 1)
   touch .configured
 fi
 
 # build mono runtime
 if [ "$skipnative" = "false" ]; then
-  make runtime -j$CPU_COUNT || (Write-PipelineTelemetryError -c "runtime" -e 1 "Error building unmanaged runtime" && exit 1)
+  make runtime -j"$CPU_COUNT" || (Write-PipelineTelemetryError -c "runtime" -e 1 "Error building unmanaged runtime" && exit 1)
 fi
 
 # build System.Private.CoreLib (../mcs/class/System.Private.CoreLib)
