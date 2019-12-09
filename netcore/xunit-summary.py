@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-
-import xml.etree.ElementTree as ET
-import os
 import glob
 import ntpath
+import os
 import sys
+import xml.etree.ElementTree as ET
 
 if len(sys.argv) < 1:
     print("Usage: xunit-summary.py <path to xunit results (*.xml)>")
