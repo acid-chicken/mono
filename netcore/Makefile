@@ -97,7 +97,7 @@ patch-app: prepare
 	@if test -z "$(APP_PATH)"; then echo "APP_PATH is not set"; exit 1; fi
 	cp NuGet.config $(APP_PATH)
 	cd $(APP_PATH) && $(DOTNET) publish -c Release -r $(RID) -f netcoreapp3.0
-	cp ../mono/mini/.libs/libmonosgen-2.0$(PLATFORM_AOT_SUFFIX) $(APP_PATH)/bin/Release/netcoreapp3.0/$(RID)/publish/$(PLATFORM_AOT_PREFIX)coreclr$(PLATFORM_AOT_SUFFIX)	
+	cp ../mono/mini/.libs/libmonosgen-2.0$(PLATFORM_AOT_SUFFIX) $(APP_PATH)/bin/Release/netcoreapp3.0/$(RID)/publish/$(PLATFORM_AOT_PREFIX)coreclr$(PLATFORM_AOT_SUFFIX)
 	cp System.Private.CoreLib/bin/$(COREARCH)/System.Private.CoreLib.dll $(APP_PATH)/bin/Release/netcoreapp3.0/$(RID)/publish
 	cp System.Private.CoreLib/bin/$(COREARCH)/System.Private.CoreLib.pdb $(APP_PATH)/bin/Release/netcoreapp3.0/$(RID)/publish
 
@@ -137,7 +137,7 @@ run-sample-local-dotnet-llvm: patch-local-dotnet
 	$(DOTNET) sample/HelloWorld/bin/netcoreapp3.0/HelloWorld.dll
 	$(DOTNET) sample/HelloWorld/bin/netcoreapp3.0/HelloWorld.dll
 
-# COREHOST_TRACE=1 
+# COREHOST_TRACE=1
 SHAREDRUNTIME := shared/Microsoft.NETCore.App/$(NETCOREAPP_VERSION)
 
 System.Private.CoreLib/src/System/Environment.Mono.cs: System.Private.CoreLib/src/System/Environment.Mono.in config.make
@@ -307,7 +307,7 @@ dump-asm-lib: patch-local-dotnet
 	$(OBJDUMP) "$(DUMPASM_LIB)$(PLATFORM_AOT_SUFFIX)" > "$(DUMPASM_OUT)/$(notdir $(DUMPASM_LIB))$(PLATFORM_AOT_SUFFIX).dasm"
 
 # Generate asm diffs, a typical workflow may look like this:
-# 
+#
 #   make dump-asm-bcl DUMPASM_OUT=dumps/before-my-jit-fix
 # (apply some runtime changes)
 #   make runtime

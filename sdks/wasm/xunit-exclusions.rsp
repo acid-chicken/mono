@@ -91,7 +91,7 @@
 -nomethod System.Data.Tests.DataColumnCollectionTest2.Indexer2
 
 # System.Numerics
-# Crashes in GC 
+# Crashes in GC
 -nomethod System.Numerics.Tests.BigIntegerConstructorTest.RunCtorByteArrayTests
 
 # System.Net.Http.UnitTests
