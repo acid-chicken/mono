@@ -13,8 +13,7 @@ cd "${BASH_SOURCE%/*}/"
 # Include VSTS logging helpers
 . ../eng/common/pipeline-logging-functions.sh
 
-usage()
-{
+usage() {
   echo "Common settings:"
   echo "  --configuration <value>    Build configuration: 'Debug' or 'Release' (short: -c)"
   echo "  --help                     Print help and exit (short: -h)"
@@ -51,11 +50,11 @@ ci=false
 while [[ $# > 0 ]]; do
   opt="$(echo "${1/#--/-}" | awk '{print tolower($0)}')"
   case "$opt" in
-    -help|-h)
+    -help | -h)
       usage
       exit 0
       ;;
-    -configuration|-c)
+    -configuration | -c)
       properties="$properties $1 $2"
       configuration=$2
       shift
@@ -63,7 +62,7 @@ while [[ $# > 0 ]]; do
     -pack)
       pack=true
       ;;
-    -test|-t)
+    -test | -t)
       test=true
       ;;
     -interpreter)
@@ -86,16 +85,16 @@ while [[ $# > 0 ]]; do
     -ci)
       ci=true
       ;;
-    -p:*|/p:*)
+    -p:* | /p:*)
       properties="$properties $1"
       ;;
-    -m:*|/m:*)
+    -m:* | /m:*)
       properties="$properties $1"
       ;;
-    -bl:*|/bl:*)
+    -bl:* | /bl:*)
       properties="$properties $1"
       ;;
-    -dl:*|/dl:*)
+    -dl:* | /dl:*)
       properties="$properties $1"
       ;;
     *)

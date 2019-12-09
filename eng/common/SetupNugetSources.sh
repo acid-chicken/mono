@@ -4,7 +4,7 @@
 # This file should be removed as part of this issue: https://github.com/dotnet/arcade/issues/4080
 #
 # What the script does is iterate over all package sources in the pointed NuGet.config and add a credential entry
-# under <packageSourceCredentials> for each Maestro's managed private feed. Two additional credential 
+# under <packageSourceCredentials> for each Maestro's managed private feed. Two additional credential
 # entries are also added for the two private static internal feeds: dotnet3-internal and dotnet3-internal-transport.
 #
 # This script needs to be called in every job that will restore packages and which the base repo has
@@ -30,51 +30,51 @@ TB='    '
 source="${BASH_SOURCE[0]}"
 
 # resolve $source until the file is no longer a symlink
-while [[ -h "$source" ]]; do
-  scriptroot="$( cd -P "$( dirname "$source" )" && pwd )"
+while [[ -L "$source" ]]; do
+  scriptroot="$(cd -P "$(dirname "$source")" && pwd)"
   source="$(readlink "$source")"
   # if $source was a relative symlink, we need to resolve it relative to the path where the
   # symlink file was located
   [[ $source != /* ]] && source="$scriptroot/$source"
 done
-scriptroot="$( cd -P "$( dirname "$source" )" && pwd )"
+scriptroot="$(cd -P "$(dirname "$source")" && pwd)"
 
 . "$scriptroot/tools.sh"
 
 if [ ! -f "$ConfigFile" ]; then
-    Write-PipelineTelemetryError -Category 'Build' "Error: Eng/common/SetupNugetSources.sh returned a non-zero exit code. Couldn't find the NuGet config file: $ConfigFile"
-    ExitWithExitCode 1
+  Write-PipelineTelemetryError -Category 'Build' "Error: Eng/common/SetupNugetSources.sh returned a non-zero exit code. Couldn't find the NuGet config file: $ConfigFile"
+  ExitWithExitCode 1
 fi
 
 if [ -z "$CredToken" ]; then
-    Write-PipelineTelemetryError -category 'Build' "Error: Eng/common/SetupNugetSources.sh returned a non-zero exit code. Please supply a valid PAT"
-    ExitWithExitCode 1
+  Write-PipelineTelemetryError -category 'Build' "Error: Eng/common/SetupNugetSources.sh returned a non-zero exit code. Please supply a valid PAT"
+  ExitWithExitCode 1
 fi
 
-if [[ `uname -s` == "Darwin" ]]; then
-    NL=$'\\\n'
-    TB=''
+if [[ $(uname -s) == "Darwin" ]]; then
+  NL=$'\\\n'
+  TB=''
 fi
 
 # Ensure there is a <packageSources>...</packageSources> section.
 grep -i "<packageSources>" "$ConfigFile"
 if [ "$?" != "0" ]; then
-    echo "Adding <packageSources>...</packageSources> section."
-    ConfigNodeHeader="<configuration>"
-    PackageSourcesTemplate="$TB<packageSources>$NL$TB</packageSources>"
+  echo "Adding <packageSources>...</packageSources> section."
+  ConfigNodeHeader="<configuration>"
+  PackageSourcesTemplate="$TB<packageSources>$NL$TB</packageSources>"
 
-    sed -i.bak "s|$ConfigNodeHeader|$ConfigNodeHeader$NL$PackageSourcesTemplate|" NuGet.config
+  sed -i.bak "s|$ConfigNodeHeader|$ConfigNodeHeader$NL$PackageSourcesTemplate|" NuGet.config
 fi
 
-# Ensure there is a <packageSourceCredentials>...</packageSourceCredentials> section. 
+# Ensure there is a <packageSourceCredentials>...</packageSourceCredentials> section.
 grep -i "<packageSourceCredentials>" "$ConfigFile"
 if [ "$?" != "0" ]; then
-    echo "Adding <packageSourceCredentials>...</packageSourceCredentials> section."
+  echo "Adding <packageSourceCredentials>...</packageSourceCredentials> section."
 
-    PackageSourcesNodeFooter="</packageSources>"
-    PackageSourceCredentialsTemplate="$TB<packageSourceCredentials>$NL$TB</packageSourceCredentials>"
+  PackageSourcesNodeFooter="</packageSources>"
+  PackageSourceCredentialsTemplate="$TB<packageSourceCredentials>$NL$TB</packageSourceCredentials>"
 
-    sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourcesNodeFooter$NL$PackageSourceCredentialsTemplate|" NuGet.config
+  sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourcesNodeFooter$NL$PackageSourceCredentialsTemplate|" NuGet.config
 fi
 
 PackageSources=()
@@ -83,49 +83,49 @@ PackageSources=()
 grep -i "<add key=\"dotnet3\"" "$ConfigFile"
 
 if [ "$?" == "0" ]; then
-    grep -i "<add key=\"dotnet3-internal\">" "$ConfigFile"
-    if [ "$?" != "0" ]; then
-        echo "Adding dotnet3-internal to the packageSources."
-        PackageSourcesNodeFooter="</packageSources>"
-        PackageSourceTemplate="$TB<add key=\"dotnet3-internal\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3-internal/nuget/v2\" />"
+  grep -i "<add key=\"dotnet3-internal\">" "$ConfigFile"
+  if [ "$?" != "0" ]; then
+    echo "Adding dotnet3-internal to the packageSources."
+    PackageSourcesNodeFooter="</packageSources>"
+    PackageSourceTemplate="$TB<add key=\"dotnet3-internal\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3-internal/nuget/v2\" />"
 
-        sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
-    fi
-    PackageSources+=('dotnet3-internal')
+    sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
+  fi
+  PackageSources+=('dotnet3-internal')
 
-    grep -i "<add key=\"dotnet3-internal-transport\"" "$ConfigFile"
-    if [ "$?" != "0" ]; then
-        echo "Adding dotnet3-internal-transport to the packageSources."
-        PackageSourcesNodeFooter="</packageSources>"
-        PackageSourceTemplate="$TB<add key=\"dotnet3-internal-transport\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3-internal-transport/nuget/v2\" />"
+  grep -i "<add key=\"dotnet3-internal-transport\"" "$ConfigFile"
+  if [ "$?" != "0" ]; then
+    echo "Adding dotnet3-internal-transport to the packageSources."
+    PackageSourcesNodeFooter="</packageSources>"
+    PackageSourceTemplate="$TB<add key=\"dotnet3-internal-transport\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3-internal-transport/nuget/v2\" />"
 
-        sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
-    fi
-    PackageSources+=('dotnet3-internal-transport')
+    sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
+  fi
+  PackageSources+=('dotnet3-internal-transport')
 fi
 
 # Ensure dotnet3.1-internal and dotnet3.1-internal-transport are in the packageSources if the public dotnet3.1 feeds are present
 grep -i "<add key=\"dotnet3.1\"" "$ConfigFile"
 if [ "$?" == "0" ]; then
-    grep -i "<add key=\"dotnet3.1-internal\"" "$ConfigFile"
-    if [ "$?" != "0" ]; then
-        echo "Adding dotnet3.1-internal to the packageSources."
-        PackageSourcesNodeFooter="</packageSources>"
-        PackageSourceTemplate="$TB<add key=\"dotnet3.1-internal\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3.1-internal/nuget/v2\" />"
+  grep -i "<add key=\"dotnet3.1-internal\"" "$ConfigFile"
+  if [ "$?" != "0" ]; then
+    echo "Adding dotnet3.1-internal to the packageSources."
+    PackageSourcesNodeFooter="</packageSources>"
+    PackageSourceTemplate="$TB<add key=\"dotnet3.1-internal\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3.1-internal/nuget/v2\" />"
 
-        sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
-    fi
-    PackageSources+=('dotnet3.1-internal')
+    sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
+  fi
+  PackageSources+=('dotnet3.1-internal')
 
-    grep -i "<add key=\"dotnet3.1-internal-transport\">" "$ConfigFile"
-    if [ "$?" != "0" ]; then
-        echo "Adding dotnet3.1-internal-transport to the packageSources."
-        PackageSourcesNodeFooter="</packageSources>"
-        PackageSourceTemplate="$TB<add key=\"dotnet3.1-internal-transport\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3.1-internal-transport/nuget/v2\" />"
+  grep -i "<add key=\"dotnet3.1-internal-transport\">" "$ConfigFile"
+  if [ "$?" != "0" ]; then
+    echo "Adding dotnet3.1-internal-transport to the packageSources."
+    PackageSourcesNodeFooter="</packageSources>"
+    PackageSourceTemplate="$TB<add key=\"dotnet3.1-internal-transport\" value=\"https://pkgs.dev.azure.com/dnceng/_packaging/dotnet3.1-internal-transport/nuget/v2\" />"
 
-        sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
-    fi
-    PackageSources+=('dotnet3.1-internal-transport')
+    sed -i.bak "s|$PackageSourcesNodeFooter|$PackageSourceTemplate$NL$PackageSourcesNodeFooter|" "$ConfigFile"
+  fi
+  PackageSources+=('dotnet3.1-internal-transport')
 fi
 
 # I want things split line by line
@@ -135,15 +135,15 @@ PackageSources+="$IFS"
 PackageSources+=$(grep -oh '"darc-int-[^"]*"' "$ConfigFile" | tr -d '"')
 IFS=$PrevIFS
 
-for FeedName in "${PackageSources[@]}" ; do
-    # Check if there is no existing credential for this FeedName
-    grep -i "<$FeedName>" "$ConfigFile" 
-    if [ "$?" != "0" ]; then
-        echo "Adding credentials for $FeedName."
+for FeedName in "${PackageSources[@]}"; do
+  # Check if there is no existing credential for this FeedName
+  grep -i "<$FeedName>" "$ConfigFile"
+  if [ "$?" != "0" ]; then
+    echo "Adding credentials for $FeedName."
 
-        PackageSourceCredentialsNodeFooter="</packageSourceCredentials>"
-        NewCredential="$TB$TB<$FeedName>$NL<add key=\"Username\" value=\"dn-bot\" />$NL<add key=\"ClearTextPassword\" value=\"$CredToken\" />$NL</$FeedName>"
+    PackageSourceCredentialsNodeFooter="</packageSourceCredentials>"
+    NewCredential="$TB$TB<$FeedName>$NL<add key=\"Username\" value=\"dn-bot\" />$NL<add key=\"ClearTextPassword\" value=\"$CredToken\" />$NL</$FeedName>"
 
-        sed -i.bak "s|$PackageSourceCredentialsNodeFooter|$NewCredential$NL$PackageSourceCredentialsNodeFooter|" "$ConfigFile"
-    fi
+    sed -i.bak "s|$PackageSourceCredentialsNodeFooter|$NewCredential$NL$PackageSourceCredentialsNodeFooter|" "$ConfigFile"
+  fi
 done
