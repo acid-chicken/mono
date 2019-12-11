@@ -100,7 +100,7 @@ CFLAGS_FOR_BTLS=$CFLAGS
 CFLAGS_FOR_LIBGC="$CFLAGS -Wno-deprecated-declarations"
 
 #
-# These are the flags that need to be stored in the mono.pc file for 
+# These are the flags that need to be stored in the mono.pc file for
 # compiling code that will embed Mono
 #
 libmono_cflags=""
@@ -976,7 +976,7 @@ fi
 AC_SUBST([mcs_topdir])
 AC_SUBST([mcs_topdir_from_srcdir])
 
-# gettext: prepare the translation directories. 
+# gettext: prepare the translation directories.
 # we do not configure the full gettext, as we consume it dynamically from C#
 AM_PO_SUBDIRS
 
@@ -1015,7 +1015,7 @@ AC_SUBST([WERROR_CFLAGS])
 AC_SUBST([SHARED_CFLAGS])
 
 GLIB_CFLAGS='-I$(top_srcdir)/mono/eglib -I$(top_builddir)/mono/eglib'
-  
+
 AC_SUBST(GLIB_CFLAGS)
 
 # Enable support for fast thread-local storage
@@ -1467,7 +1467,7 @@ elif test x$with_runtime_preset = xfullaot_llvm; then
 elif test x$with_runtime_preset = xhybridaot; then
    DISABLE_MCS_DOCS_default=yes
    with_testing_aot_hybrid_default=yes
-   TEST_PROFILE=testing_aot_hybrid 
+   TEST_PROFILE=testing_aot_hybrid
 
    AOT_BUILD_FLAGS="--runtime=mobile --aot=hybrid,$INVARIANT_AOT_OPTIONS"
    AOT_RUN_FLAGS="--runtime=mobile --hybrid-aot"
@@ -2290,7 +2290,7 @@ if test x$host_win32 = xno; then
 	dnl ****************************************************************
 	AC_MSG_CHECKING(for sched_setaffinity from glibc < 2.3.4)
 	AC_TRY_COMPILE([#include <sched.h>], [
-            int mask = 1; 
+            int mask = 1;
             sched_setaffinity(0, &mask);
 	], [
 		# Yes, we have it...
@@ -2314,7 +2314,7 @@ if test x$host_win32 = xno; then
 	dnl *** Check for large file support                               ***
 	dnl *** (If we were using autoconf 2.50 we'd use AC_SYS_LARGEFILE) ***
 	dnl ******************************************************************
-	
+
 	# Check that off_t can represent 2**63 - 1 correctly, working around
 	# potential compiler bugs.  Defines LARGE_FILE_SUPPORT, adds $1 to
 	# CPPFLAGS and sets $large_offt to yes if the test succeeds
@@ -2350,7 +2350,7 @@ if test x$host_win32 = xno; then
 	if test $large_offt = no; then
 		AC_MSG_WARN([No 64 bit file size support available])
 	fi
-	
+
 	dnl *****************************
 	dnl *** Checks for libsocket  ***
 	dnl *****************************
@@ -2565,7 +2565,7 @@ if test x$host_win32 = xno; then
 			AC_MSG_RESULT(no)
 		])
 	])
-	
+
 	dnl **********************************
 	dnl *** Check for getaddrinfo ***
 	dnl **********************************
@@ -2789,7 +2789,7 @@ if test x$host_win32 = xno; then
 			#if defined(__APPLE__) && defined(__clang__)
 			#error "__thread does not currently work with clang on Mac OS X"
 			#endif
-			
+
 			#include <unistd.h>
 			#include <pthread.h>
 			__thread int i;
@@ -2941,9 +2941,9 @@ if test x$host_win32 = xno; then
 	# 'Real Time' functions on Solaris
 	# posix4 on Solaris 2.6
 	# pthread (first!) on Linux
-	AC_SEARCH_LIBS(sem_init, pthread rt posix4) 
+	AC_SEARCH_LIBS(sem_init, pthread rt posix4)
 
-	AC_SEARCH_LIBS(shm_open, pthread rt posix4) 
+	AC_SEARCH_LIBS(shm_open, pthread rt posix4)
 	AC_CHECK_FUNCS(shm_open)
 
 	dnl ********************************
@@ -3008,9 +3008,9 @@ if test x$host_win32 = xno; then
 	dnl **************************************
 	dnl * Darwin has a race that prevents us from using reliably:
 	dnl * http://lists.apple.com/archives/darwin-dev/2011/Jun/msg00016.html
-	dnl * Since kqueue is mostly used for scaling large web servers, 
+	dnl * Since kqueue is mostly used for scaling large web servers,
 	dnl * and very few folks run Mono on large web servers on OSX, falling
-	dnl * back 
+	dnl * back
 	dnl **************************************
 	if test "x$havekqueue" = "xyes" -a "x$ac_cv_header_sys_event_h" = "xyes"; then
 		if test "x$host_darwin" = "xno"; then
@@ -3063,7 +3063,7 @@ if test x$host_win32 = xno; then
 			AC_DEFINE(HAVE_SOCKADDR_IN_SIN_LEN, 1, [sockaddr_in has sin_len])
 		], [
 			AC_MSG_RESULT(no)
-		])	
+		])
 	dnl **********************************
 	dnl ***    Checks for sin6_len     ***
 	dnl **********************************
@@ -3133,7 +3133,7 @@ if test x$host_win32 = xno; then
 	], [
 		AC_MSG_RESULT(no)
 	])
-			
+
 	dnl **********************************
 	dnl *** Checks for proclib         ***
 	dnl **********************************
@@ -3200,7 +3200,7 @@ if test x$host_win32 = xno; then
 	AC_CHECK_FUNCS(localtime_r)
 	AC_CHECK_FUNCS(mkdtemp)
 	AC_CHECK_SIZEOF(size_t)
-	AC_CHECK_TYPES([blksize_t], [AC_DEFINE(HAVE_BLKSIZE_T)], , 
+	AC_CHECK_TYPES([blksize_t], [AC_DEFINE(HAVE_BLKSIZE_T)], ,
 		[#include <sys/types.h>
 		 #include <sys/stat.h>
 		 #include <unistd.h>])
@@ -3247,19 +3247,19 @@ if test x$host_win32 = xno; then
 		[#include <sys/types.h>
 		 #include <utime.h>])
 	AC_CHECK_MEMBERS(
-		[struct dirent.d_off, struct dirent.d_reclen, struct dirent.d_type],,, 
+		[struct dirent.d_off, struct dirent.d_reclen, struct dirent.d_type],,,
 		[#include <sys/types.h>
 		 #include <dirent.h>])
 	AC_CHECK_MEMBERS(
-		[struct passwd.pw_gecos],,, 
+		[struct passwd.pw_gecos],,,
 		[#include <sys/types.h>
 		 #include <pwd.h>])
 	AC_CHECK_MEMBERS(
-		[struct statfs.f_flags],,, 
+		[struct statfs.f_flags],,,
 		[#include <sys/types.h>
 		 #include <sys/vfs.h>])
 	AC_CHECK_MEMBERS(
-		[struct stat.st_atim, struct stat.st_mtim, struct stat.st_atimespec, struct stat.st_ctim],,, 
+		[struct stat.st_atim, struct stat.st_mtim, struct stat.st_atimespec, struct stat.st_ctim],,,
 		[#include <sys/types.h>
 		 #include <sys/stat.h>
 		 #include <unistd.h>])
@@ -3272,7 +3272,7 @@ if test x$host_win32 = xno; then
 
 	dnl kinfo_proc.kp_proc works on darwin but fails on other simil-bsds
 	AC_CHECK_MEMBERS(
-		[struct kinfo_proc.kp_proc],,, 
+		[struct kinfo_proc.kp_proc],,,
 		[#include <sys/types.h>
 		 #include <sys/param.h>
 		 #include <sys/sysctl.h>
@@ -3406,8 +3406,8 @@ if test x$host_win32 = xno; then
 	AC_CHECK_DECL(ICANON,            [AC_DEFINE(HAVE_ICANON, 1, [ICANON])], [], [[#include <termios.h>]])
 	AC_CHECK_DECL(TCSANOW,           [AC_DEFINE(HAVE_TCSANOW, 1, [TCSANOW])], [], [[#include <termios.h>]])
 
-	AC_CHECK_DECL(lchflags,          [AC_DEFINE(HAVE_LCHFLAGS, 1, [lchflags])], [], 
-		[[#include <sys/types.h> 
+	AC_CHECK_DECL(lchflags,          [AC_DEFINE(HAVE_LCHFLAGS, 1, [lchflags])], [],
+		[[#include <sys/types.h>
 		#include <sys/stat.h>]])
 	AC_CHECK_MEMBER(struct stat.st_flags,
 		[AC_DEFINE(HAVE_STAT_FLAGS, 1, [struct stat.st_flags])],
@@ -4597,7 +4597,7 @@ if test "x$host" != "x$target"; then
 			arm_fpu=VFP_HARD
 			AC_DEFINE(TARGET_WATCHOS, 1, [...])
 			;;
-		esac		
+		esac
 		;;
    powerpc64-ps3-linux-gnu)
 		TARGET=POWERPC64
@@ -4921,7 +4921,7 @@ if test "x$have_deprecated" = "xyes"; then
    AC_DEFINE(HAVE_DEPRECATED, 1, [Support for the deprecated attribute])
 fi
 
-dnl 
+dnl
 dnl Simple Generational checks (sgen)
 dnl
 SGEN_DEFINES=
@@ -5034,7 +5034,7 @@ case "$host" in
 			fi
 		done
 	done
-	
+
 	if test "x$X11" = "xlibX11.so"; then
 		AC_MSG_WARN([Could not find libX11.so. Do you have X.org or XFree86 installed? Assuming libX11.so.6...]);
 		X11=libX11.so.6
@@ -5607,8 +5607,8 @@ case "x$libgc" in
 		if test x$TARGET = xSPARC -o x$TARGET = xSPARC64; then
 			TMP_CPPFLAGS=`echo $TMP_CPPFLAGS | sed -e 's/-D_FILE_OFFSET_BITS=64//g'`
 		fi
-		# Don't pass -finstrument-for-thread-suspension in, 
-		# if these are instrumented it will be very bad news 
+		# Don't pass -finstrument-for-thread-suspension in,
+		# if these are instrumented it will be very bad news
 		# (infinite recursion, undefined parking behavior, etc)
 		TMP_CPPFLAGS=`echo $TMP_CPPFLAGS | sed -e 's/-finstrument-for-thread-suspension//g'`
 		ac_configure_args="$ac_configure_args --enable-single-obj-compilation --disable-embed-check --with-libgc-threads=$libgc_threads $libgc_configure_args \"CPPFLAGS_FOR_LIBGC=$TMP_CPPFLAGS\" \"CFLAGS_FOR_LIBGC=$CFLAGS_FOR_LIBGC\""
@@ -5787,8 +5787,8 @@ dnl End of checked builds
 
 AM_CONDITIONAL(NEED_VASPRINTF, test x$ac_cv_func_vasprintf = xno || test x$with_overridable_allocators = xyes)
 
-AC_CHECK_HEADER([malloc.h], 
-		[AC_DEFINE([HAVE_USR_INCLUDE_MALLOC_H], [1], 
+AC_CHECK_HEADER([malloc.h],
+		[AC_DEFINE([HAVE_USR_INCLUDE_MALLOC_H], [1],
 			[Define to 1 if you have /usr/include/malloc.h.])],,)
 
 # When --disable-shared is used, libtool transforms libmono-2.0.la into libmono-2.0.so
@@ -6646,7 +6646,7 @@ AC_SUBST(MONO_NATIVE_PLATFORM_TYPE_UNIFIED)
 # automake chooses the linker that it used to compile a target based on the
 # _SOURCES for that target.  If the target is comprised of only C code, it
 # chooses the C linker (on Linux and OSX this is just gcc or clang called with
-# linker arguments and a -o).  If the target _SOURCES include at least one C++ file, 
+# linker arguments and a -o).  If the target _SOURCES include at least one C++ file,
 # then automake chooses the C++ linker (usually g++ or clang++ called with linker arguments and -o).
 #
 # The problem for Mono is that we don't want the C++ runtime library (libstdc++
@@ -6822,10 +6822,10 @@ fi
     if test x$has_extension_module != xno; then
         echo "EXTENSION_MODULE = 1" >> $srcdir/$mcsdir/build/config.make
     fi
-    
+
     echo "DEFAULT_PROFILE = $default_profile" >> $srcdir/$mcsdir/build/config.make
-    
-    if test "x$test_bcl_opt" = "xyes"; then    
+
+    if test "x$test_bcl_opt" = "xyes"; then
       echo "BCL_OPTIMIZE = 1" >> $srcdir/$mcsdir/build/config.make
     fi
 
@@ -6966,7 +6966,7 @@ if test "x$with_core" = "xonly"; then
   fi
 fi
 
-	
+
 echo "
 	mcs source:    $mcsdir
 	C# Compiler:   $csc_compiler
@@ -6975,7 +6975,7 @@ echo "
    Engine:
 	Host:	       $host
 	Target:	       $target
-	GC:	       $gc_msg 
+	GC:	       $gc_msg
 	$thread_suspend_msg
 	TLS:           $with_tls
 	SIGALTSTACK:   $with_sigaltstack
