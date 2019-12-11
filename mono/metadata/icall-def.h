@@ -266,7 +266,7 @@ HANDLES(FILEV_1, "GetVersionInfo_icall", ves_icall_System_Diagnostics_FileVersio
 ICALL_TYPE(PERFCTR, "System.Diagnostics.PerformanceCounter", PERFCTR_1)
 NOHANDLES(ICALL(PERFCTR_1, "FreeData", mono_perfcounter_free_data))
 HANDLES(PERFCTR_2, "GetImpl_icall", mono_perfcounter_get_impl, gpointer, 8,
-	(const_gunichar2_ptr, gint32, const_gunichar2_ptr, gint32, const_gunichar2_ptr, gint32, gint32_ref, MonoBoolean_ref))
+        (const_gunichar2_ptr, gint32, const_gunichar2_ptr, gint32, const_gunichar2_ptr, gint32, gint32_ref, MonoBoolean_ref))
 NOHANDLES(ICALL(PERFCTR_3, "GetSample", mono_perfcounter_get_sample))
 NOHANDLES(ICALL(PERFCTR_4, "UpdateValue", mono_perfcounter_update_value))
 
@@ -282,7 +282,7 @@ HANDLES(PERFCTRCAT_8, "InstanceExistsInternal_icall", mono_perfcounter_instance_
 
 ICALL_TYPE(PROCESS, "System.Diagnostics.Process", PROCESS_1)
 HANDLES(PROCESS_1, "CreateProcess_internal", ves_icall_System_Diagnostics_Process_CreateProcess_internal,
-	MonoBoolean, 5, (MonoW32ProcessStartInfo, gpointer, gpointer, gpointer, MonoW32ProcessInfo_ref))
+        MonoBoolean, 5, (MonoW32ProcessStartInfo, gpointer, gpointer, gpointer, MonoW32ProcessInfo_ref))
 HANDLES(PROCESS_4, "GetModules_icall", ves_icall_System_Diagnostics_Process_GetModules_internal, MonoArray, 2, (MonoObject, PROCESS_HANDLE))
 NOHANDLES(ICALL(PROCESS_5H, "GetProcessData", ves_icall_System_Diagnostics_Process_GetProcessData))
 HANDLES(PROCESS_6, "GetProcess_internal", ves_icall_System_Diagnostics_Process_GetProcess_internal, gpointer, 1, (guint32))
