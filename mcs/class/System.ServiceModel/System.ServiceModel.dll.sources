@@ -913,4 +913,3 @@ System.ServiceModel.Configuration/BasicHttpsBindingElement.cs
 System.ServiceModel.Configuration/BasicHttpsSecurityElement.cs
 System.ServiceModel.Configuration/BasicHttpsBindingCollectionElement.cs
 ../referencesource/System.ServiceModel/System/ServiceModel/XmlUtil.cs
-
