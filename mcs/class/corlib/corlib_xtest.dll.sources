@@ -416,4 +416,3 @@ corefx/GlobalizationMode.cs
 ../../../external/corefx/src/System.Collections.Specialized/tests/HybridDictionary/*.cs
 ../../../external/corefx/src/System.Collections.Specialized/tests/OrderedDictionary/*.cs
 ../../../external/corefx/src/System.Collections.Specialized/tests/*.cs:StringCollectionTests.cs
-
