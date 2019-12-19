@@ -48,10 +48,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Security.Cryptography;
 
-namespace Mono.Net.Security
-{
-class MonoTlsStream : IDisposable
-{
+namespace Mono.Net.Security {
+  class MonoTlsStream : IDisposable {
 #if SECURITY_DEP
     readonly MobileTlsProvider provider;
     readonly NetworkStream networkStream;
@@ -60,117 +58,116 @@ class MonoTlsStream : IDisposable
     readonly MonoTlsSettings settings;
 
     internal HttpWebRequest Request {
-        get {
-            return request;
-        }
+      get { return request; }
     }
 
     SslStream sslStream;
-    readonly object sslStreamLock = new object ();
+    readonly object sslStreamLock = new object();
 
     internal SslStream SslStream {
-        get {
-            return sslStream;
-        }
+      get { return sslStream; }
     }
 #else
-    const string EXCEPTION_MESSAGE = "System.Net.Security.SslStream is not supported on the current platform.";
+    const string EXCEPTION_MESSAGE =
+        "System.Net.Security.SslStream is not supported on the current platform.";
 #endif
 
     WebExceptionStatus status;
 
     internal WebExceptionStatus ExceptionStatus {
-        get {
-            return status;
-        }
+      get { return status; }
     }
 
     internal bool CertificateValidationFailed {
-        get;
-        set;
+      get;
+      set;
     }
 
-    public MonoTlsStream (HttpWebRequest request, NetworkStream networkStream)
-    {
+    public MonoTlsStream(HttpWebRequest request, NetworkStream networkStream) {
 #if SECURITY_DEP
-        this.request = request;
-        this.networkStream = networkStream;
+      this.request = request;
+      this.networkStream = networkStream;
 
-        settings = request.TlsSettings;
-        provider = request.TlsProvider ?? MonoTlsProviderFactory.GetProviderInternal ();
-        status = WebExceptionStatus.SecureChannelFailure;
+      settings = request.TlsSettings;
+      provider =
+          request.TlsProvider ?? MonoTlsProviderFactory.GetProviderInternal();
+      status = WebExceptionStatus.SecureChannelFailure;
 
-        ChainValidationHelper.Create (provider, ref settings, this);
+      ChainValidationHelper.Create(provider, ref settings, this);
 #else
-        status = WebExceptionStatus.SecureChannelFailure;
-        throw new PlatformNotSupportedException (EXCEPTION_MESSAGE);
+      status = WebExceptionStatus.SecureChannelFailure;
+      throw new PlatformNotSupportedException(EXCEPTION_MESSAGE);
 #endif
     }
 
-    internal async Task<Stream> CreateStream (WebConnectionTunnel tunnel, CancellationToken cancellationToken)
-    {
+    internal async Task<Stream>
+    CreateStream(WebConnectionTunnel tunnel,
+                 CancellationToken cancellationToken) {
 #if SECURITY_DEP
-        var socket = networkStream.InternalSocket;
-        WebConnection.Debug ($"MONO TLS STREAM CREATE STREAM: {socket.ID}");
-        sslStream = new SslStream (networkStream, false, provider, settings);
+      var socket = networkStream.InternalSocket;
+      WebConnection.Debug($"MONO TLS STREAM CREATE STREAM: {socket.ID}");
+      sslStream = new SslStream(networkStream, false, provider, settings);
 
-        try {
-            var host = request.Host;
-            if (!string.IsNullOrEmpty (host)) {
-                var pos = host.IndexOf (':');
-                if (pos > 0)
-                    host = host.Substring (0, pos);
-            }
+      try {
+        var host = request.Host;
+        if (!string.IsNullOrEmpty(host)) {
+          var pos = host.IndexOf(':');
+          if (pos > 0)
+            host = host.Substring(0, pos);
+        }
 
-            await sslStream.AuthenticateAsClientAsync (
+        await sslStream
+            .AuthenticateAsClientAsync(
                 host, request.ClientCertificates,
-                (SslProtocols)ServicePointManager.SecurityProtocol,
-                ServicePointManager.CheckCertificateRevocationList).ConfigureAwait (false);
+                (SslProtocols) ServicePointManager.SecurityProtocol,
+                ServicePointManager.CheckCertificateRevocationList)
+            .ConfigureAwait(false);
 
-            status = WebExceptionStatus.Success;
+        status = WebExceptionStatus.Success;
 
-            request.ServicePoint.UpdateClientCertificate (sslStream.LocalCertificate);
-        } catch (Exception ex) {
-            WebConnection.Debug ($"MONO TLS STREAM ERROR: {socket.ID} {socket.CleanedUp} {ex.Message}");
-            if (socket.CleanedUp)
-                status = WebExceptionStatus.RequestCanceled;
-            else if (CertificateValidationFailed)
-                status = WebExceptionStatus.TrustFailure;
-            else
-                status = WebExceptionStatus.SecureChannelFailure;
+        request.ServicePoint.UpdateClientCertificate(
+            sslStream.LocalCertificate);
+      } catch (Exception ex) {
+        WebConnection.Debug(
+            $"MONO TLS STREAM ERROR: {socket.ID} {socket.CleanedUp} {ex.Message}");
+        if (socket.CleanedUp)
+          status = WebExceptionStatus.RequestCanceled;
+        else if (CertificateValidationFailed)
+          status = WebExceptionStatus.TrustFailure;
+        else
+          status = WebExceptionStatus.SecureChannelFailure;
 
-            request.ServicePoint.UpdateClientCertificate (null);
-            CloseSslStream ();
-            throw;
-        }
+        request.ServicePoint.UpdateClientCertificate(null);
+        CloseSslStream();
+        throw;
+      }
 
-        try {
-            if (tunnel?.Data != null)
-                await sslStream.WriteAsync (tunnel.Data, 0, tunnel.Data.Length, cancellationToken).ConfigureAwait (false);
-        } catch {
-            status = WebExceptionStatus.SendFailure;
-            CloseSslStream ();
-            throw;
-        }
+      try {
+        if (tunnel?.Data != null)
+          await sslStream
+              .WriteAsync(tunnel.Data, 0, tunnel.Data.Length, cancellationToken)
+              .ConfigureAwait(false);
+      } catch {
+        status = WebExceptionStatus.SendFailure;
+        CloseSslStream();
+        throw;
+      }
 
-        return sslStream;
+      return sslStream;
 #else
-        throw new PlatformNotSupportedException (EXCEPTION_MESSAGE);
+      throw new PlatformNotSupportedException(EXCEPTION_MESSAGE);
 #endif
     }
 
-    public void Dispose ()
-    {
-        CloseSslStream ();
-    }
+    public void Dispose() { CloseSslStream(); }
 
-    void CloseSslStream () {
-        lock (sslStreamLock) {
-            if (sslStream != null) {
-                sslStream.Dispose ();
-                sslStream = null;
-            }
+    void CloseSslStream() {
+      lock(sslStreamLock) {
+        if (sslStream != null) {
+          sslStream.Dispose();
+          sslStream = null;
         }
+      }
     }
-}
+  }
 }
