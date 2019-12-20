@@ -15,11 +15,11 @@ RUNTIME = $(with_mono_path) $(top_builddir)/runtime/mono-wrapper
 TOOLS_RUNTIME = MONO_PATH=$(mcs_topdir)/class/lib/build $(top_builddir)/runtime/mono-wrapper --aot-path=$(mcs_topdir)/class/lib/build
 
 if FULL_AOT_TESTS
-PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY,FULL_AOT_DESKTOP 
+PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY,FULL_AOT_DESKTOP
 endif
 
 if HYBRID_AOT_TESTS
-PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY 
+PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY
 endif
 
 ### test runner stuff
@@ -67,7 +67,7 @@ MCS= $(TOOLS_RUNTIME) $(CSC) -noconfig -nologo -debug:portable -target:library $
 
 ### testcase stuff
 
-EXTRA_DIST= README $(SIGNING_KEY) $(GACTESTLIB_SRCS) 
+EXTRA_DIST= README $(SIGNING_KEY) $(GACTESTLIB_SRCS)
 
 ### Test cases
 
@@ -176,5 +176,5 @@ src/Mid.dll: src/Mid.cs src/Dep.dll
 %.dll$(PLATFORM_AOT_SUFFIX): %.dll
 	$(RUNTIME) $(TEST_AOT_BUILD_FLAGS) $<
 
-run-assembly-load-reference-tests: $(TESTS_EXE_DEPEND) $(REFERENCED_ASMS_DEPEND) 
+run-assembly-load-reference-tests: $(TESTS_EXE_DEPEND) $(REFERENCED_ASMS_DEPEND)
 	$(TOOLS_RUNTIME) $(TEST_RUNNER) --testsuite-name $@ --disabled "$(DISABLED_TESTS)" $(TESTS_EXE)

@@ -5,11 +5,11 @@ MAKEFLAGS := $(MAKEFLAGS) --no-builtin-rules
 CLASS=$(mcs_topdir)/class/lib/$(DEFAULT_PROFILE)
 
 if FULL_AOT_TESTS
-PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY,FULL_AOT_DESKTOP 
+PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY,FULL_AOT_DESKTOP
 endif
 
 if HYBRID_AOT_TESTS
-PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY 
+PROFILE_MCS_FLAGS = -d:MOBILE,MOBILE_LEGACY
 endif
 
 ### test runner stuff
@@ -144,10 +144,10 @@ app-both.exe: app-both.cs $(SIGNED_V1_DLL) $(SIGNED_V2_DLL)
 %-v1.exe: v1/%.cs $(SIGNED_V1_DLL)
 	$(MCS) -target:exe -out:$@ -r:$(SIGNED_V1_DLL) $<
 
-%.exe$(PLATFORM_AOT_SUFFIX): %.exe 
+%.exe$(PLATFORM_AOT_SUFFIX): %.exe
 	$(TEST_RUNTIME) $(AOT_BUILD_FLAGS) $<
 
-%.dll$(PLATFORM_AOT_SUFFIX): %.dll 
+%.dll$(PLATFORM_AOT_SUFFIX): %.dll
 	$(TEST_RUNTIME) $(AOT_BUILD_FLAGS) $<
 
 # MONO_PATH tests
@@ -176,7 +176,7 @@ test-signed-v1-app-gac: $(APP_SIGNED_V1_EXE) gacinstall prereqs
 .PHONY: gacinstall
 
 gacinstall: $(SIGNED_V1_DLL) $(GACTESTLIB_DLLS_AOT)
-	$(TOOLS_RUNTIME) $(GACUTIL) -i $< -gacdir $(GACDIR) 
+	$(TOOLS_RUNTIME) $(GACUTIL) -i $< -gacdir $(GACDIR)
 
 mostlyclean-local: clean-gac-subdir clean-gactestlib-dll
 	-rm -f TestResult-*.xml
