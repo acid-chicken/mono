@@ -104,11 +104,11 @@ if [[ "$force_reconfigure" == "true" || ! -f .configured ]]; then
   fi
 
   make -C ../builds provision-wasm
-  make -j ${CPU_COUNT} -C ../builds configure-wasm NINJA=
+  make -j "$CPU_COUNT" -C ../builds configure-wasm NINJA=
   touch .configured
 fi
 
-make -j ${CPU_COUNT} -C ../builds archive-wasm NINJA=
+make -j "$CPU_COUNT" -C ../builds archive-wasm NINJA=
 make -C ../wasm runtime
 
 # run all tests
@@ -117,21 +117,21 @@ if [ "$test" = "true" ]; then
   export mixed_test_suites="System.Core"
   export xunit_test_suites="System.Core corlib"
 
-  make -j ${CPU_COUNT} build
+  make -j "$CPU_COUNT" build
   make run-all-mini
   make run-all-corlib
   #The following tests are not passing yet, so enabling them would make us perma-red
   #make run-all-System
   make run-all-System.Core
-  for suite in ${xunit_test_suites}; do make run-${suite}-xunit; done
+  for suite in "$xunit_test_suites"; do make run-"$suite"-xunit; done
   # disable for now until https://github.com/mono/mono/pull/13622 goes in
   #make run-debugger-tests
   make run-browser-tests
   #make run-browser-threads-tests
-  make -j ${CPU_COUNT} run-aot-mini
-  make -j ${CPU_COUNT} build-aot-all
-  for suite in ${aot_test_suites}; do make run-aot-${suite}; done
-  for suite in ${mixed_test_suites}; do make run-aot-mixed-${suite}; done
+  make -j "$CPU_COUNT" run-aot-mini
+  make -j "$CPU_COUNT" build-aot-all
+  for suite in "$aot_test_suites"; do make run-aot-"$suite"; done
+  for suite in "$mixed_test_suites"; do make run-aot-mixed-"$suite"; done
   #make check-aot
   make package
 fi
