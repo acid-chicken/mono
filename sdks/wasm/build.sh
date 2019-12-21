@@ -7,8 +7,7 @@ set -u
 # Prevents hidden errors caused by missing error code propagation.
 set -e
 
-usage()
-{
+usage() {
   echo "Common settings:"
   echo "  --configuration <value>    Build configuration: 'Debug' or 'Release' (short: -c)"
   echo "  --help                     Print help and exit (short: -h)"
@@ -17,7 +16,7 @@ usage()
   echo "Actions:"
   echo "  --clean                    Clean up the clean targets"
   echo "  --cxx                      Enable CXX"
-  echo "  --reconfigure              Force provision and configure"  
+  echo "  --reconfigure              Force provision and configure"
   echo "  --test                     Run all tests (short: -t)"
   echo "  --thread                   Enable WASM threads"
   echo "  --win                      Enable Windows cross build"
@@ -38,7 +37,7 @@ win=false
 while [[ $# > 0 ]]; do
   opt="$(echo "${1/#--/-}" | awk '{print tolower($0)}')"
   case "$opt" in
-    -help|-h)
+    -help | -h)
       usage
       exit 0
       ;;
@@ -48,14 +47,14 @@ while [[ $# > 0 ]]; do
     -cxx)
       cxx=true
       ;;
-    -configuration|-c)
+    -configuration | -c)
       configuration=$2
       shift
       ;;
     -reconfigure)
       force_reconfigure=true
       ;;
-    -test|-t)
+    -test | -t)
       test=true
       ;;
     -thread)
@@ -76,31 +75,31 @@ done
 
 CPU_COUNT=$(getconf _NPROCESSORS_ONLN || echo 4)
 
-# clean all 
+# clean all
 if [ "$cleanall" = "true" ]; then
   make clean
-  exit 0;
+  exit 0
 fi
 
 # provision and configuration
 if [[ "$force_reconfigure" == "true" || ! -f .configured ]]; then
   # re-create Make.config
-  echo "ENABLE_WASM=1" > ../Make.config
+  echo "ENABLE_WASM=1" >../Make.config
 
   if [ "$win" == "true" ]; then
-    echo "ENABLE_WINDOWS=1" >> ../Make.config
+    echo "ENABLE_WINDOWS=1" >>../Make.config
   fi
-  
+
   if [ "$cxx" == "true" ]; then
-    echo "ENABLE_CXX=1" >> ../Make.config
+    echo "ENABLE_CXX=1" >>../Make.config
   fi
-  
+
   if [ "$thread" == "true" ]; then
-    echo "ENABLE_WASM_THREADS=1" >> ../Make.config
+    echo "ENABLE_WASM_THREADS=1" >>../Make.config
   fi
-  
+
   if [[ "$configuration" == "Debug" ]]; then
-    echo "CONFIGURATION=debug" >> ../Make.config
+    echo "CONFIGURATION=debug" >>../Make.config
   fi
 
   make -C ../builds provision-wasm
