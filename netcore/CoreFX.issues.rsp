@@ -1,4 +1,4 @@
--notrait category=OuterLoop 
+-notrait category=OuterLoop
 -notrait category=RequiresElevation
 -notrait category=nonnetcoreapptests
 -notrait category=nonmonotests
@@ -141,11 +141,11 @@
 ##  System.Memory.Tests
 ####################################################################
 
-# Reflection TargetException: Non-static method requires a target. 
+# Reflection TargetException: Non-static method requires a target.
 # https://github.com/mono/mono/issues/14962
 -nomethod System.SpanTests.SpanTests.ReadOnlyMemory_PropertyReturningReadOnlySpan
 
-# Should throw NotSupportedException, but we do not. 
+# Should throw NotSupportedException, but we do not.
 # https://github.com/mono/mono/issues/14993
 -nomethod System.SpanTests.SpanTests.ReadOnlySpan_Constructor
 -nomethod System.SpanTests.SpanTests.Span_Constructor
@@ -174,7 +174,7 @@
 # NOTE: KEEPING THIS HERE BUT COMMENTED OUT - in the event the UI is shown (wasn't for me)
 #-nomethod System.Net.Http.Functional.Tests.SocketsHttpHandler_HttpClientHandler_DangerousAcceptAllCertificatesValidator_Test.SetDelegate_ConnectionSucceeds
 
-# When test is run, xunit claims it's not a part of the test suite 
+# When test is run, xunit claims it's not a part of the test suite
 #-nomethod System.Net.Http.Functional.Tests.SocketsHttpHandler_HttpClientHandler_ClientCertificates_Test.AutomaticOrManual_DoesntFailRegardlessOfWhetherClientCertsAreAvailable
 
 ####################################################################
@@ -342,7 +342,7 @@
 # https://github.com/mono/mono/issues/15027
 -nomethod System.Reflection.Tests.PropertyInfoTests.GetValue_Invalid
 
-# Expected empty string, but got enumType instead 
+# Expected empty string, but got enumType instead
 # https://github.com/mono/mono/issues/15028
 -nomethod System.Reflection.Tests.TypeInfoTests.IsEnumDefined_Invalid
 
@@ -360,7 +360,7 @@
 # SKIPPED
 -nomethod System.Reflection.Tests.MemberInfoNetCoreAppTests.HasSameMetadataDefinitionAs__CornerCase_HasElementTypes
 
-# Assertion failed... Not sure why 
+# Assertion failed... Not sure why
 # https://github.com/mono/mono/issues/15069
 -nomethod System.Reflection.Tests.MemberInfoNetCoreAppTests.HasSameMetadataDefinitionAs_GenericTypeParameters
 
@@ -374,7 +374,7 @@
 ####################################################################
 
 # Marshal Methods WILL NOT BE Implemented in MonoVM
-# https://github.com/mono/mono/issues/15085 
+# https://github.com/mono/mono/issues/15085
 -nomethod System.Runtime.InteropServices.Tests.IntPtrTests.ReadIntPtr_NotReadable_ThrowsArgumentException
 -nomethod System.Runtime.InteropServices.Tests.IntPtrTests.WriteIntPtr_BlittableObject_Roundtrips
 -nomethod System.Runtime.InteropServices.Tests.IntPtrTests.WriteIntPtr_StructWithReferenceTypes_ReturnsExpected
@@ -470,7 +470,7 @@
 # https://github.com/mono/mono/issues/15113
 -nomethod System.Runtime.Serialization.Formatters.Tests.FormatterServicesTests.GetUninitializedObject_NotSupportedType_ThrowsArgumentException
 
-# Expected TypeInitializationException but none thrown 
+# Expected TypeInitializationException but none thrown
 # https://github.com/mono/mono/issues/15114
 -nomethod System.Runtime.Serialization.Formatters.Tests.FormatterServicesTests.GetUninitializedObject_StaticConstructorThrows_ThrowsTypeInitializationException
 
@@ -627,11 +627,11 @@
 # https://github.com/mono/mono/issues/15183
 -nomethod System.Diagnostics.Tests.StackFrameTests.Ctor_SkipFrames
 
-# Assertion differences 
+# Assertion differences
 # https://github.com/mono/mono/issues/15184
 -nomethod System.Diagnostics.Tests.StackFrameTests.Ctor_Filename_LineNumber_ColNumber
 
-# A little off 
+# A little off
 # Assert.Equal() Failure
 #                ↓ (pos 0)
 #      Expected: MoveNext at offset 90 in file:line:column···
@@ -709,12 +709,12 @@
 -nomethod ThreadPoolBoundHandleTests.BindHandle_MinusOneAsHandle_ThrowsArgumentException
 
 # No Exception thrown
-# https://github.com/mono/mono/issues/15313 
+# https://github.com/mono/mono/issues/15313
 -nomethod ThreadPoolBoundHandleTests.PreAllocatedOverlapped_NonBlittableTypeAsPinData_Throws
 -nomethod ThreadPoolBoundHandleTests.PreAllocatedOverlapped_ObjectArrayWithNonBlittableTypeAsPinData_Throws
 -nomethod ThreadPoolBoundHandleTests.GetNativeOverlappedState_NullAsNativeOverlapped_ThrowsArgumentNullException
 
-# NRE on BindHandle 
+# NRE on BindHandle
 # https://github.com/mono/mono/issues/15314
 -nomethod ThreadPoolBoundHandleTests.BindHandle_ZeroAsHandle_ThrowsArgumentException
 -nomethod ThreadPoolBoundHandleTests.BindHandle_NullAsHandle_ThrowsArgumentNullException
@@ -769,7 +769,7 @@
 # https://github.com/mono/mono/issues/15319
 -nomethod System.Reflection.Tests.PropertyInfoTests.GetGetMethod_GetSetMethod
 
-# Extra methods 
+# Extra methods
 # https://github.com/mono/mono/issues/15320
 -nomethod System.Reflection.Tests.TypeTests.GetMethods
 
@@ -841,7 +841,7 @@
 ##  System.Utf8String.Experimental.Tests
 ####################################################################
 
-# Experimental feature 
+# Experimental feature
 # Will be removed and we can skip for now.
 -nomethod System.Tests.MemoryTests.*
 -nomethod System.Tests.Utf8StringTests.*
@@ -881,7 +881,7 @@
 ##  System.Security.Cryptography.X509Certificates.Tests
 ####################################################################
 
-# Passes local, but leaving here because it may be flaky 
+# Passes local, but leaving here because it may be flaky
 -nomethod System.Security.Cryptography.X509Certificates.Tests.DynamicChainTests.TestInvalidAia
 
 # disabled in CoreCLR too
