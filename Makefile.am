@@ -54,7 +54,7 @@ noinst_DATA = mono-uninstalled.pc
 DISTCLEANFILES= mono-uninstalled.pc
 
 # building with monolite
-.PHONY: get-monolite-latest 
+.PHONY: get-monolite-latest
 get-monolite-latest:
 	$(MAKE) -C $(mcs_topdir)/class get-monolite-latest
 
@@ -100,7 +100,7 @@ install:
 	done
 
 update-csproj:
-	-rm msvc/scripts/order 
+	-rm msvc/scripts/order
 	-rm msvc/scripts/order.xml
 	-rm -rf msvc/scripts/inputs
 	-mkdir msvc/scripts/inputs
