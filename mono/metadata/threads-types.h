@@ -26,34 +26,34 @@
 
 /* This is a copy of System.Threading.ThreadState */
 typedef enum {
-	ThreadState_Running = 0x00000000,
-	ThreadState_SuspendRequested = 0x00000002,
-	ThreadState_Background = 0x00000004,
-	ThreadState_Unstarted = 0x00000008,
-	ThreadState_Stopped = 0x00000010,
-	ThreadState_WaitSleepJoin = 0x00000020,
-	ThreadState_Suspended = 0x00000040,
-	ThreadState_AbortRequested = 0x00000080,
-	ThreadState_Aborted = 0x00000100
+    ThreadState_Running = 0x00000000,
+    ThreadState_SuspendRequested = 0x00000002,
+    ThreadState_Background = 0x00000004,
+    ThreadState_Unstarted = 0x00000008,
+    ThreadState_Stopped = 0x00000010,
+    ThreadState_WaitSleepJoin = 0x00000020,
+    ThreadState_Suspended = 0x00000040,
+    ThreadState_AbortRequested = 0x00000080,
+    ThreadState_Aborted = 0x00000100
 } MonoThreadState;
 
 G_ENUM_FUNCTIONS (MonoThreadState)
 
 /* This is a copy of System.Threading.ApartmentState */
 typedef enum {
-	ThreadApartmentState_STA = 0x00000000,
-	ThreadApartmentState_MTA = 0x00000001,
-	ThreadApartmentState_Unknown = 0x00000002
+    ThreadApartmentState_STA = 0x00000000,
+    ThreadApartmentState_MTA = 0x00000001,
+    ThreadApartmentState_Unknown = 0x00000002
 } MonoThreadApartmentState;
 
 typedef enum {
 // These values match System.Threading.ThreadPriority.
 // These values match System.Diagnostics.ThreadPriorityLevel and Windows, but are offset by 2.
-	MONO_THREAD_PRIORITY_LOWEST       = 0,
-	MONO_THREAD_PRIORITY_BELOW_NORMAL = 1,
-	MONO_THREAD_PRIORITY_NORMAL       = 2,
-	MONO_THREAD_PRIORITY_ABOVE_NORMAL = 3,
-	MONO_THREAD_PRIORITY_HIGHEST      = 4,
+    MONO_THREAD_PRIORITY_LOWEST       = 0,
+    MONO_THREAD_PRIORITY_BELOW_NORMAL = 1,
+    MONO_THREAD_PRIORITY_NORMAL       = 2,
+    MONO_THREAD_PRIORITY_ABOVE_NORMAL = 3,
+    MONO_THREAD_PRIORITY_HIGHEST      = 4,
 } MonoThreadPriority;
 
 #define SPECIAL_STATIC_NONE 0
@@ -74,11 +74,11 @@ void
 mono_thread_callbacks_init (void);
 
 typedef enum {
-	MONO_THREAD_CREATE_FLAGS_NONE         = 0x0,
-	MONO_THREAD_CREATE_FLAGS_THREADPOOL   = 0x1,
-	MONO_THREAD_CREATE_FLAGS_DEBUGGER     = 0x2,
-	MONO_THREAD_CREATE_FLAGS_FORCE_CREATE = 0x4,
-	MONO_THREAD_CREATE_FLAGS_SMALL_STACK  = 0x8,
+    MONO_THREAD_CREATE_FLAGS_NONE         = 0x0,
+    MONO_THREAD_CREATE_FLAGS_THREADPOOL   = 0x1,
+    MONO_THREAD_CREATE_FLAGS_DEBUGGER     = 0x2,
+    MONO_THREAD_CREATE_FLAGS_FORCE_CREATE = 0x4,
+    MONO_THREAD_CREATE_FLAGS_SMALL_STACK  = 0x8,
 } MonoThreadCreateFlags;
 
 // FIXME func should be MonoThreadStart and remove the template
@@ -90,7 +90,7 @@ template <typename T>
 inline MonoInternalThread*
 mono_thread_create_internal (MonoDomain *domain, T func, gpointer arg, MonoThreadCreateFlags flags, MonoError *error)
 {
-	return mono_thread_create_internal(domain, (gpointer)func, arg, flags, error);
+    return mono_thread_create_internal(domain, (gpointer)func, arg, flags, error);
 }
 #endif
 
@@ -102,7 +102,7 @@ template <typename T>
 inline MonoInternalThreadHandle
 mono_thread_create_internal_handle (MonoDomain *domain, T func, gpointer arg, MonoThreadCreateFlags flags, MonoError *error)
 {
-	return mono_thread_create_internal_handle(domain, (gpointer)func, arg, flags, error);
+    return mono_thread_create_internal_handle(domain, (gpointer)func, arg, flags, error);
 }
 #endif
 
@@ -119,8 +119,8 @@ mono_thread_manage_internal (void);
  * machine threads are detached later.
  */
 typedef struct {
-  MonoRefCount ref;
-  MonoCoopMutex *synch_cs;
+    MonoRefCount ref;
+    MonoCoopMutex *synch_cs;
 } MonoLongLivedThreadData;
 
 void mono_threads_install_cleanup (MonoThreadCleanupFunc func);
@@ -350,8 +350,8 @@ G_ENUM_FUNCTIONS (MonoSetThreadNameFlags)
 MONO_PROFILER_API
 void
 mono_thread_set_name (MonoInternalThread *thread,
-		      const char* name8, size_t name8_length, const gunichar2* name16,
-		      MonoSetThreadNameFlags flags, MonoError *error);
+                      const char* name8, size_t name8_length, const gunichar2* name16,
+                      MonoSetThreadNameFlags flags, MonoError *error);
 
 #define mono_thread_set_name_constant_ignore_error(thread, name, flags) \
 	mono_thread_set_name ((thread), name, G_N_ELEMENTS (name) - 1,  \
@@ -416,7 +416,7 @@ template <typename T>
 inline gboolean
 mono_thread_create_checked (MonoDomain *domain, T func, gpointer arg, MonoError *error)
 {
-	return mono_thread_create_checked (domain, (gpointer)func, arg, error);
+    return mono_thread_create_checked (domain, (gpointer)func, arg, error);
 }
 #endif
 
@@ -481,80 +481,80 @@ mono_set_pending_exception_handle (MonoExceptionHandle exc);
 #define MONO_MAX_SUMMARY_EXCEPTIONS 15
 
 typedef struct {
-	gboolean is_managed;
-	char str_descr [MONO_MAX_SUMMARY_NAME_LEN];
-	struct {
-		int token;
-		int il_offset;
-		int native_offset;
-		const char *guid;
+    gboolean is_managed;
+    char str_descr [MONO_MAX_SUMMARY_NAME_LEN];
+    struct {
+        int token;
+        int il_offset;
+        int native_offset;
+        const char *guid;
 
 #ifndef MONO_PRIVATE_CRASHES
-		// We use ifdef to make it a compile-time error to store this 
-		// symbolicated string on release builds
-		const char *name;
+        // We use ifdef to make it a compile-time error to store this
+        // symbolicated string on release builds
+        const char *name;
 #endif
-		const char *filename;
-		guint32 image_size;
-		guint32 time_date_stamp;
-	} managed_data;
-	struct {
-		intptr_t ip;
-		gint32 offset;
-		char module [MONO_MAX_SUMMARY_NAME_LEN];
-		gboolean is_trampoline;
-		gboolean has_name;
-	} unmanaged_data;
+        const char *filename;
+        guint32 image_size;
+        guint32 time_date_stamp;
+    } managed_data;
+    struct {
+        intptr_t ip;
+        gint32 offset;
+        char module [MONO_MAX_SUMMARY_NAME_LEN];
+        gboolean is_trampoline;
+        gboolean has_name;
+    } unmanaged_data;
 } MonoFrameSummary;
 
 typedef struct {
-	MonoClass *managed_exc_type;
+    MonoClass *managed_exc_type;
 
-	int num_managed_frames;
-	MonoFrameSummary managed_frames [MONO_MAX_SUMMARY_FRAMES];
+    int num_managed_frames;
+    MonoFrameSummary managed_frames [MONO_MAX_SUMMARY_FRAMES];
 } MonoExcSummary;
 
 typedef struct {
-	guint64 offset_free_hash;
-	guint64 offset_rich_hash;
+    guint64 offset_free_hash;
+    guint64 offset_rich_hash;
 } MonoStackHash;
 
 typedef struct {
-	gboolean done; // Needed because cond wait can have spurious wakeups
-	MonoSemType done_wait; // Readers are finished with this
+    gboolean done; // Needed because cond wait can have spurious wakeups
+    MonoSemType done_wait; // Readers are finished with this
 
-	// For managed stack walking
+    // For managed stack walking
 
-	MonoDomain *domain;
-	MonoJitTlsData *jit_tls;
-	MonoLMF *lmf;
+    MonoDomain *domain;
+    MonoJitTlsData *jit_tls;
+    MonoLMF *lmf;
 
-	// Emitted attributes
+    // Emitted attributes
 
-	gboolean is_managed;
+    gboolean is_managed;
 
-	char name [MONO_MAX_THREAD_NAME_LEN];
+    char name [MONO_MAX_THREAD_NAME_LEN];
 
-	intptr_t info_addr;
-	intptr_t native_thread_id;
+    intptr_t info_addr;
+    intptr_t native_thread_id;
 
-	// Print reason we don't have a complete
-	// managed trace
-	const char *error_msg;
+    // Print reason we don't have a complete
+    // managed trace
+    const char *error_msg;
 
-	int num_managed_frames;
-	MonoFrameSummary managed_frames [MONO_MAX_SUMMARY_FRAMES];
+    int num_managed_frames;
+    MonoFrameSummary managed_frames [MONO_MAX_SUMMARY_FRAMES];
 
-	int num_unmanaged_frames;
-	MonoFrameSummary unmanaged_frames [MONO_MAX_SUMMARY_FRAMES];
+    int num_unmanaged_frames;
+    MonoFrameSummary unmanaged_frames [MONO_MAX_SUMMARY_FRAMES];
 
-	int num_exceptions;
-	MonoExcSummary exceptions [MONO_MAX_SUMMARY_EXCEPTIONS];
+    int num_exceptions;
+    MonoExcSummary exceptions [MONO_MAX_SUMMARY_EXCEPTIONS];
 
-	MonoStackHash hashes;
+    MonoStackHash hashes;
 
-	MonoContext *ctx;
-	MonoContext ctx_mem;
+    MonoContext *ctx;
+    MonoContext ctx_mem;
 } MonoThreadSummary;
 
 void
