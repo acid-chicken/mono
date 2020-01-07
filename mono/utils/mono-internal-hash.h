@@ -35,31 +35,28 @@
 
 typedef struct _MonoInternalHashTable MonoInternalHashTable;
 
-typedef gpointer (*MonoInternalHashKeyExtractFunc) (gpointer value);
-typedef gpointer* (*MonoInternalHashNextValueFunc) (gpointer value);
-typedef void (*MonoInternalHashApplyFunc) (gpointer value);
+typedef gpointer (*MonoInternalHashKeyExtractFunc)(gpointer value);
+typedef gpointer *(*MonoInternalHashNextValueFunc)(gpointer value);
+typedef void (*MonoInternalHashApplyFunc)(gpointer value);
 
-struct _MonoInternalHashTable
-{
-    GHashFunc hash_func;
-    MonoInternalHashKeyExtractFunc key_extract;
-    MonoInternalHashNextValueFunc next_value;
-    gint size;
-    gint num_entries;
-    gpointer *table;
+struct _MonoInternalHashTable {
+  GHashFunc hash_func;
+  MonoInternalHashKeyExtractFunc key_extract;
+  MonoInternalHashNextValueFunc next_value;
+  gint size;
+  gint num_entries;
+  gpointer *table;
 };
 
-void
-mono_internal_hash_table_init (MonoInternalHashTable *table,
-                               GHashFunc hash_func,
-                               MonoInternalHashKeyExtractFunc key_extract,
-                               MonoInternalHashNextValueFunc next_value);
+void mono_internal_hash_table_init(MonoInternalHashTable *table,
+                                   GHashFunc hash_func,
+                                   MonoInternalHashKeyExtractFunc key_extract,
+                                   MonoInternalHashNextValueFunc next_value);
 
-void
-mono_internal_hash_table_destroy (MonoInternalHashTable *table);
+void mono_internal_hash_table_destroy(MonoInternalHashTable *table);
 
-gpointer
-mono_internal_hash_table_lookup (MonoInternalHashTable *table, gpointer key);
+gpointer mono_internal_hash_table_lookup(MonoInternalHashTable *table,
+                                         gpointer key);
 
 /* mono_internal_hash_table_insert requires that there is no entry for
    key in the hash table.  If you want to change the value for a key
@@ -68,14 +65,13 @@ mono_internal_hash_table_lookup (MonoInternalHashTable *table, gpointer key);
 
    The key pointer is actually only passed here to check a debugging
    assertion and to make the API look more familiar. */
-void
-mono_internal_hash_table_insert (MonoInternalHashTable *table,
-                                 gpointer key, gpointer value);
+void mono_internal_hash_table_insert(MonoInternalHashTable *table, gpointer key,
+                                     gpointer value);
 
-void
-mono_internal_hash_table_apply (MonoInternalHashTable *table, MonoInternalHashApplyFunc func);
+void mono_internal_hash_table_apply(MonoInternalHashTable *table,
+                                    MonoInternalHashApplyFunc func);
 
-gboolean
-mono_internal_hash_table_remove (MonoInternalHashTable *table, gpointer key);
+gboolean mono_internal_hash_table_remove(MonoInternalHashTable *table,
+                                         gpointer key);
 
 #endif
