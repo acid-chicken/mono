@@ -15,23 +15,23 @@
 #endif
 
 struct _InterpMethodArguments {
-	size_t ilen;
-	gpointer *iargs;
-	size_t flen;
-	double *fargs;
-	gpointer *retval;
-	size_t is_float_ret;
+    size_t ilen;
+    gpointer *iargs;
+    size_t flen;
+    double *fargs;
+    gpointer *retval;
+    size_t is_float_ret;
 #ifdef TARGET_WASM
-	MonoMethodSignature *sig;
+    MonoMethodSignature *sig;
 #endif
 };
 
 enum {
-	INTERP_OPT_NONE = 0,
-	INTERP_OPT_INLINE = 1,
-	INTERP_OPT_CPROP = 2,
-	INTERP_OPT_SUPER_INSTRUCTIONS = 4,
-	INTERP_OPT_DEFAULT = INTERP_OPT_INLINE | INTERP_OPT_CPROP | INTERP_OPT_SUPER_INSTRUCTIONS
+    INTERP_OPT_NONE = 0,
+    INTERP_OPT_INLINE = 1,
+    INTERP_OPT_CPROP = 2,
+    INTERP_OPT_SUPER_INSTRUCTIONS = 4,
+    INTERP_OPT_DEFAULT = INTERP_OPT_INLINE | INTERP_OPT_CPROP | INTERP_OPT_SUPER_INSTRUCTIONS
 };
 
 typedef struct _InterpMethodArguments InterpMethodArguments;

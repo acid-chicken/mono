@@ -29,15 +29,15 @@
 #define MINT_VT_ALIGNMENT 8
 
 enum {
-	VAL_I32     = 0,
-	VAL_DOUBLE  = 1,
-	VAL_I64     = 2,
-	VAL_VALUET  = 3,
-	VAL_POINTER = 4,
-	VAL_NATI    = 0 + VAL_POINTER,
-	VAL_MP      = 1 + VAL_POINTER,
-	VAL_TP      = 2 + VAL_POINTER,
-	VAL_OBJ     = 3 + VAL_POINTER
+    VAL_I32     = 0,
+    VAL_DOUBLE  = 1,
+    VAL_I64     = 2,
+    VAL_VALUET  = 3,
+    VAL_POINTER = 4,
+    VAL_NATI    = 0 + VAL_POINTER,
+    VAL_MP      = 1 + VAL_POINTER,
+    VAL_TP      = 2 + VAL_POINTER,
+    VAL_OBJ     = 3 + VAL_POINTER
 };
 
 #if SIZEOF_VOID_P == 4
@@ -78,7 +78,7 @@ typedef gint64  mono_i;
 static inline MonoObject * WASM_VOLATILE *
 mono_interp_objref (MonoObject **o)
 {
-	return o;
+    return o;
 }
 
 #define OBJREF(x) (*mono_interp_objref (&x))
@@ -98,23 +98,23 @@ mono_interp_objref (MonoObject **o)
  * A value type can't be larger than 16 MB.
  */
 typedef struct {
-	union {
-		gint32 i;
-		gint64 l;
-		struct {
-			gint32 lo;
-			gint32 hi;
-		} pair;
-		float f_r4;
-		double f;
-		MonoObject * WASM_VOLATILE o;
-		/* native size integer and pointer types */
-		gpointer p;
-		mono_u nati;
-		gpointer vt;
-	} data;
+    union {
+        gint32 i;
+        gint64 l;
+        struct {
+            gint32 lo;
+            gint32 hi;
+        } pair;
+        float f_r4;
+        double f;
+        MonoObject * WASM_VOLATILE o;
+        /* native size integer and pointer types */
+        gpointer p;
+        mono_u nati;
+        gpointer vt;
+    } data;
 #if defined(__ppc__) || defined(__powerpc__)
-	int pad;
+    int pad;
 #endif
 } stackval;
 
@@ -123,124 +123,124 @@ typedef struct _InterpFrame InterpFrame;
 typedef void (*MonoFuncV) (void);
 typedef void (*MonoPIFunc) (void *callme, void *margs);
 
-/* 
- * Structure representing a method transformed for the interpreter 
+/*
+ * Structure representing a method transformed for the interpreter
  * This is domain specific
  */
 typedef struct _InterpMethod
 {
-	/* NOTE: These first two elements (method and
-	   next_jit_code_hash) must be in the same order and at the
-	   same offset as in MonoJitInfo, because of the jit_code_hash
-	   internal hash table in MonoDomain. */
-	MonoMethod *method;
-	struct _InterpMethod *next_jit_code_hash;
-	guint32 locals_size;
-	guint32 total_locals_size;
-	guint32 stack_size;
-	guint32 vt_stack_size;
-	guint32 alloca_size;
-	unsigned int init_locals : 1;
-	unsigned int vararg : 1;
-	unsigned int needs_thread_attach : 1;
-	unsigned short *code;
-	MonoPIFunc func;
-	int num_clauses;
-	MonoExceptionClause *clauses;
-	void **data_items;
-	int transformed;
-	guint32 *local_offsets;
-	guint32 *exvar_offsets;
-	unsigned int param_count;
-	unsigned int hasthis;
-	gpointer jit_wrapper;
-	gpointer jit_addr;
-	MonoMethodSignature *jit_sig;
-	gpointer jit_entry;
-	gpointer llvmonly_unbox_entry;
-	MonoType *rtype;
-	MonoType **param_types;
-	MonoJitInfo *jinfo;
-	MonoDomain *domain;
-	MonoProfilerCallInstrumentationFlags prof_flags;
+    /* NOTE: These first two elements (method and
+       next_jit_code_hash) must be in the same order and at the
+       same offset as in MonoJitInfo, because of the jit_code_hash
+       internal hash table in MonoDomain. */
+    MonoMethod *method;
+    struct _InterpMethod *next_jit_code_hash;
+    guint32 locals_size;
+    guint32 total_locals_size;
+    guint32 stack_size;
+    guint32 vt_stack_size;
+    guint32 alloca_size;
+    unsigned int init_locals : 1;
+    unsigned int vararg : 1;
+    unsigned int needs_thread_attach : 1;
+    unsigned short *code;
+    MonoPIFunc func;
+    int num_clauses;
+    MonoExceptionClause *clauses;
+    void **data_items;
+    int transformed;
+    guint32 *local_offsets;
+    guint32 *exvar_offsets;
+    unsigned int param_count;
+    unsigned int hasthis;
+    gpointer jit_wrapper;
+    gpointer jit_addr;
+    MonoMethodSignature *jit_sig;
+    gpointer jit_entry;
+    gpointer llvmonly_unbox_entry;
+    MonoType *rtype;
+    MonoType **param_types;
+    MonoJitInfo *jinfo;
+    MonoDomain *domain;
+    MonoProfilerCallInstrumentationFlags prof_flags;
 #ifdef ENABLE_EXPERIMENT_TIERED
-	MiniTieredCounter tiered_counter;
+    MiniTieredCounter tiered_counter;
 #endif
 } InterpMethod;
 
 typedef struct _StackFragment StackFragment;
 struct _StackFragment {
-	guint8 *pos, *end;
-	struct _StackFragment *next;
-	double data [1];
+    guint8 *pos, *end;
+    struct _StackFragment *next;
+    double data [1];
 };
 
 typedef struct {
-	StackFragment *first, *last, *current;
-	/* For GC sync */
-	int inited;
+    StackFragment *first, *last, *current;
+    /* For GC sync */
+    int inited;
 } FrameStack;
 
 /* State of the interpreter main loop */
 typedef struct {
-	stackval *sp;
-	unsigned char *vt_sp;
-	const unsigned short  *ip;
-	GSList *finally_ips;
-	gpointer clause_args;
+    stackval *sp;
+    unsigned char *vt_sp;
+    const unsigned short  *ip;
+    GSList *finally_ips;
+    gpointer clause_args;
 } InterpState;
 
 struct _InterpFrame {
-	InterpFrame *parent; /* parent */
-	InterpMethod  *imethod; /* parent */
-	stackval       *retval; /* parent */
-	stackval       *stack_args; /* parent */
-	stackval       *stack;
-	/* An address on the native stack associated with the frame, used during EH */
-	gpointer       native_stack_addr;
-	/* Stack fragments this frame was allocated from */
-	StackFragment *iframe_frag, *data_frag;
-	/* exception info */
-	const unsigned short  *ip;
-	/* State saved before calls */
-	/* This is valid if state.ip != NULL */
-	InterpState state;
+    InterpFrame *parent; /* parent */
+    InterpMethod  *imethod; /* parent */
+    stackval       *retval; /* parent */
+    stackval       *stack_args; /* parent */
+    stackval       *stack;
+    /* An address on the native stack associated with the frame, used during EH */
+    gpointer       native_stack_addr;
+    /* Stack fragments this frame was allocated from */
+    StackFragment *iframe_frag, *data_frag;
+    /* exception info */
+    const unsigned short  *ip;
+    /* State saved before calls */
+    /* This is valid if state.ip != NULL */
+    InterpState state;
 };
 
 #define frame_locals(frame) (((guchar*)((frame)->stack)) + (frame)->imethod->stack_size + (frame)->imethod->vt_stack_size)
 
 typedef struct {
-	/* Lets interpreter know it has to resume execution after EH */
-	gboolean has_resume_state;
-	/* Frame to resume execution at */
-	InterpFrame *handler_frame;
-	/* IP to resume execution at */
-	const guint16 *handler_ip;
-	/* Clause that we are resuming to */
-	MonoJitExceptionInfo *handler_ei;
-	/* Exception that is being thrown. Set with rest of resume state */
-	guint32 exc_gchandle;
-	/* Stack of InterpFrames */
-	FrameStack iframe_stack;
-	/* Stack of frame data */
-	FrameStack data_stack;
+    /* Lets interpreter know it has to resume execution after EH */
+    gboolean has_resume_state;
+    /* Frame to resume execution at */
+    InterpFrame *handler_frame;
+    /* IP to resume execution at */
+    const guint16 *handler_ip;
+    /* Clause that we are resuming to */
+    MonoJitExceptionInfo *handler_ei;
+    /* Exception that is being thrown. Set with rest of resume state */
+    guint32 exc_gchandle;
+    /* Stack of InterpFrames */
+    FrameStack iframe_stack;
+    /* Stack of frame data */
+    FrameStack data_stack;
 } ThreadContext;
 
 typedef struct {
-	gint64 transform_time;
-	gint64 methods_transformed;
-	gint64 cprop_time;
-	gint64 super_instructions_time;
-	gint32 stloc_nps;
-	gint32 movlocs;
-	gint32 copy_propagations;
-	gint32 constant_folds;
-	gint32 killed_instructions;
-	gint32 emitted_instructions;
-	gint32 super_instructions;
-	gint32 added_pop_count;
-	gint32 inlined_methods;
-	gint32 inline_failures;
+    gint64 transform_time;
+    gint64 methods_transformed;
+    gint64 cprop_time;
+    gint64 super_instructions_time;
+    gint32 stloc_nps;
+    gint32 movlocs;
+    gint32 copy_propagations;
+    gint32 constant_folds;
+    gint32 killed_instructions;
+    gint32 emitted_instructions;
+    gint32 super_instructions;
+    gint32 added_pop_count;
+    gint32 inlined_methods;
+    gint32 inline_failures;
 } MonoInterpStats;
 
 extern MonoInterpStats mono_interp_stats;
@@ -264,62 +264,62 @@ mono_interp_print_code (InterpMethod *imethod);
 static inline int
 mint_type(MonoType *type_)
 {
-	MonoType *type = mini_native_type_replace_type (type_);
-	if (type->byref)
-		return MINT_TYPE_P;
+    MonoType *type = mini_native_type_replace_type (type_);
+    if (type->byref)
+        return MINT_TYPE_P;
 enum_type:
-	switch (type->type) {
-	case MONO_TYPE_I1:
-		return MINT_TYPE_I1;
-	case MONO_TYPE_U1:
-	case MONO_TYPE_BOOLEAN:
-		return MINT_TYPE_U1;
-	case MONO_TYPE_I2:
-		return MINT_TYPE_I2;
-	case MONO_TYPE_U2:
-	case MONO_TYPE_CHAR:
-		return MINT_TYPE_U2;
-	case MONO_TYPE_I4:
-	case MONO_TYPE_U4:
-		return MINT_TYPE_I4;
-	case MONO_TYPE_I:
-	case MONO_TYPE_U:
+    switch (type->type) {
+    case MONO_TYPE_I1:
+        return MINT_TYPE_I1;
+    case MONO_TYPE_U1:
+    case MONO_TYPE_BOOLEAN:
+        return MINT_TYPE_U1;
+    case MONO_TYPE_I2:
+        return MINT_TYPE_I2;
+    case MONO_TYPE_U2:
+    case MONO_TYPE_CHAR:
+        return MINT_TYPE_U2;
+    case MONO_TYPE_I4:
+    case MONO_TYPE_U4:
+        return MINT_TYPE_I4;
+    case MONO_TYPE_I:
+    case MONO_TYPE_U:
 #if SIZEOF_VOID_P == 4
-		return MINT_TYPE_I4;
+        return MINT_TYPE_I4;
 #else
-		return MINT_TYPE_I8;
+        return MINT_TYPE_I8;
 #endif
-	case MONO_TYPE_PTR:
-		return MINT_TYPE_P;
-	case MONO_TYPE_R4:
-		return MINT_TYPE_R4;
-	case MONO_TYPE_I8:
-	case MONO_TYPE_U8:
-		return MINT_TYPE_I8;
-	case MONO_TYPE_R8:
-		return MINT_TYPE_R8;
-	case MONO_TYPE_STRING:
-	case MONO_TYPE_SZARRAY:
-	case MONO_TYPE_CLASS:
-	case MONO_TYPE_OBJECT:
-	case MONO_TYPE_ARRAY:
-		return MINT_TYPE_O;
-	case MONO_TYPE_VALUETYPE:
-		if (m_class_is_enumtype (type->data.klass)) {
-			type = mono_class_enum_basetype_internal (type->data.klass);
-			goto enum_type;
-		} else
-			return MINT_TYPE_VT;
-	case MONO_TYPE_TYPEDBYREF:
-		return MINT_TYPE_VT;
-	case MONO_TYPE_GENERICINST:
-		type = m_class_get_byval_arg (type->data.generic_class->container_class);
-		goto enum_type;
-	default:
-		g_warning ("got type 0x%02x", type->type);
-		g_assert_not_reached ();
-	}
-	return -1;
+    case MONO_TYPE_PTR:
+        return MINT_TYPE_P;
+    case MONO_TYPE_R4:
+        return MINT_TYPE_R4;
+    case MONO_TYPE_I8:
+    case MONO_TYPE_U8:
+        return MINT_TYPE_I8;
+    case MONO_TYPE_R8:
+        return MINT_TYPE_R8;
+    case MONO_TYPE_STRING:
+    case MONO_TYPE_SZARRAY:
+    case MONO_TYPE_CLASS:
+    case MONO_TYPE_OBJECT:
+    case MONO_TYPE_ARRAY:
+        return MINT_TYPE_O;
+    case MONO_TYPE_VALUETYPE:
+        if (m_class_is_enumtype (type->data.klass)) {
+            type = mono_class_enum_basetype_internal (type->data.klass);
+            goto enum_type;
+        } else
+            return MINT_TYPE_VT;
+    case MONO_TYPE_TYPEDBYREF:
+        return MINT_TYPE_VT;
+    case MONO_TYPE_GENERICINST:
+        type = m_class_get_byval_arg (type->data.generic_class->container_class);
+        goto enum_type;
+    default:
+        g_warning ("got type 0x%02x", type->type);
+        g_assert_not_reached ();
+    }
+    return -1;
 }
 
 #endif /* __MONO_MINI_INTERPRETER_INTERNALS_H__ */

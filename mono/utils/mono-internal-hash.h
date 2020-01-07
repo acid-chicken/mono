@@ -41,19 +41,19 @@ typedef void (*MonoInternalHashApplyFunc) (gpointer value);
 
 struct _MonoInternalHashTable
 {
-	GHashFunc hash_func;
-	MonoInternalHashKeyExtractFunc key_extract;
-	MonoInternalHashNextValueFunc next_value;
-	gint size;
-	gint num_entries;
-	gpointer *table;
+    GHashFunc hash_func;
+    MonoInternalHashKeyExtractFunc key_extract;
+    MonoInternalHashNextValueFunc next_value;
+    gint size;
+    gint num_entries;
+    gpointer *table;
 };
 
 void
 mono_internal_hash_table_init (MonoInternalHashTable *table,
-			       GHashFunc hash_func,
-			       MonoInternalHashKeyExtractFunc key_extract,
-			       MonoInternalHashNextValueFunc next_value);
+                               GHashFunc hash_func,
+                               MonoInternalHashKeyExtractFunc key_extract,
+                               MonoInternalHashNextValueFunc next_value);
 
 void
 mono_internal_hash_table_destroy (MonoInternalHashTable *table);
@@ -70,7 +70,7 @@ mono_internal_hash_table_lookup (MonoInternalHashTable *table, gpointer key);
    assertion and to make the API look more familiar. */
 void
 mono_internal_hash_table_insert (MonoInternalHashTable *table,
-				 gpointer key, gpointer value);
+                                 gpointer key, gpointer value);
 
 void
 mono_internal_hash_table_apply (MonoInternalHashTable *table, MonoInternalHashApplyFunc func);

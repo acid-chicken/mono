@@ -21,7 +21,7 @@ typedef struct _MonoInterpStackIter MonoInterpStackIter;
 
 /* Needed for stack allocation */
 struct _MonoInterpStackIter {
-	gpointer dummy [8];
+    gpointer dummy [8];
 };
 
 typedef gpointer MonoInterpFrameHandle;
@@ -70,7 +70,7 @@ typedef struct _MonoEECallbacks {
 #undef MONO_EE_CALLBACK
 #define MONO_EE_CALLBACK(ret, name, sig) ret (*name) sig;
 
-	MONO_EE_CALLBACKS
+    MONO_EE_CALLBACKS
 
 } MonoEECallbacks;
 
