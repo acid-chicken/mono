@@ -4,19 +4,20 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System
-{
-partial class Object
-{
-    [Intrinsic]
-    public Type GetType () => GetType ();
+namespace System {
+partial class Object {
+  [Intrinsic]
+  public Type
+  GetType() => GetType();
 
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    protected extern object MemberwiseClone ();
+  [MethodImplAttribute(MethodImplOptions.InternalCall)]
+  protected extern object
+  MemberwiseClone();
 
-    [Intrinsic]
-    internal ref byte GetRawData () => ref GetRawData ();
+  [Intrinsic]
+  internal ref byte
+  GetRawData() => ref GetRawData();
 
-    internal object CloneInternal () => MemberwiseClone ();
+  internal object CloneInternal() => MemberwiseClone();
 }
 }
