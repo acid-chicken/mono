@@ -9,21 +9,21 @@ for km in fdescfs linprocfs; do
 done
 ## Set up the appropriate mounts prior to pkg installation. It's easier this way.
 if [ ! -e /dev/fd ]; then
-  echo "fdesc /dev/fd fdescfs rw 0 0" >> /etc/fstab
+  echo "fdesc /dev/fd fdescfs rw 0 0" >>/etc/fstab
   mount /dev/fd
 fi
 ## Linux compatibility shim here; this may be required for some unit tests and applications
 if [ ! -d /compat/linux/proc ]; then
   mkdir -p /compat/linux/proc
-  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >> /etc/fstab
+  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >>/etc/fstab
   mount /compat/linux/proc
 elif [ -e /compat/linux/proc ]; then
-  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >> /etc/fstab
+  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >>/etc/fstab
   mount /compat/linux/proc
 fi
 
 ## Validate that pkg is working.
-if ! pkg info > /dev/null; then
+if ! pkg info >/dev/null; then
   ## We can't possibly continue.
   echo "[FATAL] pkgng is non-functional; build impossible."
   exit 1
@@ -57,5 +57,5 @@ if [ ! -d /usr/share/.mono ]; then
   mkdir /usr/share/.mono
   chown builder /usr/share/.mono
 else
- chown builder /usr/share/.mono
+  chown builder /usr/share/.mono
 fi
