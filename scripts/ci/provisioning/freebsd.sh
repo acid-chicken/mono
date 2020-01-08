@@ -5,7 +5,7 @@ chown builder /mnt/jenkins /mnt/jenkins/pbuilder /mnt/scratch
 
 ## Set up our kernel modules
 for km in fdescfs linprocfs; do
-  kldload $km || true
+  kldload "$km" || true
 done
 ## Set up the appropriate mounts prior to pkg installation. It's easier this way.
 if [ ! -e /dev/fd ]; then
@@ -38,7 +38,7 @@ fi
 
 ## These packages are NICE to have, so be more graceful.
 for pn in gettext-runtime gettext-tools cairo libdrm mesa-dri mesa-libs openjdk8 libgdiplus unixODBC sqlite3 xorgproto pango libinotify; do
-  pkg install -y $pn || true
+  pkg install -y "$pn" || true
 done
 
 ## Jan 7 2020 - work around image having mangled perl defaults
