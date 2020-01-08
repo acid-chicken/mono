@@ -58,7 +58,7 @@ fi
 
 # Resolve any symlinks in the given path.
 function ResolvePath {
-  local path=$1
+  local path="$1"
 
   while [[ -h $path ]]; do
     local dir="$( cd -P "$( dirname "$path" )" && pwd )"
@@ -75,9 +75,9 @@ function ResolvePath {
 
 # ReadVersionFromJson [json key]
 function ReadGlobalVersion {
-  local key=$1
+  local key="$1"
 
-  local line=`grep -m 1 "$key" "$global_json_file"`
+  local line="$(grep -m 1 "$key" "$global_json_file")"
   local pattern="\"$key\" *: *\"(.*)\""
 
   if [[ ! $line =~ $pattern ]]; then
@@ -94,7 +94,7 @@ function InitializeDotNetCli {
     return
   fi
 
-  local install=$1
+  local install="$1"
 
   # Don't resolve runtime, shared framework, or SDK from other locations to ensure build determinism
   export DOTNET_MULTILEVEL_LOOKUP=0
@@ -118,15 +118,15 @@ function InitializeDotNetCli {
 
   # Find the first path on $PATH that contains the dotnet.exe
   if [[ "$use_installed_dotnet_cli" == true && $global_json_has_runtimes == false && -z "${DOTNET_INSTALL_DIR:-}" ]]; then
-    local dotnet_path=`command -v dotnet`
+    local dotnet_path="$(command -v dotnet)"
     if [[ -n "$dotnet_path" ]]; then
       ResolvePath "$dotnet_path"
-      export DOTNET_INSTALL_DIR=`dirname "$_ResolvePath"`
+      export DOTNET_INSTALL_DIR="$(dirname "$_ResolvePath")"
     fi
   fi
 
   ReadGlobalVersion "dotnet"
-  local dotnet_sdk_version=$_ReadGlobalVersion
+  local dotnet_sdk_version="$_ReadGlobalVersion"
   local dotnet_root=""
 
   # Use dotnet installation specified in DOTNET_INSTALL_DIR if it contains the required SDK version,
@@ -160,21 +160,21 @@ function InitializeDotNetCli {
 }
 
 function InstallDotNetSdk {
-  local root=$1
-  local version=$2
+  local root="$1"
+  local version="$2"
   local architecture=""
   if [[ $# == 3 ]]; then
     architecture=$3
   fi
-  InstallDotNet "$root" "$version" $architecture
+  InstallDotNet "$root" "$version" "$architecture"
 }
 
 function InstallDotNet {
-  local root=$1
-  local version=$2
+  local root="$1"
+  local version="$2"
  
   GetDotNetInstallScript "$root"
-  local install_script=$_GetDotNetInstallScript
+  local install_script="$_GetDotNetInstallScript"
 
   local archArg=''
   if [[ -n "${3:-}" ]]; then
@@ -189,7 +189,7 @@ function InstallDotNet {
   if [[ "$#" -ge "5" ]]; then
     skipNonVersionedFilesArg="--skip-non-versioned-files"
   fi
-  bash "$install_script" --version $version --install-dir "$root" $archArg $runtimeArg $skipNonVersionedFilesArg || {
+  bash "$install_script" --version "$version" --install-dir "$root" "$archArg" "$runtimeArg" "$skipNonVersionedFilesArg" || {
     local exit_code=$?
     Write-PipelineTelemetryError -category 'InitializeToolset' "Failed to install dotnet SDK from public location (exit code '$exit_code')."
 
@@ -201,25 +201,25 @@ function InstallDotNet {
 
       local runtimeSourceFeedKey=''
       if [[ -n "${7:-}" ]]; then
-        decodedFeedKey=`echo $7 | base64 --decode`
+        decodedFeedKey=`echo "$7" | base64 --decode`
         runtimeSourceFeedKey="--feed-credential $decodedFeedKey"
       fi
 
       if [[ -n "$runtimeSourceFeed" || -n "$runtimeSourceFeedKey" ]]; then
-        bash "$install_script" --version $version --install-dir "$root" $archArg $runtimeArg $skipNonVersionedFilesArg $runtimeSourceFeed $runtimeSourceFeedKey || {
+        bash "$install_script" --version "$version" --install-dir "$root" "$archArg" "$runtimeArg" "$skipNonVersionedFilesArg" "$runtimeSourceFeed" "$runtimeSourceFeedKey" || {
           local exit_code=$?
           Write-PipelineTelemetryError -category 'InitializeToolset' "Failed to install dotnet SDK from custom location '$runtimeSourceFeed' (exit code '$exit_code')."
-          ExitWithExitCode $exit_code
+          ExitWithExitCode "$exit_code"
         }
       else
-        ExitWithExitCode $exit_code
+        ExitWithExitCode "$exit_code"
       fi
     fi
   }
 }
 
 function GetDotNetInstallScript {
-  local root=$1
+  local root="$1"
   local install_script="$root/dotnet-install.sh"
   local install_script_url="https://dot.net/$dotnetInstallScriptVersion/dotnet-install.sh"
 
@@ -233,13 +233,13 @@ function GetDotNetInstallScript {
       curl "$install_script_url" -sSL --retry 10 --create-dirs -o "$install_script" || {
         local exit_code=$?
         Write-PipelineTelemetryError -category 'InitializeToolset' "Failed to acquire dotnet install script (exit code '$exit_code')."
-        ExitWithExitCode $exit_code
+        ExitWithExitCode "$exit_code"
       }
     else 
       wget -q -O "$install_script" "$install_script_url" || {
         local exit_code=$?
         Write-PipelineTelemetryError -category 'InitializeToolset' "Failed to acquire dotnet install script (exit code '$exit_code')."
-        ExitWithExitCode $exit_code
+        ExitWithExitCode "$exit_code"
       }
     fi
   fi
@@ -252,7 +252,7 @@ function InitializeBuildTool {
     return
   fi
   
-  InitializeDotNetCli $restore
+  InitializeDotNetCli "$restore"
 
   # return values
   _InitializeBuildTool="$_InitializeDotNetCli/dotnet"  
@@ -277,13 +277,13 @@ function InitializeNativeTools() {
   if [[ -n "${DisableNativeToolsetInstalls:-}" ]]; then
     return
   fi
-  if grep -Fq "native-tools" $global_json_file
+  if grep -Fq "native-tools" "$global_json_file"
   then
     local nativeArgs=""
     if [[ "$ci" == true ]]; then
       nativeArgs="--installDirectory $tools_dir"
     fi
-    "$_script_dir/init-tools-native.sh" $nativeArgs
+    "$_script_dir/init-tools-native.sh" "$nativeArgs"
   fi
 }
 
@@ -296,11 +296,11 @@ function InitializeToolset {
 
   ReadGlobalVersion "Microsoft.DotNet.Arcade.Sdk"
 
-  local toolset_version=$_ReadGlobalVersion
+  local toolset_version="$_ReadGlobalVersion"
   local toolset_location_file="$toolset_dir/$toolset_version.txt"
 
   if [[ -a "$toolset_location_file" ]]; then
-    local path=`cat "$toolset_location_file"`
+    local path="$(cat "$toolset_location_file")"
     if [[ -a "$path" ]]; then
       # return value
       _InitializeToolset="$path"
@@ -321,9 +321,9 @@ function InitializeToolset {
   fi
   
   echo '<Project Sdk="Microsoft.DotNet.Arcade.Sdk"/>' > "$proj"
-  MSBuild-Core "$proj" $bl /t:__WriteToolsetLocation /clp:ErrorsOnly\;NoSummary /p:__ToolsetLocationOutputFile="$toolset_location_file"
+  MSBuild-Core "$proj" "$bl" /t:__WriteToolsetLocation /clp:ErrorsOnly\;NoSummary /p:__ToolsetLocationOutputFile="$toolset_location_file"
 
-  local toolset_build_proj=`cat "$toolset_location_file"`
+  local toolset_build_proj="$(cat "$toolset_location_file")"
 
   if [[ ! -a "$toolset_build_proj" ]]; then
     Write-PipelineTelemetryError -category 'Build' "Invalid toolset path: $toolset_build_proj"
@@ -338,7 +338,7 @@ function ExitWithExitCode {
   if [[ "$ci" == true && "$prepare_machine" == true ]]; then
     StopProcesses
   fi
-  exit $1
+  exit "$1"
 }
 
 function StopProcesses {
@@ -349,7 +349,7 @@ function StopProcesses {
 }
 
 function MSBuild {
-  local args=$@
+  local args="$@"
   if [[ "$pipelines_log" == true ]]; then
     InitializeBuildTool
     InitializeToolset
@@ -370,7 +370,7 @@ function MSBuild {
     args=( "${args[@]}" "-logger:$logger_path" )
   fi
 
-  MSBuild-Core ${args[@]}
+  MSBuild-Core "${args[@]}"
 }
 
 function MSBuild-Core {
@@ -393,10 +393,10 @@ function MSBuild-Core {
     warnaserror_switch="/warnaserror"
   fi
 
-  "$_InitializeBuildTool" "$_InitializeBuildToolCommand" /m /nologo /clp:Summary /v:$verbosity /nr:$node_reuse $warnaserror_switch /p:TreatWarningsAsErrors=$warn_as_error /p:ContinuousIntegrationBuild=$ci "$@" || {
+  "$_InitializeBuildTool" "$_InitializeBuildToolCommand" /m /nologo /clp:Summary /v:"$verbosity" /nr:"$node_reuse" "$warnaserror_switch" /p:TreatWarningsAsErrors="$warn_as_error" /p:ContinuousIntegrationBuild="$ci" "$@" || {
     local exit_code=$?
     Write-PipelineTelemetryError -category 'Build'  "Build failed (exit code '$exit_code')."
-    ExitWithExitCode $exit_code
+    ExitWithExitCode "$exit_code"
   }
 }
 
