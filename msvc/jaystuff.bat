@@ -15,4 +15,3 @@ type .\mono\mcs\class\System.XML\Mono.Xml.Xsl\Pattern.txt .\mono\mcs\class\Syste
 .\mono\mcs\jay\jay.exe -ct < .\mono\mcs\jay\skeleton.cs .\mono\mcs\class\Commons.Xml.Relaxng\Commons.Xml.Relaxng.Rnc\RncParser.jay > .\mono\mcs\class\Commons.Xml.Relaxng\Commons.Xml.Relaxng.Rnc\RncParser.cs
 
 .\mono\mcs\jay\jay.exe -ct < .\mono\mcs\jay\skeleton.cs .\mono\mcs\ilasm\parser\ILParser.jay > .\mono\mcs\ilasm\ILParser.cs
-
