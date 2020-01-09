@@ -713,7 +713,7 @@ System.Security.Permissions/CodeAccessSecurityAttribute.cs
 System.Security.Permissions/EnvironmentPermission.cs
 System.Security.Permissions/EnvironmentPermissionAccess.cs
 System.Security.Permissions/EnvironmentPermissionAttribute.cs
-System.Security.Permissions/FileDialogPermission.cs 
+System.Security.Permissions/FileDialogPermission.cs
 ../../../external/corefx/src/System.Security.Permissions/src/System/Security/Permissions/FileDialogPermissionAccess.cs
 System.Security.Permissions/FileDialogPermissionAttribute.cs
 System.Security.Permissions/FileIOPermission.cs
@@ -726,7 +726,7 @@ System.Security.Permissions/HostProtectionPermission.cs
 ../../../external/corefx/src/System.Security.Permissions/src/System/Security/Permissions/HostProtectionResource.cs
 System.Security.Permissions/IBuiltInPermission.cs
 ../../../external/corefx/src/System.Security.Permissions/src/System/Security/Permissions/IsolatedStorageContainment.cs
-System.Security.Permissions/IsolatedStorageFilePermission.cs 
+System.Security.Permissions/IsolatedStorageFilePermission.cs
 System.Security.Permissions/IsolatedStorageFilePermissionAttribute.cs
 System.Security.Permissions/IsolatedStoragePermission.cs
 System.Security.Permissions/IsolatedStoragePermissionAttribute.cs
@@ -739,10 +739,10 @@ System.Security.Permissions/KeyContainerPermissionAttribute.cs
 System.Security.Permissions/KeyContainerPermissionFlags.cs
 System.Security.Permissions/PermissionSetAttribute.cs
 ../../../external/corefx/src/System.Security.Permissions/src/System/Security/Permissions/PermissionState.cs
-System.Security.Permissions/PrincipalPermission.cs 
+System.Security.Permissions/PrincipalPermission.cs
 System.Security.Permissions/PrincipalPermissionAttribute.cs
 System.Security.Permissions/PublisherIdentityPermission.cs
-System.Security.Permissions/PublisherIdentityPermissionAttribute.cs 
+System.Security.Permissions/PublisherIdentityPermissionAttribute.cs
 System.Security.Permissions/ReflectionPermission.cs
 System.Security.Permissions/ReflectionPermissionAttribute.cs
 ../../../external/corefx/src/System.Security.Permissions/src/System/Security/Permissions/ReflectionPermissionFlag.cs
@@ -754,12 +754,12 @@ System.Security.Permissions/SecurityAttribute.cs
 System.Security.Permissions/SecurityPermission.cs
 System.Security.Permissions/SecurityPermissionAttribute.cs
 System.Security.Permissions/SecurityPermissionFlag.cs
-System.Security.Permissions/SiteIdentityPermission.cs 
+System.Security.Permissions/SiteIdentityPermission.cs
 System.Security.Permissions/SiteIdentityPermissionAttribute.cs
 System.Security.Permissions/StrongNameIdentityPermission.cs
 System.Security.Permissions/StrongNamePermissionAttribute.cs
 System.Security.Permissions/StrongNamePublicKeyBlob.cs
-System.Security.Permissions/UIPermission.cs 
+System.Security.Permissions/UIPermission.cs
 System.Security.Permissions/UIPermissionAttribute.cs
 ../../../external/corefx/src/System.Security.Permissions/src/System/Security/Permissions/UIPermissionClipboard.cs
 ../../../external/corefx/src/System.Security.Permissions/src/System/Security/Permissions/UIPermissionWindow.cs
