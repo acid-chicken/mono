@@ -114,19 +114,19 @@ while (($# > 0)); do
 done
 
 if [ "$repository" == "dotnet/performance" ] || [ "$repository" == "dotnet-performance" ]; then
-    run_from_perf_repo=true
+  run_from_perf_repo=true
 fi
 
 if [ -z "$configurations" ]; then
-    configurations="CompliationMode=$compilation_mode"
+  configurations="CompliationMode=$compilation_mode"
 fi
 
 if [ -z "$core_root_directory" ]; then
-    use_core_run=false
+  use_core_run=false
 fi
 
 if [ -z "$baseline_core_root_directory" ]; then
-    use_baseline_core_run=false
+  use_baseline_core_run=false
 fi
 
 payload_directory=$source_directory/Payload
@@ -143,7 +143,7 @@ if [[ "$compare" == true ]]; then
   perflab_arguments=
 
   # No open queues for arm64
-  if [[ "$architecture" = "arm64" ]]; then
+  if [[ "$architecture" == "arm64" ]]; then
     echo "Compare not available for arm64"
     exit 1
   fi
@@ -152,39 +152,39 @@ if [[ "$compare" == true ]]; then
 fi
 
 if [[ "$internal" == true ]]; then
-    perflab_arguments="--upload-to-perflab-container"
-    helix_source_prefix="official"
-    creator=
-    extra_benchmark_dotnet_arguments=
-    
-    if [[ "$architecture" = "arm64" ]]; then
-        queue=Ubuntu.1804.Arm64.Perf
-    else
-        queue=Ubuntu.1804.Amd64.Tiger.Perf
-    fi
+  perflab_arguments="--upload-to-perflab-container"
+  helix_source_prefix="official"
+  creator=
+  extra_benchmark_dotnet_arguments=
+
+  if [[ "$architecture" == "arm64" ]]; then
+    queue=Ubuntu.1804.Arm64.Perf
+  else
+    queue=Ubuntu.1804.Amd64.Tiger.Perf
+  fi
 fi
 
 common_setup_arguments="--channel master --queue $queue --build-number $build_number --build-configs $configurations"
 setup_arguments="--repository https://github.com/$repository --branch $branch --get-perf-hash --commit-sha $commit_sha $common_setup_arguments"
 
-if [[ "$run_from_perf_repo" = true ]]; then
-    payload_directory=
-    workitem_directory=$source_directory
-    performance_directory=$workitem_directory
-    setup_arguments="--perf-hash $commit_sha $common_setup_arguments"
+if [[ "$run_from_perf_repo" == true ]]; then
+  payload_directory=
+  workitem_directory=$source_directory
+  performance_directory=$workitem_directory
+  setup_arguments="--perf-hash $commit_sha $common_setup_arguments"
 else
-    git clone --branch master --depth 1 --quiet https://github.com/dotnet/performance "$performance_directory"
-    
-    docs_directory=$performance_directory/docs
-    mv "$docs_directory" "$workitem_directory"
+  git clone --branch master --depth 1 --quiet https://github.com/dotnet/performance "$performance_directory"
+
+  docs_directory=$performance_directory/docs
+  mv "$docs_directory" "$workitem_directory"
 fi
 
-if [[ "$use_core_run" = true ]]; then
-    new_core_root=$payload_directory/Core_Root
-    mv "$core_root_directory" "$new_core_root"
+if [[ "$use_core_run" == true ]]; then
+  new_core_root=$payload_directory/Core_Root
+  mv "$core_root_directory" "$new_core_root"
 fi
 
-if [[ "$use_baseline_core_run" = true ]]; then
+if [[ "$use_baseline_core_run" == true ]]; then
   new_baseline_core_root=$payload_directory/Baseline_Core_Root
   mv "$baseline_core_root_directory" "$new_baseline_core_root"
 fi
