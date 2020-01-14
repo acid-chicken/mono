@@ -6,16 +6,13 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace System.Threading
-{
-//
-// Under netcore, there is only one thread object per thread
-//
-[StructLayout (LayoutKind.Sequential)]
-partial class Thread
-{
+namespace System.Threading {
+  //
+  // Under netcore, there is only one thread object per thread
+  //
+  [StructLayout(LayoutKind.Sequential)] partial class Thread {
 #pragma warning disable 169, 414, 649
-    #region Sync with metadata/object-internals.h and InternalThread in mcs/class/corlib/System.Threading/Thread.cs
+#region Sync with metadata / object - internals.h and InternalThread in mcs / class / corlib / System.Threading / Thread.cs
     int lock_thread_id;
     // stores a thread handle
     IntPtr handle;
@@ -29,11 +26,13 @@ partial class Thread
     private int abort_state_handle;
     /* thread_id is only accessed from unmanaged code */
     internal Int64 thread_id;
-    private IntPtr debugger_thread; // FIXME switch to bool as soon as CI testing with corlib version bump works
-    private UIntPtr static_data; /* GC-tracked */
+    private IntPtr debugger_thread; // FIXME switch to bool as soon as CI
+                                    // testing with corlib version bump works
+    private UIntPtr static_data;    /* GC-tracked */
     private IntPtr runtime_thread_info;
     /* current System.Runtime.Remoting.Contexts.Context instance
-       keep as an object to avoid triggering its class constructor when not needed */
+       keep as an object to avoid triggering its class constructor when not
+       needed */
     private object current_appcontext;
     private object root_domain_thread;
     internal byte[] _serialized_principal;
@@ -68,7 +67,7 @@ partial class Thread
      *
      * DO NOT RENAME! DO NOT ADD FIELDS AFTER! */
     private IntPtr last;
-    #endregion
+#endregion
 #pragma warning restore 169, 414, 649
 
     string _name;
@@ -78,272 +77,259 @@ partial class Thread
     internal ExecutionContext _executionContext;
     internal SynchronizationContext _synchronizationContext;
 
-    Thread ()
-    {
-        InitInternal (this);
-    }
+    Thread() { InitInternal(this); }
 
-    ~Thread ()
-    {
-        FreeInternal ();
-    }
+    ~Thread() { FreeInternal(); }
 
     internal static ulong CurrentOSThreadId {
-        get {
-            return GetCurrentOSThreadId ();
-        }
+      get { return GetCurrentOSThreadId(); }
     }
 
     public bool IsAlive {
-        get {
-            var state = GetState (this);
-            return (state & (ThreadState.Unstarted | ThreadState.Stopped | ThreadState.Aborted)) == 0;
-        }
+      get {
+        var state = GetState(this);
+        return (state & (ThreadState.Unstarted | ThreadState.Stopped |
+                         ThreadState.Aborted)) == 0;
+      }
     }
 
     public bool IsBackground {
-        get {
-            var state = ValidateThreadState ();
-            return (state & ThreadState.Background) != 0;
+      get {
+        var state = ValidateThreadState();
+        return (state & ThreadState.Background) != 0;
+      }
+      set {
+        ValidateThreadState();
+        if (value) {
+          SetState(this, ThreadState.Background);
+        } else {
+          ClrState(this, ThreadState.Background);
         }
-        set {
-            ValidateThreadState ();
-            if (value) {
-                SetState (this, ThreadState.Background);
-            } else {
-                ClrState (this, ThreadState.Background);
-            }
-        }
+      }
     }
 
     public bool IsThreadPoolThread {
-        get {
-            ValidateThreadState ();
-            return threadpool_thread;
-        }
-        internal set {
-            threadpool_thread = value;
-        }
+      get {
+        ValidateThreadState();
+        return threadpool_thread;
+      }
+      internal set { threadpool_thread = value; }
     }
 
     public int ManagedThreadId => managed_id;
 
     internal static int OptimalMaxSpinWaitsPerSpinIteration {
-        get {
-            // Default from coreclr (src/utilcode/yieldprocessornormalized.cpp)
-            return 7;
-        }
+      get {
+        // Default from coreclr (src/utilcode/yieldprocessornormalized.cpp)
+        return 7;
+      }
     }
 
     public ThreadPriority Priority {
-        get {
-            ValidateThreadState ();
-            return (ThreadPriority) priority;
-        }
-        set {
-            // TODO: arguments check
-            SetPriority (this, (int) value);
-        }
+      get {
+        ValidateThreadState();
+        return (ThreadPriority) priority;
+      }
+      set {
+        // TODO: arguments check
+        SetPriority(this, (int) value);
+      }
     }
 
-    public ThreadState ThreadState => GetState (this);
+    public ThreadState ThreadState => GetState(this);
 
-    void Create (ThreadStart start) => SetStartHelper ((Delegate) start, 0); // 0 will setup Thread with default stackSize
+    void Create(ThreadStart start) => SetStartHelper(
+        (Delegate) start, 0); // 0 will setup Thread with default stackSize
 
-    void Create (ThreadStart start, int maxStackSize) => SetStartHelper ((Delegate) start, maxStackSize);
+    void Create(ThreadStart start,
+                int maxStackSize) => SetStartHelper((Delegate) start,
+                                                    maxStackSize);
 
-    void Create (ParameterizedThreadStart start) => SetStartHelper ((Delegate) start, 0);
+    void Create(ParameterizedThreadStart start) => SetStartHelper((Delegate)
+                                                                      start,
+                                                                  0);
 
-    void Create (ParameterizedThreadStart start, int maxStackSize) => SetStartHelper ((Delegate) start, maxStackSize);
+    void Create(ParameterizedThreadStart start,
+                int maxStackSize) => SetStartHelper((Delegate) start,
+                                                    maxStackSize);
 
-    public ApartmentState GetApartmentState () => ApartmentState.Unknown;
+    public ApartmentState GetApartmentState() => ApartmentState.Unknown;
 
-    public void DisableComObjectEagerCleanup ()
-    {
+    public void DisableComObjectEagerCleanup(){
         // no-op
     }
 
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static int GetCurrentProcessorNumber ();
+        [MethodImplAttribute(
+            MethodImplOptions
+                .InternalCall)] extern static int GetCurrentProcessorNumber();
 
-    public static int GetCurrentProcessorId ()
-    {
-        int id = GetCurrentProcessorNumber ();
+    public static int GetCurrentProcessorId() {
+      int id = GetCurrentProcessorNumber();
 
-        if (id < 0)
-            id = Environment.CurrentManagedThreadId;
+      if (id < 0)
+        id = Environment.CurrentManagedThreadId;
 
-        return id;
+      return id;
     }
 
-    public void Interrupt ()
-    {
-        InterruptInternal (this);
+    public void Interrupt() { InterruptInternal(this); }
+
+    public bool Join(int millisecondsTimeout) {
+      if (millisecondsTimeout < Timeout.Infinite)
+        throw new ArgumentOutOfRangeException(
+            nameof(millisecondsTimeout), millisecondsTimeout,
+            SR.ArgumentOutOfRange_NeedNonNegOrNegative1);
+      return JoinInternal(this, millisecondsTimeout);
     }
 
-    public bool Join (int millisecondsTimeout)
-    {
-        if (millisecondsTimeout < Timeout.Infinite)
-            throw new ArgumentOutOfRangeException (nameof (millisecondsTimeout), millisecondsTimeout, SR.ArgumentOutOfRange_NeedNonNegOrNegative1);
-        return JoinInternal (this, millisecondsTimeout);
+    internal void ResetThreadPoolThread() {
+      if (_name != null)
+        Name = null;
+
+      if ((state & ThreadState.Background) == 0)
+        IsBackground = true;
+
+      if ((ThreadPriority) priority != ThreadPriority.Normal)
+        Priority = ThreadPriority.Normal;
     }
 
-    internal void ResetThreadPoolThread ()
-    {
-        if (_name != null)
-            Name = null;
-
-        if ((state & ThreadState.Background) == 0)
-            IsBackground = true;
-
-        if ((ThreadPriority) priority != ThreadPriority.Normal)
-            Priority = ThreadPriority.Normal;
+    void SetCultureOnUnstartedThreadNoCheck(CultureInfo value, bool uiCulture) {
+      if (uiCulture)
+        ui_culture = value;
+      else
+        culture = value;
     }
 
-    void SetCultureOnUnstartedThreadNoCheck (CultureInfo value, bool uiCulture)
-    {
-        if (uiCulture)
-            ui_culture = value;
-        else
-            culture = value;
+    void SetStartHelper(Delegate start, int maxStackSize) {
+      m_start = start;
+      stack_size = maxStackSize;
     }
 
-    void SetStartHelper (Delegate start, int maxStackSize)
-    {
-        m_start = start;
-        stack_size = maxStackSize;
+    public static void SpinWait(int iterations) {
+      if (iterations < 0)
+        return;
+
+      while (iterations-- > 0)
+        SpinWait_nop();
     }
 
-    public static void SpinWait (int iterations)
-    {
-        if (iterations < 0)
-            return;
+    public static void Sleep(int millisecondsTimeout) {
+      if (millisecondsTimeout < Timeout.Infinite)
+        throw new ArgumentOutOfRangeException(
+            nameof(millisecondsTimeout), millisecondsTimeout,
+            SR.ArgumentOutOfRange_NeedNonNegOrNegative1);
 
-        while (iterations-- > 0)
-            SpinWait_nop ();
+      SleepInternal(millisecondsTimeout, true);
     }
 
-    public static void Sleep (int millisecondsTimeout)
-    {
-        if (millisecondsTimeout < Timeout.Infinite)
-            throw new ArgumentOutOfRangeException (nameof (millisecondsTimeout), millisecondsTimeout, SR.ArgumentOutOfRange_NeedNonNegOrNegative1);
+    internal static void UninterruptibleSleep0() => SleepInternal(0, false);
 
-        SleepInternal (millisecondsTimeout, true);
-    }
+    public void Start() { StartInternal(this); }
 
-    internal static void UninterruptibleSleep0 () => SleepInternal (0, false);
+    public void Start(object parameter) {
+      if (m_start is ThreadStart)
+        throw new InvalidOperationException(
+            SR.InvalidOperation_ThreadWrongThreadStart);
 
-    public void Start ()
-    {
-        StartInternal (this);
-    }
-
-    public void Start (object parameter)
-    {
-        if (m_start is ThreadStart)
-            throw new InvalidOperationException (SR.InvalidOperation_ThreadWrongThreadStart);
-
-        m_start_arg = parameter;
-        StartInternal (this);
+      m_start_arg = parameter;
+      StartInternal(this);
     }
 
     // Called from the runtime
-    internal void StartCallback ()
-    {
-        if (culture != null)
-            CurrentCulture = culture;
-        if (ui_culture != null)
-            CurrentUICulture = ui_culture;
-        if (m_start is ThreadStart del) {
-            m_start = null;
-            del ();
-        } else {
-            var pdel = (ParameterizedThreadStart) m_start;
-            var arg = m_start_arg;
-            m_start = null;
-            m_start_arg = null;
-            pdel (arg);
-        }
+    internal void StartCallback() {
+      if (culture != null)
+        CurrentCulture = culture;
+      if (ui_culture != null)
+        CurrentUICulture = ui_culture;
+      if (m_start is ThreadStart del) {
+        m_start = null;
+        del();
+      } else {
+        var pdel = (ParameterizedThreadStart) m_start;
+        var arg = m_start_arg;
+        m_start = null;
+        m_start_arg = null;
+        pdel(arg);
+      }
     }
 
-    partial void ThreadNameChanged (string value)
-    {
-        // TODO: Should only raise the events
-        SetName (this, value);
+    partial void ThreadNameChanged(string value) {
+      // TODO: Should only raise the events
+      SetName(this, value);
     }
 
-    public static bool Yield ()
-    {
-        return YieldInternal ();
-    }
+    public static bool Yield() { return YieldInternal(); }
 
-    bool TrySetApartmentStateUnchecked (ApartmentState state) => state == ApartmentState.Unknown;
+    bool TrySetApartmentStateUnchecked(ApartmentState state) =>
+        state == ApartmentState.Unknown;
 
-    ThreadState ValidateThreadState ()
-    {
-        var state = GetState (this);
-        if ((state & ThreadState.Stopped) != 0)
-            throw new ThreadStateException ("Thread is dead; state can not be accessed.");
-        return state;
-    }
-
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    private extern static ulong GetCurrentOSThreadId ();
-
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    extern static void InitInternal (Thread thread);
-
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static Thread InitializeCurrentThread ();
-
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern void FreeInternal ();
-
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    extern static ThreadState GetState (Thread thread);
-
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    extern static void SetState (Thread thread, ThreadState set);
-
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    extern static void ClrState (Thread thread, ThreadState clr);
-
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static string GetName (Thread thread);
-
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    private static unsafe extern void SetName_icall (Thread thread, char *name, int nameLength);
-
-    static unsafe void SetName (Thread thread, String name)
-    {
-        fixed (char* fixed_name = name)
-            SetName_icall (thread, fixed_name, name?.Length ?? 0);
+    ThreadState ValidateThreadState() {
+      var state = GetState(this);
+      if ((state & ThreadState.Stopped) != 0)
+        throw new ThreadStateException(
+            "Thread is dead; state can not be accessed.");
+      return state;
     }
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static bool YieldInternal ();
+    private extern static ulong
+    GetCurrentOSThreadId();
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static void
+    InitInternal(Thread thread);
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static Thread
+    InitializeCurrentThread();
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern void
+    FreeInternal();
+
+    [MethodImplAttribute(
+        MethodImplOptions.InternalCall)] extern static ThreadState
+    GetState(Thread thread);
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static void
+    SetState(Thread thread, ThreadState set);
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static void
+    ClrState(Thread thread, ThreadState clr);
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static string
+    GetName(Thread thread);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static void SleepInternal (int millisecondsTimeout, bool allowInterruption);
+    private static unsafe extern void
+    SetName_icall(Thread thread, char *name, int nameLength);
+
+    static unsafe void SetName(Thread thread, String name) {
+      fixed(char *fixed_name = name)
+          SetName_icall(thread, fixed_name, name?.Length ?? 0);
+    }
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static bool
+    YieldInternal();
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static void
+    SleepInternal(int millisecondsTimeout, bool allowInterruption);
 
     [Intrinsic]
-    static void SpinWait_nop ()
-    {
-    }
+    static void
+    SpinWait_nop(){}
 
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    extern static Thread CreateInternal ();
+        [MethodImplAttribute(
+            MethodImplOptions.InternalCall)] extern static Thread
+        CreateInternal();
 
-    [MethodImplAttribute (MethodImplOptions.InternalCall)]
-    extern static void StartInternal (Thread runtime_thread);
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static void
+    StartInternal(Thread runtime_thread);
 
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static bool JoinInternal (Thread thread, int millisecondsTimeout);
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static bool
+    JoinInternal(Thread thread, int millisecondsTimeout);
 
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static void InterruptInternal (Thread thread);
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static void
+    InterruptInternal(Thread thread);
 
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    extern static void SetPriority (Thread thread, int priority);
-}
+    [MethodImplAttribute(MethodImplOptions.InternalCall)] extern static void
+    SetPriority(Thread thread, int priority);
+  }
 }
