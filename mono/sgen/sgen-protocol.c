@@ -46,9 +46,9 @@ static volatile int binary_protocol_use_count = 0;
 
 typedef struct _BinaryProtocolBuffer BinaryProtocolBuffer;
 struct _BinaryProtocolBuffer {
-	BinaryProtocolBuffer * volatile next;
-	volatile int index;
-	unsigned char buffer [BINARY_PROTOCOL_BUFFER_SIZE];
+    BinaryProtocolBuffer * volatile next;
+    volatile int index;
+    unsigned char buffer [BINARY_PROTOCOL_BUFFER_SIZE];
 };
 
 static BinaryProtocolBuffer * volatile binary_protocol_buffers = NULL;
@@ -61,206 +61,206 @@ static long long file_size_limit;
 static char*
 filename_for_index (int index)
 {
-	char *filename;
+    char *filename;
 
-	SGEN_ASSERT (0, file_size_limit > 0, "Indexed binary protocol filename must only be used with file size limit");
+    SGEN_ASSERT (0, file_size_limit > 0, "Indexed binary protocol filename must only be used with file size limit");
 
-	filename = (char *)sgen_alloc_internal_dynamic (strlen (filename_or_prefix) + 32, INTERNAL_MEM_BINARY_PROTOCOL, TRUE);
-	sprintf (filename, "%s.%d", filename_or_prefix, index);
+    filename = (char *)sgen_alloc_internal_dynamic (strlen (filename_or_prefix) + 32, INTERNAL_MEM_BINARY_PROTOCOL, TRUE);
+    sprintf (filename, "%s.%d", filename_or_prefix, index);
 
-	return filename;
+    return filename;
 }
 
 static void
 free_filename (char *filename)
 {
-	SGEN_ASSERT (0, file_size_limit > 0, "Indexed binary protocol filename must only be used with file size limit");
+    SGEN_ASSERT (0, file_size_limit > 0, "Indexed binary protocol filename must only be used with file size limit");
 
-	sgen_free_internal_dynamic (filename, strlen (filename_or_prefix) + 32, INTERNAL_MEM_BINARY_PROTOCOL);
+    sgen_free_internal_dynamic (filename, strlen (filename_or_prefix) + 32, INTERNAL_MEM_BINARY_PROTOCOL);
 }
 
 static void
 binary_protocol_open_file (gboolean assert_on_failure)
 {
-	char *filename;
+    char *filename;
 #ifdef F_SETLK
-	struct flock lock;
-	lock.l_type = F_WRLCK;
-	lock.l_whence = SEEK_SET;
-	lock.l_start = 0;
-	lock.l_len = 0;
+    struct flock lock;
+    lock.l_type = F_WRLCK;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = 0;
+    lock.l_len = 0;
 #endif
 
-	if (file_size_limit > 0)
-		filename = filename_for_index (current_file_index);
-	else
-		filename = filename_or_prefix;
+    if (file_size_limit > 0)
+        filename = filename_for_index (current_file_index);
+    else
+        filename = filename_or_prefix;
 
 #if defined(HOST_WIN32)
-	binary_protocol_file = CreateFileA (filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    binary_protocol_file = CreateFileA (filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 #elif defined(HAVE_UNISTD_H)
-	do {
-		binary_protocol_file = open (filename, O_CREAT | O_WRONLY, 0644);
-		if (binary_protocol_file == -1) {
-			if (errno != EINTR)
-				break; /* Failed */
+    do {
+        binary_protocol_file = open (filename, O_CREAT | O_WRONLY, 0644);
+        if (binary_protocol_file == -1) {
+            if (errno != EINTR)
+                break; /* Failed */
 #ifdef F_SETLK
-		} else if (fcntl (binary_protocol_file, F_SETLK, &lock) == -1) {
-			/* The lock for the file is already taken. Fail */
-			close (binary_protocol_file);
-			binary_protocol_file = -1;
-			break;
+        } else if (fcntl (binary_protocol_file, F_SETLK, &lock) == -1) {
+            /* The lock for the file is already taken. Fail */
+            close (binary_protocol_file);
+            binary_protocol_file = -1;
+            break;
 #endif
-		} else {
-			/* We have acquired the lock. Truncate the file */
-			ftruncate (binary_protocol_file, 0);
-		}
-	} while (binary_protocol_file == -1);
+        } else {
+            /* We have acquired the lock. Truncate the file */
+            ftruncate (binary_protocol_file, 0);
+        }
+    } while (binary_protocol_file == -1);
 #else
-	g_error ("sgen binary protocol: not supported");
+    g_error ("sgen binary protocol: not supported");
 #endif
-	if (binary_protocol_file == invalid_file_value && assert_on_failure)
-		g_error ("sgen binary protocol: failed to open file");
+    if (binary_protocol_file == invalid_file_value && assert_on_failure)
+        g_error ("sgen binary protocol: failed to open file");
 
-	if (file_size_limit > 0)
-		free_filename (filename);
+    if (file_size_limit > 0)
+        free_filename (filename);
 }
 
 void
 sgen_binary_protocol_init (const char *filename, long long limit)
 {
-	file_size_limit = limit;
+    file_size_limit = limit;
 
-	/* Original name length + . + pid length in hex + null terminator */
-	filename_or_prefix = g_strdup_printf ("%s", filename);
-	binary_protocol_open_file (FALSE);
+    /* Original name length + . + pid length in hex + null terminator */
+    filename_or_prefix = g_strdup_printf ("%s", filename);
+    binary_protocol_open_file (FALSE);
 
-	if (binary_protocol_file == invalid_file_value) {
-		/* Another process owns the file, try adding the pid suffix to the filename */
-		gint32 pid = mono_process_current_pid ();
-		g_free (filename_or_prefix);
-		filename_or_prefix = g_strdup_printf ("%s.%x", filename, pid);
-		binary_protocol_open_file (TRUE);
-	}
+    if (binary_protocol_file == invalid_file_value) {
+        /* Another process owns the file, try adding the pid suffix to the filename */
+        gint32 pid = mono_process_current_pid ();
+        g_free (filename_or_prefix);
+        filename_or_prefix = g_strdup_printf ("%s.%x", filename, pid);
+        binary_protocol_open_file (TRUE);
+    }
 
-	/* If we have a file size limit, we might need to open additional files */
-	if (file_size_limit == 0)
-		g_free (filename_or_prefix);
+    /* If we have a file size limit, we might need to open additional files */
+    if (file_size_limit == 0)
+        g_free (filename_or_prefix);
 
-	sgen_binary_protocol_header (PROTOCOL_HEADER_CHECK, PROTOCOL_HEADER_VERSION, SIZEOF_VOID_P, G_BYTE_ORDER == G_LITTLE_ENDIAN);
+    sgen_binary_protocol_header (PROTOCOL_HEADER_CHECK, PROTOCOL_HEADER_VERSION, SIZEOF_VOID_P, G_BYTE_ORDER == G_LITTLE_ENDIAN);
 }
 
 gboolean
 sgen_binary_protocol_is_enabled (void)
 {
-	return binary_protocol_file != invalid_file_value;
+    return binary_protocol_file != invalid_file_value;
 }
 
 static void
 close_binary_protocol_file (void)
 {
 #if defined(HOST_WIN32)
-	CloseHandle (binary_protocol_file);
+    CloseHandle (binary_protocol_file);
 #elif defined(HAVE_UNISTD_H)
-	while (close (binary_protocol_file) == -1 && errno == EINTR)
-		;
+    while (close (binary_protocol_file) == -1 && errno == EINTR)
+        ;
 #endif
-	binary_protocol_file = invalid_file_value;
+    binary_protocol_file = invalid_file_value;
 }
 
 static gboolean
 try_lock_exclusive (void)
 {
-	do {
-		if (binary_protocol_use_count)
-			return FALSE;
-	} while (mono_atomic_cas_i32 (&binary_protocol_use_count, -1, 0) != 0);
-	mono_memory_barrier ();
-	return TRUE;
+    do {
+        if (binary_protocol_use_count)
+            return FALSE;
+    } while (mono_atomic_cas_i32 (&binary_protocol_use_count, -1, 0) != 0);
+    mono_memory_barrier ();
+    return TRUE;
 }
 
 static void
 unlock_exclusive (void)
 {
-	mono_memory_barrier ();
-	SGEN_ASSERT (0, binary_protocol_use_count == -1, "Exclusively locked count must be -1");
-	if (mono_atomic_cas_i32 (&binary_protocol_use_count, 0, -1) != -1)
-		SGEN_ASSERT (0, FALSE, "Somebody messed with the exclusive lock");
+    mono_memory_barrier ();
+    SGEN_ASSERT (0, binary_protocol_use_count == -1, "Exclusively locked count must be -1");
+    if (mono_atomic_cas_i32 (&binary_protocol_use_count, 0, -1) != -1)
+        SGEN_ASSERT (0, FALSE, "Somebody messed with the exclusive lock");
 }
 
 static void
 lock_recursive (void)
 {
-	int old_count;
-	do {
-	retry:
-		old_count = binary_protocol_use_count;
-		if (old_count < 0) {
-			/* Exclusively locked - retry */
-			/* FIXME: short back-off */
-			goto retry;
-		}
-	} while (mono_atomic_cas_i32 (&binary_protocol_use_count, old_count + 1, old_count) != old_count);
-	mono_memory_barrier ();
+    int old_count;
+    do {
+retry:
+        old_count = binary_protocol_use_count;
+        if (old_count < 0) {
+            /* Exclusively locked - retry */
+            /* FIXME: short back-off */
+            goto retry;
+        }
+    } while (mono_atomic_cas_i32 (&binary_protocol_use_count, old_count + 1, old_count) != old_count);
+    mono_memory_barrier ();
 }
 
 static void
 unlock_recursive (void)
 {
-	int old_count;
-	mono_memory_barrier ();
-	do {
-		old_count = binary_protocol_use_count;
-		SGEN_ASSERT (0, old_count > 0, "Locked use count must be at least 1");
-	} while (mono_atomic_cas_i32 (&binary_protocol_use_count, old_count - 1, old_count) != old_count);
+    int old_count;
+    mono_memory_barrier ();
+    do {
+        old_count = binary_protocol_use_count;
+        SGEN_ASSERT (0, old_count > 0, "Locked use count must be at least 1");
+    } while (mono_atomic_cas_i32 (&binary_protocol_use_count, old_count - 1, old_count) != old_count);
 }
 
 static void
 binary_protocol_flush_buffer (BinaryProtocolBuffer *buffer)
 {
-	size_t to_write = buffer->index;
-	size_t written = 0;
-	g_assert (buffer->index > 0);
+    size_t to_write = buffer->index;
+    size_t written = 0;
+    g_assert (buffer->index > 0);
 
-	while (binary_protocol_file != invalid_file_value && written < to_write) {
+    while (binary_protocol_file != invalid_file_value && written < to_write) {
 #if defined(HOST_WIN32)
-		DWORD tmp_written;
-		if (WriteFile (binary_protocol_file, buffer->buffer + written, to_write - written, &tmp_written, NULL))
-			written += tmp_written;
+        DWORD tmp_written;
+        if (WriteFile (binary_protocol_file, buffer->buffer + written, to_write - written, &tmp_written, NULL))
+            written += tmp_written;
 #elif defined(HAVE_UNISTD_H)
-		ssize_t ret = write (binary_protocol_file, buffer->buffer + written, to_write - written);
-		if (ret >= 0)
-			written += ret;
-		else if (errno == EINTR)
-			continue;
+        ssize_t ret = write (binary_protocol_file, buffer->buffer + written, to_write - written);
+        if (ret >= 0)
+            written += ret;
+        else if (errno == EINTR)
+            continue;
 #endif
-		else
-			close_binary_protocol_file ();
-	}
+        else
+            close_binary_protocol_file ();
+    }
 
-	current_file_size += buffer->index;
+    current_file_size += buffer->index;
 
-	sgen_free_os_memory (buffer, sizeof (BinaryProtocolBuffer), SGEN_ALLOC_INTERNAL, MONO_MEM_ACCOUNT_SGEN_BINARY_PROTOCOL);
+    sgen_free_os_memory (buffer, sizeof (BinaryProtocolBuffer), SGEN_ALLOC_INTERNAL, MONO_MEM_ACCOUNT_SGEN_BINARY_PROTOCOL);
 }
 
 static void
 binary_protocol_check_file_overflow (void)
 {
-	if (file_size_limit <= 0 || current_file_size < file_size_limit)
-		return;
+    if (file_size_limit <= 0 || current_file_size < file_size_limit)
+        return;
 
-	close_binary_protocol_file ();
+    close_binary_protocol_file ();
 
-	if (current_file_index > 0) {
-		char *filename = filename_for_index (current_file_index - 1);
-		unlink (filename);
-		free_filename (filename);
-	}
+    if (current_file_index > 0) {
+        char *filename = filename_for_index (current_file_index - 1);
+        unlink (filename);
+        free_filename (filename);
+    }
 
-	++current_file_index;
-	current_file_size = 0;
+    ++current_file_index;
+    current_file_size = 0;
 
-	binary_protocol_open_file (TRUE);
+    binary_protocol_open_file (TRUE);
 }
 
 /*
@@ -273,110 +273,110 @@ binary_protocol_check_file_overflow (void)
 gboolean
 sgen_binary_protocol_flush_buffers (gboolean force)
 {
-	int num_buffers = 0, i;
-	BinaryProtocolBuffer *header;
-	BinaryProtocolBuffer *buf;
-	BinaryProtocolBuffer **bufs;
+    int num_buffers = 0, i;
+    BinaryProtocolBuffer *header;
+    BinaryProtocolBuffer *buf;
+    BinaryProtocolBuffer **bufs;
 
-	if (binary_protocol_file == invalid_file_value)
-		return FALSE;
+    if (binary_protocol_file == invalid_file_value)
+        return FALSE;
 
-	if (!force && !try_lock_exclusive ())
-		return FALSE;
+    if (!force && !try_lock_exclusive ())
+        return FALSE;
 
-	header = binary_protocol_buffers;
-	for (buf = header; buf != NULL; buf = buf->next)
-		++num_buffers;
-	bufs = (BinaryProtocolBuffer **)sgen_alloc_internal_dynamic (num_buffers * sizeof (BinaryProtocolBuffer*), INTERNAL_MEM_BINARY_PROTOCOL, TRUE);
-	for (buf = header, i = 0; buf != NULL; buf = buf->next, i++)
-		bufs [i] = buf;
-	SGEN_ASSERT (0, i == num_buffers, "Binary protocol buffer count error");
+    header = binary_protocol_buffers;
+    for (buf = header; buf != NULL; buf = buf->next)
+        ++num_buffers;
+    bufs = (BinaryProtocolBuffer **)sgen_alloc_internal_dynamic (num_buffers * sizeof (BinaryProtocolBuffer*), INTERNAL_MEM_BINARY_PROTOCOL, TRUE);
+    for (buf = header, i = 0; buf != NULL; buf = buf->next, i++)
+        bufs [i] = buf;
+    SGEN_ASSERT (0, i == num_buffers, "Binary protocol buffer count error");
 
-	/*
-	 * This might be incorrect when forcing, but all bets are off in that case, anyway,
-	 * because we're trying to figure out a bug in the debugger.
-	 */
-	binary_protocol_buffers = NULL;
+    /*
+     * This might be incorrect when forcing, but all bets are off in that case, anyway,
+     * because we're trying to figure out a bug in the debugger.
+     */
+    binary_protocol_buffers = NULL;
 
-	for (i = num_buffers - 1; i >= 0; --i) {
-		binary_protocol_flush_buffer (bufs [i]);
-		binary_protocol_check_file_overflow ();
-	}
+    for (i = num_buffers - 1; i >= 0; --i) {
+        binary_protocol_flush_buffer (bufs [i]);
+        binary_protocol_check_file_overflow ();
+    }
 
-	sgen_free_internal_dynamic (buf, num_buffers * sizeof (BinaryProtocolBuffer*), INTERNAL_MEM_BINARY_PROTOCOL);
+    sgen_free_internal_dynamic (buf, num_buffers * sizeof (BinaryProtocolBuffer*), INTERNAL_MEM_BINARY_PROTOCOL);
 
-	if (!force)
-		unlock_exclusive ();
+    if (!force)
+        unlock_exclusive ();
 
-	return TRUE;
+    return TRUE;
 }
 
 static BinaryProtocolBuffer*
 binary_protocol_get_buffer (int length)
 {
-	BinaryProtocolBuffer *buffer, *new_buffer;
- retry:
-	buffer = binary_protocol_buffers;
-	if (buffer && buffer->index + length <= BINARY_PROTOCOL_BUFFER_SIZE)
-		return buffer;
+    BinaryProtocolBuffer *buffer, *new_buffer;
+retry:
+    buffer = binary_protocol_buffers;
+    if (buffer && buffer->index + length <= BINARY_PROTOCOL_BUFFER_SIZE)
+        return buffer;
 
-	new_buffer = (BinaryProtocolBuffer *)sgen_alloc_os_memory (sizeof (BinaryProtocolBuffer), (SgenAllocFlags)(SGEN_ALLOC_INTERNAL | SGEN_ALLOC_ACTIVATE), "debugging memory", MONO_MEM_ACCOUNT_SGEN_BINARY_PROTOCOL);
-	new_buffer->next = buffer;
-	new_buffer->index = 0;
+    new_buffer = (BinaryProtocolBuffer *)sgen_alloc_os_memory (sizeof (BinaryProtocolBuffer), (SgenAllocFlags)(SGEN_ALLOC_INTERNAL | SGEN_ALLOC_ACTIVATE), "debugging memory", MONO_MEM_ACCOUNT_SGEN_BINARY_PROTOCOL);
+    new_buffer->next = buffer;
+    new_buffer->index = 0;
 
-	if (mono_atomic_cas_ptr ((void**)&binary_protocol_buffers, new_buffer, buffer) != buffer) {
-		sgen_free_os_memory (new_buffer, sizeof (BinaryProtocolBuffer), SGEN_ALLOC_INTERNAL, MONO_MEM_ACCOUNT_SGEN_BINARY_PROTOCOL);
-		goto retry;
-	}
+    if (mono_atomic_cas_ptr ((void**)&binary_protocol_buffers, new_buffer, buffer) != buffer) {
+        sgen_free_os_memory (new_buffer, sizeof (BinaryProtocolBuffer), SGEN_ALLOC_INTERNAL, MONO_MEM_ACCOUNT_SGEN_BINARY_PROTOCOL);
+        goto retry;
+    }
 
-	return new_buffer;
+    return new_buffer;
 }
 
 static void
 protocol_entry (unsigned char type, gpointer data, int size)
 {
-	int index;
-	gboolean include_worker_index = type != PROTOCOL_ID (binary_protocol_header);
-	int entry_size = size + 1 + (include_worker_index ? 1 : 0); // type + worker_index + size
-	BinaryProtocolBuffer *buffer;
+    int index;
+    gboolean include_worker_index = type != PROTOCOL_ID (binary_protocol_header);
+    int entry_size = size + 1 + (include_worker_index ? 1 : 0); // type + worker_index + size
+    BinaryProtocolBuffer *buffer;
 
-	if (binary_protocol_file == invalid_file_value)
-		return;
+    if (binary_protocol_file == invalid_file_value)
+        return;
 
-	lock_recursive ();
+    lock_recursive ();
 
- retry:
-	buffer = binary_protocol_get_buffer (size + 1);
- retry_same_buffer:
-	index = buffer->index;
-	if (index + entry_size > BINARY_PROTOCOL_BUFFER_SIZE)
-		goto retry;
+retry:
+    buffer = binary_protocol_get_buffer (size + 1);
+retry_same_buffer:
+    index = buffer->index;
+    if (index + entry_size > BINARY_PROTOCOL_BUFFER_SIZE)
+        goto retry;
 
-	if (mono_atomic_cas_i32 (&buffer->index, index + entry_size, index) != index)
-		goto retry_same_buffer;
+    if (mono_atomic_cas_i32 (&buffer->index, index + entry_size, index) != index)
+        goto retry_same_buffer;
 
-	/* FIXME: if we're interrupted at this point, we have a buffer
-	   entry that contains random data. */
+    /* FIXME: if we're interrupted at this point, we have a buffer
+       entry that contains random data. */
 
-	buffer->buffer [index++] = type;
-	/* We should never change the header format */
-	if (include_worker_index) {
-		int worker_index;
-		MonoNativeThreadId tid = mono_native_thread_id_get ();
-		/*
-		 * If the thread is not a worker thread we insert 0, which is interpreted
-		 * as gc thread. Worker indexes are 1 based.
-		 */
-		worker_index = sgen_thread_pool_is_thread_pool_thread (tid);
-		/* FIXME Consider using different index bases for different thread pools */
-		buffer->buffer [index++] = (unsigned char) worker_index;
-	}
-	memcpy (buffer->buffer + index, data, size);
-	index += size;
+    buffer->buffer [index++] = type;
+    /* We should never change the header format */
+    if (include_worker_index) {
+        int worker_index;
+        MonoNativeThreadId tid = mono_native_thread_id_get ();
+        /*
+         * If the thread is not a worker thread we insert 0, which is interpreted
+         * as gc thread. Worker indexes are 1 based.
+         */
+        worker_index = sgen_thread_pool_is_thread_pool_thread (tid);
+        /* FIXME Consider using different index bases for different thread pools */
+        buffer->buffer [index++] = (unsigned char) worker_index;
+    }
+    memcpy (buffer->buffer + index, data, size);
+    index += size;
 
-	g_assert (index <= BINARY_PROTOCOL_BUFFER_SIZE);
+    g_assert (index <= BINARY_PROTOCOL_BUFFER_SIZE);
 
-	unlock_recursive ();
+    unlock_recursive ();
 }
 
 #define TYPE_INT int
