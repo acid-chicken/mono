@@ -1,7 +1,7 @@
 #!/bin/sh
 top_srcdir=$1
-if test -d $top_srcdir/.git; then
-	(cd $top_srcdir;
+if test -d "$top_srcdir"/.git; then
+	(cd "$top_srcdir";
 	 LANG=C; export LANG;
 	 if test -z "$ghprbPullId"; then
 		 branch=`git branch | grep '^\*' | sed 's/(detached from .*/explicit/' | cut -d ' ' -f 2`;
