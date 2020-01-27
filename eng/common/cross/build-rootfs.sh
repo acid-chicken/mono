@@ -59,7 +59,7 @@ while :; do
         break
     fi
 
-    lowerI="$(echo $1 | awk '{print tolower($0)}')"
+    lowerI="$(echo "$1" | awk '{print tolower($0)}')"
     case $lowerI in
         -?|-h|--help)
             usage
@@ -186,58 +186,58 @@ if [ -z "$__RootfsDir" ]; then
 fi
 
 if [ -d "$__RootfsDir" ]; then
-    if [ $__SkipUnmount == 0 ]; then
-        umount $__RootfsDir/*
+    if [ "$__SkipUnmount" == 0 ]; then
+        umount "$__RootfsDir"/*
     fi
-    rm -rf $__RootfsDir
+    rm -rf "$__RootfsDir"
 fi
 
 if [[ "$__LinuxCodeName" == "alpine" ]]; then
     __ApkToolsVersion=2.9.1
     __AlpineVersion=3.9
     __ApkToolsDir=$(mktemp -d)
-    wget https://github.com/alpinelinux/apk-tools/releases/download/v$__ApkToolsVersion/apk-tools-$__ApkToolsVersion-x86_64-linux.tar.gz -P $__ApkToolsDir
-    tar -xf $__ApkToolsDir/apk-tools-$__ApkToolsVersion-x86_64-linux.tar.gz -C $__ApkToolsDir
-    mkdir -p $__RootfsDir/usr/bin
-    cp -v /usr/bin/qemu-$__QEMUArch-static $__RootfsDir/usr/bin
+    wget https://github.com/alpinelinux/apk-tools/releases/download/v"$__ApkToolsVersion/apk-tools-$__ApkToolsVersion"-x86_64-linux.tar.gz -P "$__ApkToolsDir"
+    tar -xf "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"-x86_64-linux.tar.gz -C "$__ApkToolsDir"
+    mkdir -p "$__RootfsDir"/usr/bin
+    cp -v /usr/bin/qemu-"$__QEMUArch"-static "$__RootfsDir"/usr/bin
 
-    $__ApkToolsDir/apk-tools-$__ApkToolsVersion/apk \
-      -X http://dl-cdn.alpinelinux.org/alpine/v$__AlpineVersion/main \
-      -X http://dl-cdn.alpinelinux.org/alpine/v$__AlpineVersion/community \
-      -U --allow-untrusted --root $__RootfsDir --arch $__AlpineArch --initdb \
-      add $__AlpinePackages
+    "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"/apk \
+      -X http://dl-cdn.alpinelinux.org/alpine/v"$__AlpineVersion"/main \
+      -X http://dl-cdn.alpinelinux.org/alpine/v"$__AlpineVersion"/community \
+      -U --allow-untrusted --root "$__RootfsDir" --arch "$__AlpineArch" --initdb \
+      add "$__AlpinePackages"
 
-    $__ApkToolsDir/apk-tools-$__ApkToolsVersion/apk \
+    "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"/apk \
       -X http://dl-cdn.alpinelinux.org/alpine/edge/main \
-      -U --allow-untrusted --root $__RootfsDir --arch $__AlpineArch --initdb \
-      add $__AlpinePackagesEdgeMain
+      -U --allow-untrusted --root "$__RootfsDir" --arch "$__AlpineArch" --initdb \
+      add "$__AlpinePackagesEdgeMain"
 
-    $__ApkToolsDir/apk-tools-$__ApkToolsVersion/apk \
+    "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"/apk \
       -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-      -U --allow-untrusted --root $__RootfsDir --arch $__AlpineArch --initdb \
-      add $__AlpinePackagesEdgeTesting
+      -U --allow-untrusted --root "$__RootfsDir" --arch "$__AlpineArch" --initdb \
+      add "$__AlpinePackagesEdgeTesting"
 
-    rm -r $__ApkToolsDir
+    rm -r "$__ApkToolsDir"
 elif [[ -n $__LinuxCodeName ]]; then
-    qemu-debootstrap --arch $__UbuntuArch $__LinuxCodeName $__RootfsDir $__UbuntuRepo
-    cp $__CrossDir/$__BuildArch/sources.list.$__LinuxCodeName $__RootfsDir/etc/apt/sources.list
-    chroot $__RootfsDir apt-get update
-    chroot $__RootfsDir apt-get -f -y install
-    chroot $__RootfsDir apt-get -y install $__UbuntuPackages
-    chroot $__RootfsDir symlinks -cr /usr
+    qemu-debootstrap --arch "$__UbuntuArch" "$__LinuxCodeName" "$__RootfsDir" "$__UbuntuRepo"
+    cp "$__CrossDir/$__BuildArch/sources.list.$__LinuxCodeName" "$__RootfsDir"/etc/apt/sources.list
+    chroot "$__RootfsDir" apt-get update
+    chroot "$__RootfsDir" apt-get -f -y install
+    chroot "$__RootfsDir" apt-get -y install "$__UbuntuPackages"
+    chroot "$__RootfsDir" symlinks -cr /usr
 
-    if [ $__SkipUnmount == 0 ]; then
-        umount $__RootfsDir/*
+    if [ "$__SkipUnmount" == 0 ]; then
+        umount "$__RootfsDir"/*
     fi
 
     if [[ "$__BuildArch" == "arm" && "$__LinuxCodeName" == "trusty" ]]; then
-        pushd $__RootfsDir
-        patch -p1 < $__CrossDir/$__BuildArch/trusty.patch
-        patch -p1 < $__CrossDir/$__BuildArch/trusty-lttng-2.4.patch
+        pushd "$__RootfsDir"
+        patch -p1 < "$__CrossDir/$__BuildArch"/trusty.patch
+        patch -p1 < "$__CrossDir/$__BuildArch"/trusty-lttng-2.4.patch
         popd
     fi
 elif [ "$__Tizen" == "tizen" ]; then
-    ROOTFS_DIR=$__RootfsDir $__CrossDir/$__BuildArch/tizen-build-rootfs.sh
+    ROOTFS_DIR=$__RootfsDir "$__CrossDir/$__BuildArch"/tizen-build-rootfs.sh
 else
     echo "Unsupported target platform."
     usage;
