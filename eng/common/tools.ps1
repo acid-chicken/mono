@@ -155,12 +155,12 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
   # The following code block is protecting against concurrent access so that this function can
   # be called in parallel.
   if ($createSdkLocationFile) {
-    do { 
+    do {
       $sdkCacheFileTemp = Join-Path $ToolsetDir $([System.IO.Path]::GetRandomFileName())
-    } 
+    }
     until (!(Test-Path $sdkCacheFileTemp))
     Set-Content -Path $sdkCacheFileTemp -Value $dotnetRoot
-  
+
     try {
       Rename-Item -Force -Path $sdkCacheFileTemp 'sdk.txt'
     } catch {
@@ -198,12 +198,12 @@ function InstallDotNetSdk([string] $dotnetRoot, [string] $version, [string] $arc
   InstallDotNet $dotnetRoot $version $architecture
 }
 
-function InstallDotNet([string] $dotnetRoot, 
-  [string] $version, 
-  [string] $architecture = '', 
-  [string] $runtime = '', 
-  [bool] $skipNonVersionedFiles = $false, 
-  [string] $runtimeSourceFeed = '', 
+function InstallDotNet([string] $dotnetRoot,
+  [string] $version,
+  [string] $architecture = '',
+  [string] $runtime = '',
+  [bool] $skipNonVersionedFiles = $false,
+  [string] $runtimeSourceFeed = '',
   [string] $runtimeSourceFeedKey = '') {
 
   $installScript = GetDotNetInstallScript $dotnetRoot
@@ -298,7 +298,7 @@ function InitializeVisualStudioMSBuild([bool]$install, [object]$vsRequirements =
       $vsMajorVersion = $vsMinVersion.Major
       $xcopyMSBuildVersion = "$vsMajorVersion.$($vsMinVersion.Minor).0-alpha"
     }
-    
+
     $vsInstallDir = $null
     if ($xcopyMSBuildVersion.Trim() -ine "none") {
         $vsInstallDir = InitializeXCopyMSBuild $xcopyMSBuildVersion $install
