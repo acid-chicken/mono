@@ -28,7 +28,7 @@
 
 namespace System.Windows.Forms.RTF {
 
-internal enum Minor {
+  internal enum Minor {
     Undefined,
 
     Skip,
@@ -768,5 +768,5 @@ internal enum Minor {
     UnicodeDualDestination,
     UnicodeAnsiCodepage
 
-}
+  }
 }

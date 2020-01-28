@@ -28,53 +28,43 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms
-{
-[ComVisible (true)]
-[ClassInterface (ClassInterfaceType.AutoDispatch)]
-[DefaultEvent ("Opening")]
-public class ContextMenuStrip : ToolStripDropDownMenu
-{
+namespace System.Windows.Forms {
+  [ComVisible(true)]
+  [ClassInterface(ClassInterfaceType.AutoDispatch)]
+  [DefaultEvent("Opening")]
+  public class ContextMenuStrip : ToolStripDropDownMenu {
     internal Control AssociatedControl;
 
-    #region Public Construtors
-    public ContextMenuStrip () : base ()
-    {
-    }
+#region Public Construtors
+    public ContextMenuStrip() : base() {}
 
-    public ContextMenuStrip (IContainer container) : this ()
-    {
-        // TODO: handle `container` argument
+    public ContextMenuStrip(IContainer container) : this() {
+      // TODO: handle `container` argument
     }
-    #endregion
+#endregion
 
-    #region Public Properties
-    [Browsable (false)]
-    [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
+#region Public Properties
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Control SourceControl {
-        get;
-        protected set;
+      get;
+      protected set;
     }
-    #endregion
+#endregion
 
-    #region Protected Methods
-    protected override void Dispose (bool disposing)
-    {
-        base.Dispose (disposing);
-    }
+#region Protected Methods
+    protected override void Dispose(bool disposing) { base.Dispose(disposing); }
 
-    protected override void SetVisibleCore (bool visible)
-    {
-        base.SetVisibleCore (visible);
-        if (visible)
-            XplatUI.SetTopmost (this.Handle, true);
+    protected override void SetVisibleCore(bool visible) {
+      base.SetVisibleCore(visible);
+      if (visible)
+        XplatUI.SetTopmost(this.Handle, true);
     }
 
-    protected override void SetOwnerControl (Control control)
-    {
-        base.SetOwnerControl (control);
-        SourceControl = control;
+    protected override void SetOwnerControl(Control control) {
+      base.SetOwnerControl(control);
+      SourceControl = control;
     }
-    #endregion
-}
+#endregion
+  }
 }
