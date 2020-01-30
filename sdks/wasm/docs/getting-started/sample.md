@@ -5,8 +5,8 @@ the sample.
 
 ## Content
 
-&nbsp;&nbsp;&nbsp;&nbsp;[Requirements](#requirements)  
-&nbsp;&nbsp;&nbsp;&nbsp;[Create sample](#create-sample)  
+&nbsp;&nbsp;&nbsp;&nbsp;[Requirements](#requirements)
+&nbsp;&nbsp;&nbsp;&nbsp;[Create sample](#create-sample)
 &nbsp;&nbsp;&nbsp;&nbsp;[Serving sample](#serving-sample)
 
 ## Requirements

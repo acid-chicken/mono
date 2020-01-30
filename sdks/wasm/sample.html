@@ -6,9 +6,9 @@
 				padding: 20px;
 				background-color:#ffffc9
 			  }
-				  
+
 			  p { margin : 0; }
-		</style>    	  
+		</style>
   </head>
   <body>
 	  C# output:
@@ -19,8 +19,8 @@
 	  <br>
 
 	  <p><button onclick="App.geoFindMeCSharp()">Show my location</button></p>
-	  <div id="out"></div>	  
-	
+	  <div id="out"></div>
+
 	<script type='text/javascript'>
 		var App = {
 			onClick: function () {
@@ -41,10 +41,10 @@
 			},
             geoFindMeCSharp: function () {
                 BINDING.call_static_method("[sample] GeoLocation.Program:GeoFindMe", [ document.getElementById("out") ]);
-            }			
+            }
 		};
 
-        // Called from C# passing in the mime type of the image and the 
+        // Called from C# passing in the mime type of the image and the
         // image data converted from byte array to base64
         function showMyPosition (mimeType, imageData)
         {
