@@ -103,7 +103,7 @@ NPM=$(CURDIR)/node_modules/node/bin/node $(CURDIR)/node_modules/npm/bin/npm-cli.
 jsup: .stamp-jsvu
 	node_modules/node/bin/node node_modules/jsvu/cli.js --os=$(JSVU_OS) --engines=chakra,javascriptcore,spidermonkey,v8,xs
 
-.stamp-jsvu: 
+.stamp-jsvu:
 	npm install npm@^6.13.4
 	node_modules/npm/bin/npm-cli.js install
 	node_modules/node/bin/node node_modules/jsvu/cli.js --os=$(JSVU_OS) --engines=chakra,javascriptcore,spidermonkey,v8,xs
@@ -332,7 +332,7 @@ cil-strip:
 
 mono: runtime runtime-threads cross bcl
 
-BCL_DEPS=/r:$(WASM_BCL_DIR)/mscorlib.dll /r:$(WASM_BCL_DIR)/System.Core.dll /r:$(WASM_BCL_DIR)/System.dll /r:$(WASM_BCL_DIR)/System.Net.Http.dll /r:$(WASM_BCL_DIR)/Facades/netstandard.dll /r:$(WASM_BCL_DIR)/System.IO.Compression.dll /r:$(WASM_BCL_DIR)/Facades/System.Memory.dll 
+BCL_DEPS=/r:$(WASM_BCL_DIR)/mscorlib.dll /r:$(WASM_BCL_DIR)/System.Core.dll /r:$(WASM_BCL_DIR)/System.dll /r:$(WASM_BCL_DIR)/System.Net.Http.dll /r:$(WASM_BCL_DIR)/Facades/netstandard.dll /r:$(WASM_BCL_DIR)/System.IO.Compression.dll /r:$(WASM_BCL_DIR)/Facades/System.Memory.dll
 
 main.exe: $(APP_SOURCES)
 	$(CSC) $(CSC_FLAGS) /unsafe -out:$@ $(BCL_DEPS) /r:$(WASM_BCL_DIR)/nunitlite.dll  $(APP_SOURCES)
@@ -368,7 +368,7 @@ packager.exe: packager.cs Mono.Cecil.dll $(OPTIONS_CS) | build-native
 
 .stamp-build-debug-sample: packager.exe $(WASM_FRAMEWORK)/.stamp-framework sample.dll debug.html runtime.js
 	$(PACKAGER) --copy=always -debug -out=debug_sample --asset=debug.html sample.dll
-	touch $@	
+	touch $@
 
 TEST_ASSEMBLIES = $(WASM_BCL_DIR)/nunitlite.dll $(WASM_BCL_DIR)/tests/wasm_corlib_test.dll $(WASM_BCL_DIR)/tests/wasm_System_test.dll $(WASM_BCL_DIR)/tests/wasm_System.Core_test.dll
 
@@ -418,7 +418,7 @@ $(eval $(call XunitTestTemplate,System.Xml-xunit,System.Xml-xunit,wasm_System.Xm
 $(eval $(call XunitTestTemplate,System.Xml.Linq-xunit,System.Xml.Linq-xunit,wasm_System.Xml.Linq_xunit-test.dll))
 $(eval $(call XunitTestTemplate,corlib-xunit,corlib-xunit,wasm_corlib_xunit-test.dll))
 
-$(BROWSER_TEST)/.stamp-browser-test-suite: packager.exe $(WASM_FRAMEWORK)/.stamp-framework $(BROWSER_TEST_SOURCES) clean-browser-tests build-sdk 
+$(BROWSER_TEST)/.stamp-browser-test-suite: packager.exe $(WASM_FRAMEWORK)/.stamp-framework $(BROWSER_TEST_SOURCES) clean-browser-tests build-sdk
 	$(DOTNET_BUILD) tests/browser/src -v normal
 	(cd $(BROWSER_TEST) && $(NPM) install)
 	touch $@
@@ -718,7 +718,7 @@ package: build build-sdk build-dbg-proxy
 	cp README.md tmp/
 	cp server.py tmp/
 	cp Mono.Cecil.dll tmp/
-	cp $(OPTIONS_CS) tmp/	
+	cp $(OPTIONS_CS) tmp/
 	cp packager.exe tmp/
 	cp runtime.js tmp/
 	cp Mono.WebAssembly.DebuggerProxy/bin/Debug/netstandard2.1/Mono.WebAssembly.DebuggerProxy.dll tmp/
