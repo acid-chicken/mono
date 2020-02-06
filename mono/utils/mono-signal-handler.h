@@ -82,11 +82,11 @@
 #include <windows.h>
 #define MONO_SIG_HANDLER_INFO_TYPE MonoWindowsSigHandlerInfo
 typedef struct {
-	/* Set to FALSE to indicate chained signal handler needs run.
-	 * With vectored exceptions Windows does that for us by returning
-	 * EXCEPTION_CONTINUE_SEARCH from handler */
-	gboolean handled;
-	EXCEPTION_POINTERS* ep;
+    /* Set to FALSE to indicate chained signal handler needs run.
+     * With vectored exceptions Windows does that for us by returning
+     * EXCEPTION_CONTINUE_SEARCH from handler */
+    gboolean handled;
+    EXCEPTION_POINTERS* ep;
 } MonoWindowsSigHandlerInfo;
 /* seh_vectored_exception_handler () passes in a CONTEXT* */
 #else
