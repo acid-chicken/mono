@@ -3,7 +3,8 @@
  * Handle signal handler differences across platforms
  *
  * Copyright (C) 2013 Xamarin Inc
- * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ * Licensed under the MIT license. See LICENSE file in the project root for full
+ * license information.
  */
 
 #ifndef __MONO_SIGNAL_HANDLER_H__
@@ -36,25 +37,21 @@
  * handler has done its work, it returns into a SIGSEGV.
  */
 
-#if defined (TARGET_ARM) && defined (HAVE_ARMV7) && defined (TARGET_ANDROID)
-#define KRAIT_IT_BUG_WORKAROUND	1
+#if defined(TARGET_ARM) && defined(HAVE_ARMV7) && defined(TARGET_ANDROID)
+#define KRAIT_IT_BUG_WORKAROUND 1
 #endif
 
 #ifdef KRAIT_IT_BUG_WORKAROUND
-#define MONO_SIGNAL_HANDLER_FUNC(access, name, arglist)		\
-	static void __krait_ ## name arglist;	\
-	__attribute__ ((__naked__)) access void				\
-	name arglist							\
-	{								\
-		asm volatile (						\
-			      "mov r0, r0\n\t"				\
-			      "mov r0, r0\n\t"				\
-			      "mov r0, r0\n\t"				\
-			      "mov r0, r0\n\t"				\
-				  "b __krait_" # name			\
-				  "\n\t");						\
-	}	\
-	static __attribute__ ((__used__)) void __krait_ ## name arglist
+#define MONO_SIGNAL_HANDLER_FUNC(access, name, arglist)                        \
+  static void __krait_##name arglist;                                          \
+  __attribute__((__naked__)) access void name arglist {                        \
+    asm volatile("mov r0, r0\n\t"                                              \
+                 "mov r0, r0\n\t"                                              \
+                 "mov r0, r0\n\t"                                              \
+                 "mov r0, r0\n\t"                                              \
+                 "b __krait_" #name "\n\t");                                   \
+  }                                                                            \
+  static __attribute__((__used__)) void __krait_##name arglist
 #endif
 
 /* Don't use this */
@@ -82,11 +79,11 @@
 #include <windows.h>
 #define MONO_SIG_HANDLER_INFO_TYPE MonoWindowsSigHandlerInfo
 typedef struct {
-    /* Set to FALSE to indicate chained signal handler needs run.
-     * With vectored exceptions Windows does that for us by returning
-     * EXCEPTION_CONTINUE_SEARCH from handler */
-    gboolean handled;
-    EXCEPTION_POINTERS* ep;
+  /* Set to FALSE to indicate chained signal handler needs run.
+   * With vectored exceptions Windows does that for us by returning
+   * EXCEPTION_CONTINUE_SEARCH from handler */
+  gboolean handled;
+  EXCEPTION_POINTERS *ep;
 } MonoWindowsSigHandlerInfo;
 /* seh_vectored_exception_handler () passes in a CONTEXT* */
 #else
@@ -94,14 +91,18 @@ typedef struct {
 #define MONO_SIG_HANDLER_INFO_TYPE siginfo_t
 #endif
 
-#define MONO_SIG_HANDLER_SIGNATURE(ftn) ftn (int _dummy, MONO_SIG_HANDLER_INFO_TYPE *_info, void *context)
-#define MONO_SIG_HANDLER_FUNC(access, ftn) MONO_SIGNAL_HANDLER_FUNC (access, ftn, (int _dummy, MONO_SIG_HANDLER_INFO_TYPE *_info, void *context))
+#define MONO_SIG_HANDLER_SIGNATURE(ftn)                                        \
+  ftn(int _dummy, MONO_SIG_HANDLER_INFO_TYPE *_info, void *context)
+#define MONO_SIG_HANDLER_FUNC(access, ftn)                                     \
+  MONO_SIGNAL_HANDLER_FUNC(                                                    \
+      access, ftn,                                                             \
+      (int _dummy, MONO_SIG_HANDLER_INFO_TYPE *_info, void *context))
 #define MONO_SIG_HANDLER_PARAMS _dummy, _info, context
 #define MONO_SIG_HANDLER_GET_SIGNO() (_dummy)
 #define MONO_SIG_HANDLER_GET_INFO() (_info)
 #define MONO_SIG_HANDLER_GET_CONTEXT void *ctx = context;
 
-void mono_load_signames (void);
-const char * mono_get_signame (int signo);
+void mono_load_signames(void);
+const char *mono_get_signame(int signo);
 
 #endif // __MONO_SIGNAL_HANDLER_H__
