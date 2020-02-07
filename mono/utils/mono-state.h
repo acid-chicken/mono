@@ -21,35 +21,35 @@
 #define MONO_NATIVE_STATE_PROTOCOL_VERSION "0.0.6"
 
 typedef enum {
-	MonoSummaryNone = 0,
-	MonoSummarySetup,
-	MonoSummarySuspendHandshake,
-	MonoSummaryUnmanagedStacks,
-	MonoSummaryManagedStacks,
-	MonoSummaryStateWriter,
-	MonoSummaryStateWriterDone,
-	MonoSummaryMerpWriter,
-	MonoSummaryMerpInvoke,
-	MonoSummaryCleanup,
-	MonoSummaryDone,
+    MonoSummaryNone = 0,
+    MonoSummarySetup,
+    MonoSummarySuspendHandshake,
+    MonoSummaryUnmanagedStacks,
+    MonoSummaryManagedStacks,
+    MonoSummaryStateWriter,
+    MonoSummaryStateWriterDone,
+    MonoSummaryMerpWriter,
+    MonoSummaryMerpInvoke,
+    MonoSummaryCleanup,
+    MonoSummaryDone,
 
-	MonoSummaryDoubleFault
+    MonoSummaryDoubleFault
 } MonoSummaryStage;
 
 typedef struct {
-	char *output_str;
-	int len;
-	int allocated_len;
-	int indent;
+    char *output_str;
+    int len;
+    int allocated_len;
+    int indent;
 } MonoStateWriter;
 
 typedef struct {
-	gpointer *mem;
-	gsize size;
+    gpointer *mem;
+    gsize size;
 
-	// File Information
-	gint handle;
-	gint64 tag;
+    // File Information
+    gint handle;
+    gint64 tag;
 } MonoStateMem;
 
 // Logging
