@@ -21,7 +21,7 @@ function CheckExitCode ([string]$stage)
 try {
   $ErrorActionPreference = 'Stop'
   . $PSScriptRoot\tools.ps1
-  
+
   Import-Module -Name (Join-Path $PSScriptRoot 'native\CommonLibrary.psm1')
 
   Push-Location $PSScriptRoot

@@ -33,7 +33,7 @@ jobs:
 
                 $Channels = ""
                 $Content | Select -Index 1 | ForEach-Object { $Channels += "$_ ," }
-                
+
                 $IsStableBuild = $Content | Select -Index 2
 
                 $AzureDevOpsProject = $Env:System_TeamProject
@@ -49,7 +49,7 @@ jobs:
                 $apiHeaders.Add('Authorization',"Bearer ${Env:MAESTRO_API_TOKEN}")
 
                 $buildInfo = try { Invoke-WebRequest -Method Get -Uri $buildApiEndpoint -Headers $apiHeaders | ConvertFrom-Json } catch { Write-Host "Error: $_" }
-               
+
                 $BarId = $Env:BARBuildId
                 $Channels = 'None'
 
