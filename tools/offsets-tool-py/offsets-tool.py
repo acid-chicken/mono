@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode: t; -*-
-
 from __future__ import print_function
+
+import argparse
 import os
 import sys
-import argparse
+
 import clang.cindex
 
 IOS_DEFINES = [
