@@ -76,12 +76,13 @@ class OffsetsTool:
             dest="libclang",
             help="path to shared library of libclang.{so,dylib}",
         )
-        parser.add_argument(
-            "--emscripten-sdk", dest="emscripten_path", help="path to emscripten sdk"
-        )
-        parser.add_argument(
-            "--outfile", dest="outfile", help="path to output file", required=True
-        )
+        parser.add_argument("--emscripten-sdk",
+                            dest="emscripten_path",
+                            help="path to emscripten sdk")
+        parser.add_argument("--outfile",
+                            dest="outfile",
+                            help="path to output file",
+                            required=True)
         parser.add_argument(
             "--monodir",
             dest="mono_path",
@@ -94,12 +95,13 @@ class OffsetsTool:
             help="path to mono tree configured for target",
             required=True,
         )
-        parser.add_argument(
-            "--abi=", dest="abi", help="ABI triple to generate", required=True
-        )
-        parser.add_argument(
-            "--sysroot=", dest="sysroot", help="path to sysroot headers of target"
-        )
+        parser.add_argument("--abi=",
+                            dest="abi",
+                            help="ABI triple to generate",
+                            required=True)
+        parser.add_argument("--sysroot=",
+                            dest="sysroot",
+                            help="path to sysroot headers of target")
         parser.add_argument(
             "--include-prefix=",
             dest="include_prefix",
@@ -114,7 +116,8 @@ class OffsetsTool:
         args = parser.parse_args()
 
         if not args.libclang or not os.path.isfile(args.libclang):
-            print("Libclang '" + args.libclang + "' doesn't exist.", file=sys.stderr)
+            print("Libclang '" + args.libclang + "' doesn't exist.",
+                  file=sys.stderr)
             sys.exit(1)
         if not os.path.isdir(args.mono_path):
             print(
@@ -149,8 +152,8 @@ class OffsetsTool:
             self.target = Target(
                 "TARGET_ARM",
                 None,
-                ["ARM_FPU_VFP", "HAVE_ARMV5", "HAVE_ARMV6", "HAVE_ARMV7"]
-                + LINUX_DEFINES,
+                ["ARM_FPU_VFP", "HAVE_ARMV5", "HAVE_ARMV6", "HAVE_ARMV7"] +
+                LINUX_DEFINES,
             )
             self.target_args += ["--target=arm---gnueabihf"]
             self.target_args += ["-I", args.sysroot + "/include"]
@@ -158,14 +161,15 @@ class OffsetsTool:
             if args.include_prefix:
                 if not os.path.isdir(args.include_prefix):
                     print(
-                        'provided path via --include-prefix ("'
-                        + args.include_prefix
-                        + "\") doesn't exist.",
+                        'provided path via --include-prefix ("' +
+                        args.include_prefix + "\") doesn't exist.",
                         file=sys.stderr,
                     )
                     sys.exit(1)
                 self.target_args += ["-I", args.include_prefix + "/include"]
-                self.target_args += ["-I", args.include_prefix + "/include-fixed"]
+                self.target_args += [
+                    "-I", args.include_prefix + "/include-fixed"
+                ]
             else:
                 found = False
                 for i in range(11, 5, -1):
@@ -187,9 +191,8 @@ class OffsetsTool:
         # iOS
         elif "arm-apple-darwin10" == args.abi:
             require_sysroot(args)
-            self.target = Target(
-                "TARGET_ARM", "TARGET_IOS", ["ARM_FPU_VFP", "HAVE_ARMV5"] + IOS_DEFINES
-            )
+            self.target = Target("TARGET_ARM", "TARGET_IOS",
+                                 ["ARM_FPU_VFP", "HAVE_ARMV5"] + IOS_DEFINES)
             self.target_args += ["-arch", "arm"]
             self.target_args += ["-isysroot", args.sysroot]
         elif "aarch64-apple-darwin10" == args.abi:
@@ -210,21 +213,24 @@ class OffsetsTool:
             self.target_args += ["-isysroot", args.sysroot]
         elif "aarch64-apple-darwin10_ilp32" == args.abi:
             require_sysroot(args)
-            self.target = Target(
-                "TARGET_ARM64", "TARGET_WATCHOS", ["MONO_ARCH_ILP32"] + IOS_DEFINES
-            )
+            self.target = Target("TARGET_ARM64", "TARGET_WATCHOS",
+                                 ["MONO_ARCH_ILP32"] + IOS_DEFINES)
             self.target_args += ["-arch", "arm64_32"]
             self.target_args += ["-isysroot", args.sysroot]
 
         # Android
         elif "i686-none-linux-android" == args.abi:
             require_sysroot(args)
-            self.target = Target("TARGET_X86", "TARGET_ANDROID", ANDROID_DEFINES)
+            self.target = Target("TARGET_X86", "TARGET_ANDROID",
+                                 ANDROID_DEFINES)
             self.target_args += ["--target=i386---android"]
-            self.target_args += ["-I", args.sysroot + "/usr/include/i686-linux-android"]
+            self.target_args += [
+                "-I", args.sysroot + "/usr/include/i686-linux-android"
+            ]
         elif "x86_64-none-linux-android" == args.abi:
             require_sysroot(args)
-            self.target = Target("TARGET_AMD64", "TARGET_ANDROID", ANDROID_DEFINES)
+            self.target = Target("TARGET_AMD64", "TARGET_ANDROID",
+                                 ANDROID_DEFINES)
             self.target_args += ["--target=x86_64---android"]
             self.target_args += [
                 "-I",
@@ -235,8 +241,8 @@ class OffsetsTool:
             self.target = Target(
                 "TARGET_ARM",
                 "TARGET_ANDROID",
-                ["ARM_FPU_VFP", "HAVE_ARMV5", "HAVE_ARMV6", "HAVE_ARMV7"]
-                + ANDROID_DEFINES,
+                ["ARM_FPU_VFP", "HAVE_ARMV5", "HAVE_ARMV6", "HAVE_ARMV7"] +
+                ANDROID_DEFINES,
             )
             self.target_args += ["--target=arm---androideabi"]
             self.target_args += [
@@ -245,7 +251,8 @@ class OffsetsTool:
             ]
         elif "aarch64-v8a-linux-android" == args.abi:
             require_sysroot(args)
-            self.target = Target("TARGET_ARM64", "TARGET_ANDROID", ANDROID_DEFINES)
+            self.target = Target("TARGET_ARM64", "TARGET_ANDROID",
+                                 ANDROID_DEFINES)
             self.target_args += ["--target=aarch64---android"]
             self.target_args += [
                 "-I",
@@ -372,18 +379,14 @@ class OffsetsTool:
                 if d.severity > 2:
                     sys.exit(1)
             for c in tu.cursor.walk_preorder():
-                if (
-                    c.kind != clang.cindex.CursorKind.STRUCT_DECL
-                    and c.kind != clang.cindex.CursorKind.TYPEDEF_DECL
-                ):
+                if (c.kind != clang.cindex.CursorKind.STRUCT_DECL
+                        and c.kind != clang.cindex.CursorKind.TYPEDEF_DECL):
                     continue
                 name = c.spelling
                 if c.kind == clang.cindex.CursorKind.TYPEDEF_DECL:
                     for c2 in c.get_children():
-                        if (
-                            c2.kind == clang.cindex.CursorKind.STRUCT_DECL
-                            or c2.kind == clang.cindex.CursorKind.UNION_DECL
-                        ):
+                        if (c2.kind == clang.cindex.CursorKind.STRUCT_DECL or
+                                c2.kind == clang.cindex.CursorKind.UNION_DECL):
                             c = c2
                 type = c.type
                 if "struct _" in name:
@@ -403,8 +406,8 @@ class OffsetsTool:
                         if child.is_bitfield():
                             continue
                         rtype.fields.append(
-                            FieldInfo(child.spelling, child.get_field_offsetof() // 8)
-                        )
+                            FieldInfo(child.spelling,
+                                      child.get_field_offsetof() // 8))
                 if c.spelling == "basic_types_struct":
                     for field in c.get_children():
                         btype = field.spelling.replace("_f", "")
@@ -429,18 +432,19 @@ class OffsetsTool:
         f.write("#if !defined (DISABLE_METADATA_OFFSETS)\n")
         f.write("#define USED_CROSS_COMPILER_OFFSETS\n")
         for btype in self.basic_types:
-            f.write("DECL_ALIGN2(%s,%s)\n" % (btype, self.basic_type_align[btype]))
+            f.write("DECL_ALIGN2(%s,%s)\n" %
+                    (btype, self.basic_type_align[btype]))
         for btype in self.basic_types:
-            f.write("DECL_SIZE2(%s,%s)\n" % (btype, self.basic_type_size[btype]))
+            f.write("DECL_SIZE2(%s,%s)\n" %
+                    (btype, self.basic_type_size[btype]))
         for type_name in self.runtime_type_names:
             type = self.runtime_types[type_name]
             if type.size == -1:
                 continue
             f.write("DECL_SIZE2(%s,%s)\n" % (type.name, type.size))
             for field in type.fields:
-                f.write(
-                    "DECL_OFFSET2(%s,%s,%s)\n" % (type.name, field.name, field.offset)
-                )
+                f.write("DECL_OFFSET2(%s,%s,%s)\n" %
+                        (type.name, field.name, field.offset))
         f.write("#endif //disable metadata check\n")
 
         f.write("#ifndef DISABLE_JIT_OFFSETS\n")
@@ -451,9 +455,8 @@ class OffsetsTool:
                 continue
             f.write("DECL_SIZE2(%s,%s)\n" % (type.name, type.size))
             for field in type.fields:
-                f.write(
-                    "DECL_OFFSET2(%s,%s,%s)\n" % (type.name, field.name, field.offset)
-                )
+                f.write("DECL_OFFSET2(%s,%s,%s)\n" %
+                        (type.name, field.name, field.offset))
         f.write("#endif //disable jit check\n")
 
         f.write("#endif //cross compiler checks\n")
