@@ -30,12 +30,12 @@
 /* TLS entries used by the runtime */
 // This ordering is mimiced in MONO_JIT_ICALLS (alphabetical).
 typedef enum {
-	TLS_KEY_DOMAIN		 = 0, // mono_domain_get ()
-	TLS_KEY_JIT_TLS		 = 1,
-	TLS_KEY_LMF_ADDR	 = 2,
-	TLS_KEY_SGEN_THREAD_INFO = 3,
-	TLS_KEY_THREAD		 = 4, // mono_thread_internal_current ()
-	TLS_KEY_NUM		 = 5
+    TLS_KEY_DOMAIN		 = 0, // mono_domain_get ()
+    TLS_KEY_JIT_TLS		 = 1,
+    TLS_KEY_LMF_ADDR	 = 2,
+    TLS_KEY_SGEN_THREAD_INFO = 3,
+    TLS_KEY_THREAD		 = 4, // mono_thread_internal_current ()
+    TLS_KEY_NUM		 = 5
 } MonoTlsKey;
 
 #if __cplusplus
@@ -71,14 +71,14 @@ MONO_INLINE
 void*
 mono_native_tls_get_value (unsigned index)
 {
-	PTEB const teb = NtCurrentTeb ();
+    PTEB const teb = NtCurrentTeb ();
 
-	if (index < TLS_MINIMUM_AVAILABLE)
-		return teb->TlsSlots [index];
+    if (index < TLS_MINIMUM_AVAILABLE)
+        return teb->TlsSlots [index];
 
-	void** const p = (void**)teb->TlsExpansionSlots;
+    void** const p = (void**)teb->TlsExpansionSlots;
 
-	return p ? p [index - TLS_MINIMUM_AVAILABLE] : NULL;
+    return p ? p [index - TLS_MINIMUM_AVAILABLE] : NULL;
 }
 
 #else
@@ -91,19 +91,19 @@ mono_native_tls_get_value (unsigned index)
 MONO_INLINE int
 mono_native_tls_alloc (MonoNativeTlsKey *key, void *destructor)
 {
-	return pthread_key_create (key, (void (*)(void*)) destructor) == 0;
+    return pthread_key_create (key, (void (*)(void*)) destructor) == 0;
 }
 
 MONO_INLINE void
 mono_native_tls_free (MonoNativeTlsKey key)
 {
-	pthread_key_delete (key);
+    pthread_key_delete (key);
 }
 
 MONO_INLINE int
 mono_native_tls_set_value (MonoNativeTlsKey key, gpointer value)
 {
-	return !pthread_setspecific (key, value);
+    return !pthread_setspecific (key, value);
 }
 
 #endif /* HOST_WIN32 */
