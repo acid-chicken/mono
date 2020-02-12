@@ -7,7 +7,7 @@ noinst_LTLIBRARIES = \
 	libmonoutils.la
 
 if ENABLE_LLVM
-	if INTERNAL_LLVM 
+	if INTERNAL_LLVM
 		llvm_config=$(monodir)/llvm/usr/bin/llvm-config
 	else
 		llvm_config=$(EXTERNAL_LLVM_CONFIG)
@@ -234,7 +234,7 @@ monoutils_sources = \
 	unlocked.h	\
 	ward.h
 
-arch_sources = 
+arch_sources =
 
 if !CROSS_COMPILE
 
