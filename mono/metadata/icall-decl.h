@@ -41,12 +41,12 @@
 
 /* From MonoProperty.cs */
 typedef enum {
-	PInfo_Attributes = 1,
-	PInfo_GetMethod  = 1 << 1,
-	PInfo_SetMethod  = 1 << 2,
-	PInfo_ReflectedType = 1 << 3,
-	PInfo_DeclaringType = 1 << 4,
-	PInfo_Name = 1 << 5
+    PInfo_Attributes = 1,
+    PInfo_GetMethod  = 1 << 1,
+    PInfo_SetMethod  = 1 << 2,
+    PInfo_ReflectedType = 1 << 3,
+    PInfo_DeclaringType = 1 << 4,
+    PInfo_Name = 1 << 5
 } PInfo;
 
 #include "icall-table.h"
