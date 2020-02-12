@@ -7,28 +7,25 @@ typedef struct _LifoSemaphore LifoSemaphore;
 typedef struct _LifoSemaphoreWaitEntry LifoSemaphoreWaitEntry;
 
 struct _LifoSemaphoreWaitEntry {
-    MonoCoopCond condition;
-    int signaled;
-    LifoSemaphoreWaitEntry *previous;
-    LifoSemaphoreWaitEntry *next;
+  MonoCoopCond condition;
+  int signaled;
+  LifoSemaphoreWaitEntry *previous;
+  LifoSemaphoreWaitEntry *next;
 };
 
 struct _LifoSemaphore {
-    MonoCoopMutex mutex;
-    LifoSemaphoreWaitEntry *head;
-    uint32_t pending_signals;
+  MonoCoopMutex mutex;
+  LifoSemaphoreWaitEntry *head;
+  uint32_t pending_signals;
 };
 
-LifoSemaphore *
-mono_lifo_semaphore_init (void);
+LifoSemaphore *mono_lifo_semaphore_init(void);
 
-void
-mono_lifo_semaphore_delete (LifoSemaphore *semaphore);
+void mono_lifo_semaphore_delete(LifoSemaphore *semaphore);
 
-int32_t
-mono_lifo_semaphore_timed_wait (LifoSemaphore *semaphore, int32_t timeout_ms);
+int32_t mono_lifo_semaphore_timed_wait(LifoSemaphore *semaphore,
+                                       int32_t timeout_ms);
 
-void
-mono_lifo_semaphore_release (LifoSemaphore *semaphore, uint32_t count);
+void mono_lifo_semaphore_release(LifoSemaphore *semaphore, uint32_t count);
 
 #endif // __MONO_LIFO_SEMAPHORE_H__
