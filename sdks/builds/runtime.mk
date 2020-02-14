@@ -275,4 +275,3 @@ define CrossRuntimeTemplateStub
 $$(eval $$(call RuntimeTemplateStub,$(1),$(2),$(3)))
 
 endef
-
