@@ -12,210 +12,210 @@
 static inline MonoType*
 mono_get_void_type (void)
 {
-	return m_class_get_byval_arg (mono_defaults.void_class);
+    return m_class_get_byval_arg (mono_defaults.void_class);
 }
 
 static inline MonoType*
 mono_get_int32_type (void)
 {
-	return m_class_get_byval_arg (mono_defaults.int32_class);
+    return m_class_get_byval_arg (mono_defaults.int32_class);
 }
 
 static inline MonoType*
 mono_get_int_type (void)
 {
-	return m_class_get_byval_arg (mono_defaults.int_class);
+    return m_class_get_byval_arg (mono_defaults.int_class);
 }
 
 static inline MonoType*
 mono_get_object_type (void)
 {
-	return m_class_get_byval_arg (mono_defaults.object_class);
+    return m_class_get_byval_arg (mono_defaults.object_class);
 }
 
 
 static inline gboolean
 mono_class_is_def (MonoClass *klass)
 {
-	return m_class_get_class_kind (klass) == MONO_CLASS_DEF;
+    return m_class_get_class_kind (klass) == MONO_CLASS_DEF;
 }
 
 static inline gboolean
 mono_class_is_gtd (MonoClass *klass)
 {
-	return m_class_get_class_kind (klass) == MONO_CLASS_GTD;
+    return m_class_get_class_kind (klass) == MONO_CLASS_GTD;
 }
 
 static inline gboolean
 mono_class_is_ginst (MonoClass *klass)
 {
-	return m_class_get_class_kind (klass) == MONO_CLASS_GINST;
+    return m_class_get_class_kind (klass) == MONO_CLASS_GINST;
 }
 
 static inline gboolean
 mono_class_is_gparam (MonoClass *klass)
 {
-	return m_class_get_class_kind (klass) == MONO_CLASS_GPARAM;
+    return m_class_get_class_kind (klass) == MONO_CLASS_GPARAM;
 }
 
 static inline gboolean
 mono_class_is_array (MonoClass *klass)
 {
-	return m_class_get_class_kind (klass) == MONO_CLASS_ARRAY;
+    return m_class_get_class_kind (klass) == MONO_CLASS_ARRAY;
 }
 
 static inline gboolean
 mono_class_is_pointer (MonoClass *klass)
 {
-	return m_class_get_class_kind (klass) == MONO_CLASS_POINTER;
+    return m_class_get_class_kind (klass) == MONO_CLASS_POINTER;
 }
 
 static inline gboolean
 mono_class_is_abstract (MonoClass *klass)
 {
-	return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_ABSTRACT;
+    return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_ABSTRACT;
 }
 
 static inline gboolean
 mono_class_is_interface (MonoClass *klass)
 {
-	return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_INTERFACE;
+    return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_INTERFACE;
 }
 
 static inline gboolean
 mono_class_is_sealed (MonoClass *klass)
 {
-	return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_SEALED;
+    return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_SEALED;
 }
 
 static inline gboolean
 mono_class_is_before_field_init (MonoClass *klass)
 {
-	return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_BEFORE_FIELD_INIT;
+    return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_BEFORE_FIELD_INIT;
 }
 
 static inline gboolean
 mono_class_is_auto_layout (MonoClass *klass)
 {
-	return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_LAYOUT_MASK) == TYPE_ATTRIBUTE_AUTO_LAYOUT;
+    return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_LAYOUT_MASK) == TYPE_ATTRIBUTE_AUTO_LAYOUT;
 }
 
 static inline gboolean
 mono_class_is_explicit_layout (MonoClass *klass)
 {
-	return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_LAYOUT_MASK) == TYPE_ATTRIBUTE_EXPLICIT_LAYOUT;
+    return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_LAYOUT_MASK) == TYPE_ATTRIBUTE_EXPLICIT_LAYOUT;
 }
 
 static inline gboolean
 mono_class_is_public (MonoClass *klass)
 {
-	return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_PUBLIC;
+    return mono_class_get_flags (klass) & TYPE_ATTRIBUTE_PUBLIC;
 }
 
 static inline gboolean
 mono_class_has_static_metadata (MonoClass *klass)
 {
-	return m_class_get_type_token (klass) && !m_class_get_image (klass)->dynamic && !mono_class_is_ginst (klass);
+    return m_class_get_type_token (klass) && !m_class_get_image (klass)->dynamic && !mono_class_is_ginst (klass);
 }
 
 static inline gboolean
 m_class_is_abstract (MonoClass *klass)
 {
-	return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_ABSTRACT) != 0;
+    return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_ABSTRACT) != 0;
 }
 
 static inline gboolean
 m_class_is_interface (MonoClass *klass)
 {
-	return MONO_CLASS_IS_INTERFACE_INTERNAL (klass);
+    return MONO_CLASS_IS_INTERFACE_INTERNAL (klass);
 }
 
 static inline gboolean
 m_class_is_gtd (MonoClass *klass)
 {
-	return mono_class_is_gtd (klass);
+    return mono_class_is_gtd (klass);
 }
 
 static inline gboolean
 m_class_is_string (MonoClass *klass)
 {
-	return klass == mono_defaults.string_class;
+    return klass == mono_defaults.string_class;
 }
 
 static inline gboolean
 m_class_is_primitive (MonoClass *klass)
 {
-	return mono_type_is_primitive (m_class_get_byval_arg (klass));
+    return mono_type_is_primitive (m_class_get_byval_arg (klass));
 }
 
 static inline gboolean
 m_class_is_native_pointer (MonoClass *klass)
 {
-	MonoType *t = m_class_get_byval_arg (klass);
+    MonoType *t = m_class_get_byval_arg (klass);
 
-	return t->type == MONO_TYPE_PTR || t->type == MONO_TYPE_FNPTR;
+    return t->type == MONO_TYPE_PTR || t->type == MONO_TYPE_FNPTR;
 }
 
 static inline gboolean
 m_class_is_nullable (MonoClass *klass)
 {
-	return mono_class_is_nullable (klass);
+    return mono_class_is_nullable (klass);
 }
 
 static inline MonoClass*
 m_class_get_nullable_elem_class (MonoClass *klass)
 {
-	return m_class_get_cast_class (klass);
+    return m_class_get_cast_class (klass);
 }
 
 static inline gboolean
 m_class_is_runtime_type (MonoClass *klass)
 {
-	return klass == mono_defaults.runtimetype_class;
+    return klass == mono_defaults.runtimetype_class;
 }
 
 static inline gboolean
 m_class_is_auto_layout (MonoClass *klass)
 {
-	guint32 layout = (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_LAYOUT_MASK);
+    guint32 layout = (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_LAYOUT_MASK);
 
-	return layout == TYPE_ATTRIBUTE_AUTO_LAYOUT;
+    return layout == TYPE_ATTRIBUTE_AUTO_LAYOUT;
 }
 
 static inline gboolean
 m_class_is_ginst (MonoClass *klass)
 {
-	return mono_class_is_ginst (klass);
+    return mono_class_is_ginst (klass);
 }
 
 static inline gboolean
 m_class_is_private (MonoClass *klass)
 {
-	return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_VISIBILITY_MASK) == TYPE_ATTRIBUTE_NOT_PUBLIC;
+    return (mono_class_get_flags (klass) & TYPE_ATTRIBUTE_VISIBILITY_MASK) == TYPE_ATTRIBUTE_NOT_PUBLIC;
 }
 
 static inline gboolean
 m_method_is_icall (MonoMethod *method)
 {
-	return (method->iflags & METHOD_IMPL_ATTRIBUTE_INTERNAL_CALL) != 0;
+    return (method->iflags & METHOD_IMPL_ATTRIBUTE_INTERNAL_CALL) != 0;
 }
 
 static inline gboolean
 m_method_is_synchronized (MonoMethod *method)
 {
-	return (method->iflags & METHOD_IMPL_ATTRIBUTE_SYNCHRONIZED) != 0;
+    return (method->iflags & METHOD_IMPL_ATTRIBUTE_SYNCHRONIZED) != 0;
 }
 
 static inline gboolean
 m_method_is_pinvoke (MonoMethod *method)
 {
-	return (method->flags & METHOD_ATTRIBUTE_PINVOKE_IMPL) != 0;
+    return (method->flags & METHOD_ATTRIBUTE_PINVOKE_IMPL) != 0;
 }
 
 static inline gboolean
 m_method_is_wrapper (MonoMethod *method)
 {
-	return method->wrapper_type != 0;
+    return method->wrapper_type != 0;
 }
 
 #endif
