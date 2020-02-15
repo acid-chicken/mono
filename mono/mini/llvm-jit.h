@@ -22,7 +22,8 @@
 #include <unwind.h>
 #endif
 
-/* These can't go into mini-<ARCH>.h since thats not included into llvm-jit.cpp */
+/* These can't go into mini-<ARCH>.h since thats not included into llvm-jit.cpp
+ */
 #if defined(TARGET_OSX) || defined(__linux__)
 #if defined(TARGET_AMD64) || defined(TARGET_ARM64) || defined(TARGET_X86)
 #define MONO_ARCH_LLVM_JIT_SUPPORTED 1
@@ -31,25 +32,21 @@
 
 G_BEGIN_DECLS
 
-typedef void* MonoEERef;
+typedef void *MonoEERef;
 
-void
-mono_llvm_jit_init (void);
+void mono_llvm_jit_init(void);
 
-void
-mono_llvm_jit_set_tls_cfg (MonoCompile *cfg);
+void mono_llvm_jit_set_tls_cfg(MonoCompile *cfg);
 
-MonoEERef
-mono_llvm_create_ee (LLVMExecutionEngineRef *ee);
+MonoEERef mono_llvm_create_ee(LLVMExecutionEngineRef *ee);
 
-void
-mono_llvm_dispose_ee (MonoEERef *mono_ee);
+void mono_llvm_dispose_ee(MonoEERef *mono_ee);
 
-gpointer
-mono_llvm_compile_method (MonoEERef mono_ee, LLVMValueRef method, int nvars, LLVMValueRef *callee_vars, gpointer *callee_addrs, gpointer *eh_frame);
+gpointer mono_llvm_compile_method(MonoEERef mono_ee, LLVMValueRef method,
+                                  int nvars, LLVMValueRef *callee_vars,
+                                  gpointer *callee_addrs, gpointer *eh_frame);
 
-void
-mono_llvm_set_unhandled_exception_handler (void);
+void mono_llvm_set_unhandled_exception_handler(void);
 
 G_END_DECLS
 
