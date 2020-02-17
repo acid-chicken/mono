@@ -26,59 +26,73 @@
 #ifdef MONO_GENERATING_OFFSETS
 /* The offsets tool uses this structure to compute basic type sizes/alignment */
 struct basic_types_struct {
-	gint8 gint8_f;
-	gint16 gint16_f;
-	gint32 gint32_f;
-	gint64 gint64_f;
-	float float_f;
-	double double_f;
-	gpointer gpointer_f;
+    gint8 gint8_f;
+    gint16 gint16_f;
+    gint32 gint32_f;
+    gint64 gint64_f;
+    float float_f;
+    double double_f;
+    gpointer gpointer_f;
 };
-typedef struct { gint8 i; } gint8_struct;
-typedef struct { gint16 i; } gint16_struct;
-typedef struct { gint32 i; } gint32_struct;
-typedef struct { gint64 i; } gint64_struct;
-typedef struct { float i; } float_struct;
-typedef struct { double i; } double_struct;
-typedef struct { gpointer i; } gpointer_struct;
+typedef struct {
+    gint8 i;
+} gint8_struct;
+typedef struct {
+    gint16 i;
+} gint16_struct;
+typedef struct {
+    gint32 i;
+} gint32_struct;
+typedef struct {
+    gint64 i;
+} gint64_struct;
+typedef struct {
+    float i;
+} float_struct;
+typedef struct {
+    double i;
+} double_struct;
+typedef struct {
+    gpointer i;
+} gpointer_struct;
 #endif
 
 static int
 dump_arch (void)
 {
 #if defined (TARGET_X86)
-	g_print ("#ifdef TARGET_X86\n");
+    g_print ("#ifdef TARGET_X86\n");
 #elif defined (TARGET_AMD64)
-	g_print ("#ifdef TARGET_AMD64\n");
+    g_print ("#ifdef TARGET_AMD64\n");
 #elif defined (TARGET_ARM)
-	g_print ("#ifdef TARGET_ARM\n");
+    g_print ("#ifdef TARGET_ARM\n");
 #elif defined (TARGET_ARM64)
-	g_print ("#ifdef TARGET_ARM64\n");
+    g_print ("#ifdef TARGET_ARM64\n");
 #elif defined (TARGET_RISCV32)
-	g_print ("#ifdef TARGET_RISCV32\n");
+    g_print ("#ifdef TARGET_RISCV32\n");
 #elif defined (TARGET_RISCV64)
-	g_print ("#ifdef TARGET_RISCV64\n");
+    g_print ("#ifdef TARGET_RISCV64\n");
 #else
-	return 0;
+    return 0;
 #endif
-	return 1;
+    return 1;
 }
 
 static int
 dump_os (void)
 {
 #if defined (HOST_WIN32)
-	g_print ("#ifdef TARGET_WIN32\n");
+    g_print ("#ifdef TARGET_WIN32\n");
 #elif defined (HOST_ANDROID)
-	g_print ("#ifdef TARGET_ANDROID\n");
+    g_print ("#ifdef TARGET_ANDROID\n");
 #elif defined (HOST_DARWIN)
-	g_print ("#ifdef TARGET_OSX\n");
+    g_print ("#ifdef TARGET_OSX\n");
 #elif defined (PLATFORM_IOS)
-	g_print ("#ifdef TARGET_IOS\n");
+    g_print ("#ifdef TARGET_IOS\n");
 #else
-	return 0;
+    return 0;
 #endif
-	return 1;
+    return 1;
 }
 
 void
@@ -88,33 +102,33 @@ void
 mono_dump_metadata_offsets (void)
 {
 #ifdef USED_CROSS_COMPILER_OFFSETS
-	g_print ("not using native offsets\n");
+    g_print ("not using native offsets\n");
 #else
-	g_print ("#ifndef USED_CROSS_COMPILER_OFFSETS\n");
+    g_print ("#ifndef USED_CROSS_COMPILER_OFFSETS\n");
 
-	if (!dump_arch ()) {
-		g_print ("#error failed to figure out the current arch\n");
-		return;
-	}
+    if (!dump_arch ()) {
+        g_print ("#error failed to figure out the current arch\n");
+        return;
+    }
 
-	if (!dump_os ()) {
-		g_print ("#error failed to figure out the current OS\n");
-		return;
-	}
+    if (!dump_os ()) {
+        g_print ("#error failed to figure out the current OS\n");
+        return;
+    }
 
 #ifdef HAVE_SGEN_GC
-	g_print ("#ifndef HAVE_BOEHM_GC\n");
+    g_print ("#ifndef HAVE_BOEHM_GC\n");
 #elif HAVE_BOEHM_GC
-	g_print ("#ifndef HAVE_SGEN_GC\n");
+    g_print ("#ifndef HAVE_SGEN_GC\n");
 #else
-	g_print ("#error no gc conf not supported\n");
-	return;
+    g_print ("#error no gc conf not supported\n");
+    return;
 #endif
 
-	g_print ("#define HAS_CROSS_COMPILER_OFFSETS\n");
-	g_print ("#if defined (USE_CROSS_COMPILE_OFFSETS) || defined (MONO_CROSS_COMPILE)\n");
-	g_print ("#if !defined (DISABLE_METADATA_OFFSETS)\n");
-	g_print ("#define USED_CROSS_COMPILER_OFFSETS\n");
+    g_print ("#define HAS_CROSS_COMPILER_OFFSETS\n");
+    g_print ("#if defined (USE_CROSS_COMPILE_OFFSETS) || defined (MONO_CROSS_COMPILE)\n");
+    g_print ("#if !defined (DISABLE_METADATA_OFFSETS)\n");
+    g_print ("#define USED_CROSS_COMPILER_OFFSETS\n");
 
 #define DISABLE_JIT_OFFSETS
 #define DECL_OFFSET2(struct,field,offset) this_should_not_happen
@@ -125,8 +139,8 @@ mono_dump_metadata_offsets (void)
 #define DECL_SIZE(type) g_print ("DECL_SIZE2(%s,%d)\n", #type, (int)MONO_ABI_SIZEOF (type));
 #include <mono/metadata/object-offsets.h>
 
-	g_print ("#endif //disable metadata check\n");
-	g_print ("#endif //gc check\n");
+    g_print ("#endif //disable metadata check\n");
+    g_print ("#endif //gc check\n");
 #endif
 }
 
@@ -143,7 +157,7 @@ void
 mono_metadata_cross_helpers_run (void)
 {
 #if defined (HAS_CROSS_COMPILER_OFFSETS) && !defined (MONO_CROSS_COMPILE)
-	gboolean is_broken = FALSE;
+    gboolean is_broken = FALSE;
 
 #define DISABLE_JIT_OFFSETS
 #define USE_CROSS_COMPILE_OFFSETS
@@ -174,7 +188,7 @@ mono_metadata_cross_helpers_run (void)
 
 #include <mono/metadata/object-offsets.h>
 
-	g_assert (!is_broken);
+    g_assert (!is_broken);
 #endif
 }
 

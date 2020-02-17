@@ -24,14 +24,14 @@
  */
 
 typedef enum {
-	MONO_ALIGN_gint8,
-	MONO_ALIGN_gint16,
-	MONO_ALIGN_gint32,
-	MONO_ALIGN_gint64,
-	MONO_ALIGN_float,
-	MONO_ALIGN_double,
-	MONO_ALIGN_gpointer,
-	MONO_ALIGN_COUNT
+    MONO_ALIGN_gint8,
+    MONO_ALIGN_gint16,
+    MONO_ALIGN_gint32,
+    MONO_ALIGN_gint64,
+    MONO_ALIGN_float,
+    MONO_ALIGN_double,
+    MONO_ALIGN_gpointer,
+    MONO_ALIGN_COUNT
 } CoreTypeAlign;
 
 int mono_abi_alignment (CoreTypeAlign type);
