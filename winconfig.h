@@ -2,11 +2,13 @@
 
 #ifdef _MSC_VER
 
-/* Building Mono runtime under MSVC uses this template for it's config.h since autogen.sh can't */
-/* generate a config.h that is suitable for MSVC builds. The below template will still get */
+/* Building Mono runtime under MSVC uses this template for it's config.h since
+ * autogen.sh can't */
+/* generate a config.h that is suitable for MSVC builds. The below template will
+ * still get */
 /* some dynamic configuration from autogen.sh config.h, if one exists. */
-#include <msvc/msvc-win32-support.h>
 #include <msvc/msvc-disabled-warnings.h>
+#include <msvc/msvc-win32-support.h>
 
 #ifdef HAVE_BOEHM_GC
 /* Only used when building using Boehm GC and only supported on x86 builds */
@@ -16,11 +18,14 @@
 /* Some VES is available at runtime */
 #define ENABLE_ILGEN 1
 
-/* Start configure ENABLE_DEFINES picked up from cygconfig.h or other external source, if available */
+/* Start configure ENABLE_DEFINES picked up from cygconfig.h or other external
+ * source, if available */
 /* @ENABLE_DEFINES@ */
-/* End configure ENABLE_DEFINES picked up from cygconfig.h or other external source, if available */
+/* End configure ENABLE_DEFINES picked up from cygconfig.h or other external
+ * source, if available */
 
-/* Windows MSVC builds defaults to preemptive suspend. Disable ENABLE_HYBRID_SUSPEND defines. */
+/* Windows MSVC builds defaults to preemptive suspend. Disable
+ * ENABLE_HYBRID_SUSPEND defines. */
 #undef ENABLE_HYBRID_SUSPEND
 
 /* No ENABLE_DEFINES below this point */
@@ -74,9 +79,11 @@
 /* Disables the IO portability layer */
 #define DISABLE_PORTABILITY 1
 
-/* Start configure DISABLE_DEFINES picked up from cygconfig.h or other external source, if available */
+/* Start configure DISABLE_DEFINES picked up from cygconfig.h or other external
+ * source, if available */
 /* @DISABLE_DEFINES@ */
-/* End configure DISABLE_DEFINES picked up from cygconfig.h or other external source, if available */
+/* End configure DISABLE_DEFINES picked up from cygconfig.h or other external
+ * source, if available */
 
 /* No DISABLE_DEFINES below this point */
 
@@ -171,9 +178,11 @@
 #define HAVE_WRITE_BARRIERS
 #endif
 
-/* Start configure HAVE_DEFINES picked up from cygconfig.h or other external source, if available */
+/* Start configure HAVE_DEFINES picked up from cygconfig.h or other external
+ * source, if available */
 /* @HAVE_DEFINES@ */
-/* End configure HAVE_DEFINES picked up from cygconfig.h or other external source, if available */
+/* End configure HAVE_DEFINES picked up from cygconfig.h or other external
+ * source, if available */
 
 /* No HAVE_DEFINES below this point */
 
@@ -198,7 +207,7 @@
 #define MONO_CORLIB_VERSION "#MONO_CORLIB_VERSION#"
 
 /* Have __thread keyword */
-#define MONO_KEYWORD_THREAD __declspec (thread)
+#define MONO_KEYWORD_THREAD __declspec(thread)
 
 /* Length of zero length arrays */
 #define MONO_ZERO_LEN_ARRAY 1
@@ -280,6 +289,7 @@
 
 #endif
 
-#if defined(ENABLE_LLVM) && defined(HOST_WIN32) && defined(TARGET_WIN32) && (!defined(TARGET_AMD64) || !defined(_MSC_VER))
+#if defined(ENABLE_LLVM) && defined(HOST_WIN32) && defined(TARGET_WIN32) &&    \
+    (!defined(TARGET_AMD64) || !defined(_MSC_VER))
 #error LLVM for host=Windows and target=Windows is only supported on x64 MSVC build.
 #endif
