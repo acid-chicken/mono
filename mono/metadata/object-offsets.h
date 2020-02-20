@@ -11,32 +11,34 @@ DECL_OFFSET2(struct,field,offset)
 DECL_ALIGN2(name,alignment)
 
 Optional:
-USE_CROSS_COMPILE_OFFSETS - if defined, force the cross compiler offsets to be used, otherwise
-	they will only be used if MONO_CROSS_COMPILE is defined
-DISABLE_METADATA_OFFSETS - Disable the definition of offsets for structures defined in metadata/.
-DISABLE_JIT_OFFSETS - Disable the definition of offsets for structures defined in mini/.
+USE_CROSS_COMPILE_OFFSETS - if defined, force the cross compiler offsets to be
+used, otherwise they will only be used if MONO_CROSS_COMPILE is defined
+DISABLE_METADATA_OFFSETS - Disable the definition of offsets for structures
+defined in metadata/. DISABLE_JIT_OFFSETS - Disable the definition of offsets
+for structures defined in mini/.
 
-The last two are needed because metadata shouldn't include JIT offsets since the structures
-are not defined, while the JIT shouldn't include metadata offsets, since some of them
-are GC specific, and the JIT needs to remain GC agnostic.
+The last two are needed because metadata shouldn't include JIT offsets since the
+structures are not defined, while the JIT shouldn't include metadata offsets,
+since some of them are GC specific, and the JIT needs to remain GC agnostic.
 
 Output defines:
 
-HAS_CROSS_COMPILER_OFFSETS - if set, it means we found some cross offsets, it doesnt mean we'll use it.
-USED_CROSS_COMPILER_OFFSETS - if set, it means we used the cross offsets
+HAS_CROSS_COMPILER_OFFSETS - if set, it means we found some cross offsets, it
+doesnt mean we'll use it. USED_CROSS_COMPILER_OFFSETS - if set, it means we used
+the cross offsets
 
 Environment defines (from config.h and CFLAGS):
 
-MONO_GENERATING_OFFSETS - Set by an offsets generating tool to disable the usage of any (possibly non-existing) generated header.
-MONO_OFFSETS_FILE - Name of the header file containing the offsets to be used.
+MONO_GENERATING_OFFSETS - Set by an offsets generating tool to disable the usage
+of any (possibly non-existing) generated header. MONO_OFFSETS_FILE - Name of the
+header file containing the offsets to be used.
 
 */
-
 
 #undef HAS_CROSS_COMPILER_OFFSETS
 #undef USED_CROSS_COMPILER_OFFSETS
 
-#if !defined (MONO_GENERATING_OFFSETS) && defined (MONO_OFFSETS_FILE)
+#if !defined(MONO_GENERATING_OFFSETS) && defined(MONO_OFFSETS_FILE)
 #include MONO_OFFSETS_FILE
 #endif
 
@@ -129,7 +131,7 @@ DECL_OFFSET(MonoTypedRef, type)
 DECL_OFFSET(MonoTypedRef, klass)
 DECL_OFFSET(MonoTypedRef, value)
 
-//Internal structs
+// Internal structs
 DECL_OFFSET(MonoThreadsSync, status)
 DECL_OFFSET(MonoThreadsSync, nest)
 
@@ -143,7 +145,7 @@ DECL_OFFSET(SgenThreadInfo, tlab_next)
 DECL_OFFSET(SgenThreadInfo, tlab_temp_end)
 #endif
 
-#endif //DISABLE METADATA OFFSETS
+#endif // DISABLE METADATA OFFSETS
 
 // Offsets for structures defined in mini/
 #ifndef DISABLE_JIT_OFFSETS
@@ -165,7 +167,7 @@ DECL_OFFSET(MonoJitTlsData, stack_restore_ctx)
 #endif
 
 DECL_OFFSET(MonoGSharedVtMethodRuntimeInfo, locals_size)
-DECL_OFFSET(MonoGSharedVtMethodRuntimeInfo, entries) //XXX more to fix here
+DECL_OFFSET(MonoGSharedVtMethodRuntimeInfo, entries) // XXX more to fix here
 
 DECL_OFFSET(MonoContinuation, stack_used_size)
 DECL_OFFSET(MonoContinuation, saved_stack)
@@ -255,9 +257,9 @@ DECL_OFFSET(MonoLMF, fregs)
 // ----------------------------
 
 #if defined(TARGET_ARM) || defined(TARGET_ARM64)
-DECL_OFFSET (MonoContext, pc)
-DECL_OFFSET (MonoContext, regs)
-DECL_OFFSET (MonoContext, fregs)
+DECL_OFFSET(MonoContext, pc)
+DECL_OFFSET(MonoContext, regs)
+DECL_OFFSET(MonoContext, fregs)
 
 DECL_OFFSET(MonoLMF, lmf_addr)
 
@@ -277,7 +279,7 @@ DECL_OFFSET(SeqPointInfo, ss_trigger_page)
 #endif
 
 #if defined(TARGET_ARM64)
-DECL_OFFSET (MonoContext, has_fregs)
+DECL_OFFSET(MonoContext, has_fregs)
 
 DECL_OFFSET(GSharedVtCallInfo, stack_usage)
 DECL_OFFSET(GSharedVtCallInfo, gsharedvt_in)
@@ -317,9 +319,9 @@ DECL_OFFSET(GSharedVtCallInfo, gsharedvt_in)
 DECL_OFFSET(MonoFtnDesc, arg)
 DECL_OFFSET(MonoFtnDesc, addr)
 
-#endif //DISABLE_JIT_OFFSETS
+#endif // DISABLE_JIT_OFFSETS
 
-#endif //USED_CROSS_COMPILER_OFFSETS
+#endif // USED_CROSS_COMPILER_OFFSETS
 
 #undef DECL_OFFSET
 #undef DECL_OFFSET2
