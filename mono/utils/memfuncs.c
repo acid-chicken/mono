@@ -44,7 +44,7 @@
 
 #if defined(TARGET_WIN32)
 #include <windows.h>
-#endif 
+#endif
 
 #include "memfuncs.h"
 
@@ -83,37 +83,37 @@
 void
 mono_gc_bzero_aligned (void *dest, size_t size)
 {
-	volatile char *d = (char*)dest;
-	size_t tail_bytes, word_bytes;
+    volatile char *d = (char*)dest;
+    size_t tail_bytes, word_bytes;
 
-	g_assert (unaligned_bytes (dest) == 0);
+    g_assert (unaligned_bytes (dest) == 0);
 
-	/* copy all words with memmove */
-	word_bytes = (size_t)align_down (size);
-	switch (word_bytes) {
-	case sizeof (void*) * 1:
-		BZERO_WORDS (d, 1);
-		break;
-	case sizeof (void*) * 2:
-		BZERO_WORDS (d, 2);
-		break;
-	case sizeof (void*) * 3:
-		BZERO_WORDS (d, 3);
-		break;
-	case sizeof (void*) * 4:
-		BZERO_WORDS (d, 4);
-		break;
-	default:
-		BZERO_WORDS (d, bytes_to_words (word_bytes));
-	}
+    /* copy all words with memmove */
+    word_bytes = (size_t)align_down (size);
+    switch (word_bytes) {
+    case sizeof (void*) * 1:
+        BZERO_WORDS (d, 1);
+        break;
+    case sizeof (void*) * 2:
+        BZERO_WORDS (d, 2);
+        break;
+    case sizeof (void*) * 3:
+        BZERO_WORDS (d, 3);
+        break;
+    case sizeof (void*) * 4:
+        BZERO_WORDS (d, 4);
+        break;
+    default:
+        BZERO_WORDS (d, bytes_to_words (word_bytes));
+    }
 
-	tail_bytes = unaligned_bytes (size);
-	if (tail_bytes) {
-		d += word_bytes;
-		do {
-			*d++ = 0;
-		} while (--tail_bytes);
-	}
+    tail_bytes = unaligned_bytes (size);
+    if (tail_bytes) {
+        d += word_bytes;
+        do {
+            *d++ = 0;
+        } while (--tail_bytes);
+    }
 }
 
 /**
@@ -128,10 +128,10 @@ mono_gc_bzero_aligned (void *dest, size_t size)
 void
 mono_gc_bzero_atomic (void *dest, size_t size)
 {
-	if (unaligned_bytes (dest))
-		memset (dest, 0, size);
-	else
-		mono_gc_bzero_aligned (dest, size);
+    if (unaligned_bytes (dest))
+        memset (dest, 0, size);
+    else
+        mono_gc_bzero_aligned (dest, size);
 }
 
 #define MEMMOVE_WORDS_UPWARD(dest,src,words) do {	\
@@ -166,59 +166,59 @@ mono_gc_bzero_atomic (void *dest, size_t size)
 void
 mono_gc_memmove_aligned (void *dest, const void *src, size_t size)
 {
-	g_assert (unaligned_bytes (dest) == 0);
-	g_assert (unaligned_bytes (src) == 0);
+    g_assert (unaligned_bytes (dest) == 0);
+    g_assert (unaligned_bytes (src) == 0);
 
-	/*
-	If we're copying less than a word we don't need to worry about word tearing
-	so we bailout to memmove early.
-	*/
-	if (size < sizeof(void*)) {
-		memmove (dest, src, size);
-		return;
-	}
+    /*
+    If we're copying less than a word we don't need to worry about word tearing
+    so we bailout to memmove early.
+    */
+    if (size < sizeof(void*)) {
+        memmove (dest, src, size);
+        return;
+    }
 
-	/*
-	 * A bit of explanation on why we align only dest before doing word copies.
-	 * Pointers to managed objects must always be stored in word aligned addresses, so
-	 * even if dest is misaligned, src will be by the same amount - this ensure proper atomicity of reads.
-	 *
-	 * We don't need to case when source and destination have different alignments since we only do word stores
-	 * using memmove, which must handle it.
-	 */
-	if (dest > src && ((size_t)((char*)dest - (char*)src) < size)) { /*backward copy*/
-			volatile char *p = (char*)dest + size;
-			char *s = (char*)src + size;
-			char *start = (char*)dest;
-			char *align_end = MAX((char*)dest, (char*)align_down (p));
-			char *word_start;
-			size_t bytes_to_memmove;
+    /*
+     * A bit of explanation on why we align only dest before doing word copies.
+     * Pointers to managed objects must always be stored in word aligned addresses, so
+     * even if dest is misaligned, src will be by the same amount - this ensure proper atomicity of reads.
+     *
+     * We don't need to case when source and destination have different alignments since we only do word stores
+     * using memmove, which must handle it.
+     */
+    if (dest > src && ((size_t)((char*)dest - (char*)src) < size)) { /*backward copy*/
+        volatile char *p = (char*)dest + size;
+        char *s = (char*)src + size;
+        char *start = (char*)dest;
+        char *align_end = MAX((char*)dest, (char*)align_down (p));
+        char *word_start;
+        size_t bytes_to_memmove;
 
-			while (p > align_end)
-			        *--p = *--s;
+        while (p > align_end)
+            *--p = *--s;
 
-			word_start = (char *)align_up (start);
-			bytes_to_memmove = p - word_start;
-			p -= bytes_to_memmove;
-			s -= bytes_to_memmove;
-			MEMMOVE_WORDS_DOWNWARD (p, s, bytes_to_words (bytes_to_memmove));
-	} else {
-		volatile char *d = (char*)dest;
-		const char *s = (const char*)src;
-		size_t tail_bytes;
+        word_start = (char *)align_up (start);
+        bytes_to_memmove = p - word_start;
+        p -= bytes_to_memmove;
+        s -= bytes_to_memmove;
+        MEMMOVE_WORDS_DOWNWARD (p, s, bytes_to_words (bytes_to_memmove));
+    } else {
+        volatile char *d = (char*)dest;
+        const char *s = (const char*)src;
+        size_t tail_bytes;
 
-		/* copy all words with memmove */
-		MEMMOVE_WORDS_UPWARD (d, s, bytes_to_words (align_down (size)));
+        /* copy all words with memmove */
+        MEMMOVE_WORDS_UPWARD (d, s, bytes_to_words (align_down (size)));
 
-		tail_bytes = unaligned_bytes (size);
-		if (tail_bytes) {
-			d += (size_t)align_down (size);
-			s += (size_t)align_down (size);
-			do {
-				*d++ = *s++;
-			} while (--tail_bytes);
-		}
-	}
+        tail_bytes = unaligned_bytes (size);
+        if (tail_bytes) {
+            d += (size_t)align_down (size);
+            s += (size_t)align_down (size);
+            do {
+                *d++ = *s++;
+            } while (--tail_bytes);
+        }
+    }
 }
 
 /**
@@ -234,63 +234,63 @@ mono_gc_memmove_aligned (void *dest, const void *src, size_t size)
 void
 mono_gc_memmove_atomic (void *dest, const void *src, size_t size)
 {
-	if (unaligned_bytes (_toi (dest) | _toi (src)))
-		memmove (dest, src, size);
-	else
-		mono_gc_memmove_aligned (dest, src, size);
+    if (unaligned_bytes (_toi (dest) | _toi (src)))
+        memmove (dest, src, size);
+    else
+        mono_gc_memmove_aligned (dest, src, size);
 }
 
 guint64
 mono_determine_physical_ram_size (void)
 {
 #if defined (TARGET_WIN32)
-	MEMORYSTATUSEX memstat;
+    MEMORYSTATUSEX memstat;
 
-	memstat.dwLength = sizeof (memstat);
-	GlobalMemoryStatusEx (&memstat);
-	return (guint64)memstat.ullTotalPhys;
+    memstat.dwLength = sizeof (memstat);
+    GlobalMemoryStatusEx (&memstat);
+    return (guint64)memstat.ullTotalPhys;
 #elif defined (__NetBSD__) || defined (__APPLE__)
 #ifdef __NetBSD__
-	unsigned long value;
+    unsigned long value;
 #else
-	guint64 value;
+    guint64 value;
 #endif
-	int mib[2] = {
-		CTL_HW,
+    int mib[2] = {
+        CTL_HW,
 #ifdef __NetBSD__
-		HW_PHYSMEM64
+        HW_PHYSMEM64
 #else
-		HW_MEMSIZE
+        HW_MEMSIZE
 #endif
-	};
-	size_t size_sys = sizeof (value);
+    };
+    size_t size_sys = sizeof (value);
 
-	sysctl (mib, 2, &value, &size_sys, NULL, 0);
-	if (value == 0)
-		return 134217728;
+    sysctl (mib, 2, &value, &size_sys, NULL, 0);
+    if (value == 0)
+        return 134217728;
 
-	return (guint64)value;
+    return (guint64)value;
 #elif defined (HAVE_SYSCONF)
-	guint64 page_size = 0, num_pages = 0;
+    guint64 page_size = 0, num_pages = 0;
 
-	/* sysconf works on most *NIX operating systems, if your system doesn't have it or if it
-	 * reports invalid values, please add your OS specific code below. */
+    /* sysconf works on most *NIX operating systems, if your system doesn't have it or if it
+     * reports invalid values, please add your OS specific code below. */
 #ifdef _SC_PAGESIZE
-	page_size = (guint64)sysconf (_SC_PAGESIZE);
+    page_size = (guint64)sysconf (_SC_PAGESIZE);
 #endif
 
 #ifdef _SC_PHYS_PAGES
-	num_pages = (guint64)sysconf (_SC_PHYS_PAGES);
+    num_pages = (guint64)sysconf (_SC_PHYS_PAGES);
 #endif
 
-	if (!page_size || !num_pages) {
-		g_warning ("Your operating system's sysconf (3) function doesn't correctly report physical memory size!");
-		return 134217728;
-	}
+    if (!page_size || !num_pages) {
+        g_warning ("Your operating system's sysconf (3) function doesn't correctly report physical memory size!");
+        return 134217728;
+    }
 
-	return page_size * num_pages;
+    return page_size * num_pages;
 #else
-	return 134217728;
+    return 134217728;
 #endif
 }
 
@@ -298,69 +298,69 @@ guint64
 mono_determine_physical_ram_available_size (void)
 {
 #if defined (TARGET_WIN32)
-	MEMORYSTATUSEX memstat;
+    MEMORYSTATUSEX memstat;
 
-	memstat.dwLength = sizeof (memstat);
-	GlobalMemoryStatusEx (&memstat);
-	return (guint64)memstat.ullAvailPhys;
+    memstat.dwLength = sizeof (memstat);
+    GlobalMemoryStatusEx (&memstat);
+    return (guint64)memstat.ullAvailPhys;
 
 #elif defined (__NetBSD__)
-	struct vmtotal vm_total;
-	guint64 page_size;
-	int mib[2];
-	size_t len;
+    struct vmtotal vm_total;
+    guint64 page_size;
+    int mib[2];
+    size_t len;
 
-	mib[0] = CTL_VM;
-	mib[1] = VM_METER;
+    mib[0] = CTL_VM;
+    mib[1] = VM_METER;
 
-	len = sizeof (vm_total);
-	sysctl (mib, 2, &vm_total, &len, NULL, 0);
+    len = sizeof (vm_total);
+    sysctl (mib, 2, &vm_total, &len, NULL, 0);
 
-	mib[0] = CTL_HW;
-	mib[1] = HW_PAGESIZE;
+    mib[0] = CTL_HW;
+    mib[1] = HW_PAGESIZE;
 
-	len = sizeof (page_size);
-	sysctl (mib, 2, &page_size, &len, NULL, 0);
+    len = sizeof (page_size);
+    sysctl (mib, 2, &page_size, &len, NULL, 0);
 
-	return ((guint64) vm_total.t_free * page_size) / 1024;
+    return ((guint64) vm_total.t_free * page_size) / 1024;
 #elif defined (__APPLE__)
-	mach_msg_type_number_t count = HOST_VM_INFO_COUNT;
-	mach_port_t host = mach_host_self ();
-	vm_size_t page_size;
-	vm_statistics_data_t vmstat;
-	kern_return_t ret;
-	do {
-		ret = host_statistics (host, HOST_VM_INFO, (host_info_t)&vmstat, &count);
-	} while (ret == KERN_ABORTED);
+    mach_msg_type_number_t count = HOST_VM_INFO_COUNT;
+    mach_port_t host = mach_host_self ();
+    vm_size_t page_size;
+    vm_statistics_data_t vmstat;
+    kern_return_t ret;
+    do {
+        ret = host_statistics (host, HOST_VM_INFO, (host_info_t)&vmstat, &count);
+    } while (ret == KERN_ABORTED);
 
-	if (ret != KERN_SUCCESS) {
-		g_warning ("Mono was unable to retrieve memory usage!");
-		return 0;
-	}
+    if (ret != KERN_SUCCESS) {
+        g_warning ("Mono was unable to retrieve memory usage!");
+        return 0;
+    }
 
-	host_page_size (host, &page_size);
-	return (guint64) vmstat.free_count * page_size;
+    host_page_size (host, &page_size);
+    return (guint64) vmstat.free_count * page_size;
 
 #elif defined (HAVE_SYSCONF)
-	guint64 page_size = 0, num_pages = 0;
+    guint64 page_size = 0, num_pages = 0;
 
-	/* sysconf works on most *NIX operating systems, if your system doesn't have it or if it
-	 * reports invalid values, please add your OS specific code below. */
+    /* sysconf works on most *NIX operating systems, if your system doesn't have it or if it
+     * reports invalid values, please add your OS specific code below. */
 #ifdef _SC_PAGESIZE
-	page_size = (guint64)sysconf (_SC_PAGESIZE);
+    page_size = (guint64)sysconf (_SC_PAGESIZE);
 #endif
 
 #ifdef _SC_AVPHYS_PAGES
-	num_pages = (guint64)sysconf (_SC_AVPHYS_PAGES);
+    num_pages = (guint64)sysconf (_SC_AVPHYS_PAGES);
 #endif
 
-	if (!page_size || !num_pages) {
-		g_warning ("Your operating system's sysconf (3) function doesn't correctly report physical memory size!");
-		return 0;
-	}
+    if (!page_size || !num_pages) {
+        g_warning ("Your operating system's sysconf (3) function doesn't correctly report physical memory size!");
+        return 0;
+    }
 
-	return page_size * num_pages;
+    return page_size * num_pages;
 #else
-	return 0;
+    return 0;
 #endif
 }
