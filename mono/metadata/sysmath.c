@@ -1,6 +1,6 @@
 /**
  * \file
- * these are based on bob smith's csharp routines 
+ * these are based on bob smith's csharp routines
  *
  * Author:
  *	Mono Project (http://www.mono-project.com)
@@ -34,368 +34,368 @@
 gdouble
 ves_icall_System_Math_Floor (gdouble x)
 {
-	return floor(x);
+    return floor(x);
 }
 
 gdouble
 ves_icall_System_Math_Round (gdouble x)
 {
-	gdouble floor_tmp;
+    gdouble floor_tmp;
 
-	/* If the number has no fractional part do nothing This shortcut is necessary
-	 * to workaround precision loss in borderline cases on some platforms */
-	if (x == (gdouble)(gint64) x)
-		return x;
+    /* If the number has no fractional part do nothing This shortcut is necessary
+     * to workaround precision loss in borderline cases on some platforms */
+    if (x == (gdouble)(gint64) x)
+        return x;
 
-	floor_tmp = floor (x + 0.5);
+    floor_tmp = floor (x + 0.5);
 
-	if ((x == (floor (x) + 0.5)) && (fmod (floor_tmp, 2.0) != 0)) {
-		floor_tmp -= 1.0;
-	}
+    if ((x == (floor (x) + 0.5)) && (fmod (floor_tmp, 2.0) != 0)) {
+        floor_tmp -= 1.0;
+    }
 
-	return copysign (floor_tmp, x);
+    return copysign (floor_tmp, x);
 }
 
 gdouble
 ves_icall_System_Math_FMod (gdouble x, gdouble y)
 {
-	return fmod (x, y);
+    return fmod (x, y);
 }
 
 gdouble
 ves_icall_System_Math_ModF (gdouble x, gdouble *d)
 {
-	return modf (x, d);
+    return modf (x, d);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Sin (gdouble x)
 {
-	return sin (x);
+    return sin (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Cos (gdouble x)
 {
-	return cos (x);
+    return cos (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Cbrt (gdouble x)
 {
-	return cbrt (x);
+    return cbrt (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Tan (gdouble x)
 {
-	return tan (x);
+    return tan (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Sinh (gdouble x)
 {
-	return sinh (x);
+    return sinh (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Cosh (gdouble x)
 {
-	return cosh (x);
+    return cosh (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Tanh (gdouble x)
 {
-	return tanh (x);
+    return tanh (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Acos (gdouble x)
 {
-	return acos (x);
+    return acos (x);
 }
 
 gdouble
 ves_icall_System_Math_Acosh (gdouble x)
 {
-	return acosh (x);
+    return acosh (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Asin (gdouble x)
 {
-	return asin (x);
+    return asin (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Asinh (gdouble x)
 {
-	return asinh (x);
+    return asinh (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Atan (gdouble x)
 {
-	return atan (x);
+    return atan (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Atan2 (gdouble y, gdouble x)
 {
-	return atan2 (y, x);
+    return atan2 (y, x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Atanh (gdouble x)
 {
-	return atanh (x);
+    return atanh (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Exp (gdouble x)
 {
-	return exp (x);
+    return exp (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Log (gdouble x)
 {
-	return log (x);
+    return log (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Log10 (gdouble x)
 {
-	return log10 (x);
+    return log10 (x);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Pow (gdouble x, gdouble y)
 {
-	return pow (x, y);
+    return pow (x, y);
 }
 
-gdouble 
+gdouble
 ves_icall_System_Math_Sqrt (gdouble x)
 {
-	return sqrt (x);
+    return sqrt (x);
 }
 
 gdouble
 ves_icall_System_Math_Abs_double (gdouble v)
 {
-	return fabs (v);
+    return fabs (v);
 }
 
 float
 ves_icall_System_Math_Abs_single (float v)
 {
-	return fabsf (v);
+    return fabsf (v);
 }
 
 gdouble
 ves_icall_System_Math_Ceiling (gdouble v)
 {
-	return ceil (v);
+    return ceil (v);
 }
 
 #if ENABLE_NETCORE
 gint32
 ves_icall_System_Math_ILogB (gdouble x)
 {
-	if (FP_ILOGB0 != INT_MIN && x == 0.0)
-		return INT_MIN;
-	if (FP_ILOGBNAN != INT_MAX && isnan(x))
-		return INT_MAX;
-	
-	return ilogb(x);
+    if (FP_ILOGB0 != INT_MIN && x == 0.0)
+        return INT_MIN;
+    if (FP_ILOGBNAN != INT_MAX && isnan(x))
+        return INT_MAX;
+
+    return ilogb(x);
 }
 
 gdouble
 ves_icall_System_Math_Log2 (gdouble x)
 {
-	return log2 (x);
+    return log2 (x);
 }
 
 gdouble
 ves_icall_System_Math_ScaleB (gdouble x, gint32 n)
 {
-	return scalbn (x, n);
+    return scalbn (x, n);
 }
 
 gdouble
 ves_icall_System_Math_FusedMultiplyAdd (gdouble x, gdouble y, gdouble z)
 {
-	return fma (x, y, z);
+    return fma (x, y, z);
 }
 #endif
 
 float
 ves_icall_System_MathF_Acos (float x)
 {
-	return acosf (x);
+    return acosf (x);
 }
 
 float
 ves_icall_System_MathF_Acosh (float x)
 {
-	return acoshf (x);
+    return acoshf (x);
 }
 
 float
 ves_icall_System_MathF_Asin (float x)
 {
-	return asinf (x);
+    return asinf (x);
 }
 
 float
 ves_icall_System_MathF_Asinh  (float x)
 {
-	return asinhf (x);
+    return asinhf (x);
 }
 
 float
 ves_icall_System_MathF_Atan  (float x)
 {
-	return atan (x);
+    return atan (x);
 }
 
 float
 ves_icall_System_MathF_Atan2 (float x, float y)
 {
-	return atan2f (x, y);
+    return atan2f (x, y);
 }
 
 float
 ves_icall_System_MathF_Atanh (float x)
 {
-	return atanhf (x);
+    return atanhf (x);
 }
 
 float
 ves_icall_System_MathF_Cbrt (float x)
 {
-	return cbrtf (x);
+    return cbrtf (x);
 }
 
 float
 ves_icall_System_MathF_Ceiling (float x)
 {
-	return ceilf(x);
+    return ceilf(x);
 }
 
 float
 ves_icall_System_MathF_Cos (float x)
 {
-	return cosf (x);
+    return cosf (x);
 }
 
 float
 ves_icall_System_MathF_Cosh (float x)
 {
-	return coshf (x);
+    return coshf (x);
 }
 
 float
 ves_icall_System_MathF_Exp (float x)
 {
-	return expf (x);
+    return expf (x);
 }
 
 float
 ves_icall_System_MathF_Floor (float x)
 {
-	return floorf (x);
+    return floorf (x);
 }
 
 float
 ves_icall_System_MathF_Log (float x)
 {
-	return logf (x);
+    return logf (x);
 }
 
 float
 ves_icall_System_MathF_Log10 (float x)
 {
-	return log10f (x);
+    return log10f (x);
 }
 
 float
 ves_icall_System_MathF_Pow (float x, float y)
 {
-	return powf (x, y);
+    return powf (x, y);
 }
 
 float
 ves_icall_System_MathF_Sin (float x)
 {
-	return sinf (x);
+    return sinf (x);
 }
 
 float
 ves_icall_System_MathF_Sinh (float x)
 {
-	return sinh (x);
+    return sinh (x);
 }
 
 float
 ves_icall_System_MathF_Sqrt (float x)
 {
-	return sqrtf (x);
+    return sqrtf (x);
 }
 
 float
 ves_icall_System_MathF_Tan (float x)
 {
-	return tanf (x);
+    return tanf (x);
 }
 
 float
 ves_icall_System_MathF_Tanh (float x)
 {
-	return tanh (x);
+    return tanh (x);
 }
 
 float
 ves_icall_System_MathF_FMod (float x, float y)
 {
-	return fmodf (x, y);
+    return fmodf (x, y);
 }
 
 float
 ves_icall_System_MathF_ModF (float x, float *d)
 {
-	return modff (x, d);
+    return modff (x, d);
 }
 
 #if ENABLE_NETCORE
 gint32
 ves_icall_System_MathF_ILogB (float x)
 {
-	if (FP_ILOGB0 != INT_MIN && x == 0.0)
-		return INT_MIN;
-	if (FP_ILOGBNAN != INT_MAX && isnan(x))
-		return INT_MAX;
-	
-	return ilogbf(x);
+    if (FP_ILOGB0 != INT_MIN && x == 0.0)
+        return INT_MIN;
+    if (FP_ILOGBNAN != INT_MAX && isnan(x))
+        return INT_MAX;
+
+    return ilogbf(x);
 }
 
 float
 ves_icall_System_MathF_Log2 (float x)
 {
-	return log2f (x);
+    return log2f (x);
 }
 
 float
 ves_icall_System_MathF_ScaleB (float x, gint32 n)
 {
-	return scalbnf (x, n);
+    return scalbnf (x, n);
 }
 
 float
 ves_icall_System_MathF_FusedMultiplyAdd (float x, float y, float z)
 {
-	return fmaf (x, y, z);
+    return fmaf (x, y, z);
 }
 #endif
