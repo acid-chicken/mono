@@ -61,7 +61,7 @@ libtestlib_la_SOURCES = \
 	test-mono-callspec.c \
 	test-mono-string.c \
 	test-mono-embed.c \
-	test-embed-invoke.c 
+	test-embed-invoke.c
 libtestlib_la_LIBADD = ../metadata/libmonoruntimesgen.la ../sgen/libmonosgen.la ../utils/libmonoutils.la
 
 test_sgen_qsort_SOURCES = main.c
@@ -141,7 +141,7 @@ check-local:
 	fi;
 
 clean-local:
-	rm -f callspec.exe callspec.pdb 
+	rm -f callspec.exe callspec.pdb
 	rm -f test-embed.exe test-embed.pdb
 	rm -f test-embed-invoke-cs.exe test-embed-invoke-cs.pdb
 
