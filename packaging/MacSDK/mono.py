@@ -24,28 +24,22 @@ class MonoMasterPackage(Package):
         self.dont_clean = True
 
         if Package.profile.name == "darwin":
-            self.configure_flags.extend(
-                [
-                    "--with-libgdiplus=%s/lib/libgdiplus.dylib"
-                    % Package.profile.staged_prefix,
-                    "--enable-llvm",
-                    "CXXFLAGS=-stdlib=libc++",
-                ]
-            )
+            self.configure_flags.extend([
+                "--with-libgdiplus=%s/lib/libgdiplus.dylib" %
+                Package.profile.staged_prefix,
+                "--enable-llvm",
+                "CXXFLAGS=-stdlib=libc++",
+            ])
 
-            self.sources.extend(
-                [
-                    # Fixes up pkg-config usage on the Mac
-                    "patches/mcs-pkgconfig.patch"
-                ]
-            )
+            self.sources.extend([
+                # Fixes up pkg-config usage on the Mac
+                "patches/mcs-pkgconfig.patch"
+            ])
         else:
-            self.configure_flags.extend(
-                [
-                    "--with-libgdiplus=%s/lib/libgdiplus.so"
-                    % Package.profile.staged_prefix
-                ]
-            )
+            self.configure_flags.extend([
+                "--with-libgdiplus=%s/lib/libgdiplus.so" %
+                Package.profile.staged_prefix
+            ])
 
         self.gcc_flags.extend(["-O2"])
 
@@ -55,7 +49,8 @@ class MonoMasterPackage(Package):
         self.custom_version_str = None
 
     def build(self):
-        self.make = "%s EXTERNAL_RUNTIME=%s" % (self.make, self.profile.env.system_mono)
+        self.make = "%s EXTERNAL_RUNTIME=%s" % (self.make,
+                                                self.profile.env.system_mono)
         Package.configure(self)
 
         if self.custom_version_str is not None:
@@ -74,25 +69,22 @@ class MonoMasterPackage(Package):
         Package.profile.arch_build(arch, self)
         if arch == "darwin-64":  # 64-bit build pass
             self.local_configure_flags.extend(
-                ["--build=x86_64-apple-darwin13.0.0", "--disable-boehm"]
-            )
+                ["--build=x86_64-apple-darwin13.0.0", "--disable-boehm"])
 
         if arch == "darwin-32":  # 32-bit build pass
-            self.local_configure_flags.extend(["--build=i386-apple-darwin13.0.0"])
+            self.local_configure_flags.extend(
+                ["--build=i386-apple-darwin13.0.0"])
 
-        self.local_configure_flags.extend(
-            [
-                "--cache-file=%s/%s-%s.cache"
-                % (self.profile.bockbuild.build_root, self.name, arch)
-            ]
-        )
+        self.local_configure_flags.extend([
+            "--cache-file=%s/%s-%s.cache" %
+            (self.profile.bockbuild.build_root, self.name, arch)
+        ])
 
     def install(self):
         Package.install(self)
 
-        registry_dir = os.path.join(
-            self.staged_prefix, "etc", "mono", "registry", "LocalMachine"
-        )
+        registry_dir = os.path.join(self.staged_prefix, "etc", "mono",
+                                    "registry", "LocalMachine")
         ensure_dir(registry_dir)
 
         # LLVM build installs itself under the source tree; move tools to mono's install path
