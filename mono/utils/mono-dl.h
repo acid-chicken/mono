@@ -22,38 +22,39 @@
 #endif
 
 typedef struct {
-    // Only used in native-library.c, native library lock should be held when modifying
-    // Incremented on NativeLibrary.Load calls, decremented on NativeLibrary.Free
-    MonoRefCount ref;
-    void *handle;
-    int main_module;
-    char *full_name;
-    /* If not NULL, use the methods in MonoDlFallbackHandler instead of the LL_* methods */
-    MonoDlFallbackHandler *dl_fallback;
+  // Only used in native-library.c, native library lock should be held when
+  // modifying Incremented on NativeLibrary.Load calls, decremented on
+  // NativeLibrary.Free
+  MonoRefCount ref;
+  void *handle;
+  int main_module;
+  char *full_name;
+  /* If not NULL, use the methods in MonoDlFallbackHandler instead of the LL_*
+   * methods */
+  MonoDlFallbackHandler *dl_fallback;
 } MonoDl;
 
 MONO_EXTERN_C
-MonoDl*     mono_dl_open       (const char *name, int flags, char **error_msg);
+MonoDl *mono_dl_open(const char *name, int flags, char **error_msg);
 MONO_EXTERN_C
-char*       mono_dl_symbol     (MonoDl *module, const char *name, void **symbol);
+char *mono_dl_symbol(MonoDl *module, const char *name, void **symbol);
 MONO_EXTERN_C
-void        mono_dl_close      (MonoDl *module);
+void mono_dl_close(MonoDl *module);
 
-char*       mono_dl_build_path (const char *directory, const char *name, void **iter);
+char *mono_dl_build_path(const char *directory, const char *name, void **iter);
 
-MonoDl*     mono_dl_open_runtime_lib (const char *lib_name, int flags, char **error_msg);
+MonoDl *mono_dl_open_runtime_lib(const char *lib_name, int flags,
+                                 char **error_msg);
 
-
-//Platform API for mono_dl
-const char* mono_dl_get_so_prefix (void);
-const char** mono_dl_get_so_suffixes (void);
-void* mono_dl_open_file (const char *file, int flags);
-void mono_dl_close_handle (MonoDl *module);
-void* mono_dl_lookup_symbol (MonoDl *module, const char *name);
-int mono_dl_convert_flags (int flags);
-char* mono_dl_current_error_string (void);
-int mono_dl_get_executable_path (char *buf, int buflen);
-const char* mono_dl_get_system_dir (void);
+// Platform API for mono_dl
+const char *mono_dl_get_so_prefix(void);
+const char **mono_dl_get_so_suffixes(void);
+void *mono_dl_open_file(const char *file, int flags);
+void mono_dl_close_handle(MonoDl *module);
+void *mono_dl_lookup_symbol(MonoDl *module, const char *name);
+int mono_dl_convert_flags(int flags);
+char *mono_dl_current_error_string(void);
+int mono_dl_get_executable_path(char *buf, int buflen);
+const char *mono_dl_get_system_dir(void);
 
 #endif /* __MONO_UTILS_DL_H__ */
-
