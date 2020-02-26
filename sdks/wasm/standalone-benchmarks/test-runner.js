@@ -1,6 +1,7 @@
 if (process.argv.length != 4) {
   console.log(
-      "usage: node test-runner.js assemblyName packagerOutputDirectory");
+    "usage: node test-runner.js assemblyName packagerOutputDirectory"
+  );
   process.exit(1);
 }
 
@@ -26,14 +27,15 @@ context.setInterval = setInterval;
 context.clearInterval = clearInterval;
 
 context.App = {
-  init : function() {
+  init: function() {
     console.log("Priming interpreter...");
-    var wu = context.Module.mono_bind_static_method("[" + assemblyName +
-                                                    "] Program:WakeUp");
+    var wu = context.Module.mono_bind_static_method(
+      "[" + assemblyName + "] Program:WakeUp"
+    );
     wu();
     console.log("Sleeping to allow time for tiered JIT...");
     setTimeout(function() {
-      var f = context.Module.cwrap('mono_wasm_enable_on_demand_gc', 'void', []);
+      var f = context.Module.cwrap("mono_wasm_enable_on_demand_gc", "void", []);
       f();
       console.log("Running benchmark...");
       context.Module.mono_call_assembly_entry_point(assemblyName, []);
@@ -48,10 +50,8 @@ vm.createContext(context, contextOptions);
 
 function loadAndRun(filename) {
   var virtualFilename, virtualDirname, absoluteRoot;
-  if ((root[0] === "/") || (root[1] === ":"))
-    absoluteRoot = root;
-  else
-    absoluteRoot = path.normalize(path.join(process.cwd(), root));
+  if (root[0] === "/" || root[1] === ":") absoluteRoot = root;
+  else absoluteRoot = path.normalize(path.join(process.cwd(), root));
 
   virtualFilename = path.join(absoluteRoot, filename);
   virtualDirname = path.dirname(virtualFilename);
@@ -66,7 +66,7 @@ function loadAndRun(filename) {
   context.__dirname = virtualDirname;
 
   script.runInContext(context, runOptions);
-};
+}
 
 loadAndRun("mono-config.js");
 loadAndRun("runtime.js");
