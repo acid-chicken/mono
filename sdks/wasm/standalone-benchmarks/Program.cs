@@ -4,9 +4,9 @@ using System.Linq;
 
 class Program {
     static void Main () {
-        const int iterations = Benchmark.IterationCount, 
-            warming_iterations = Benchmark.WarmingIterationCount;
-    
+        const int iterations = Benchmark.IterationCount,
+                  warming_iterations = Benchmark.WarmingIterationCount;
+
         WakeUp ();
 
         Console.WriteLine ($">>> Warming with {warming_iterations} iterations...");
@@ -39,7 +39,7 @@ class Program {
         }
     }
 
-    static void WakeUp () {        
+    static void WakeUp () {
     }
 }
 

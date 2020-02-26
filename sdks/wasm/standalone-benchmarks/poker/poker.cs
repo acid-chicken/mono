@@ -31,7 +31,7 @@ using Jetstream;
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 public class CardDeck
@@ -119,17 +119,17 @@ public class CardDeck
 public class Hand
 {
     public static readonly Regex FlushRegExp = new Regex(
-            "([\x1f0a1-\x1f0ae]{5})|([\x1f0b1-\x1f0be]{5})|([\x1f0c1-\x1f0ce]{5})|([\x1f0d1-\x1f0de]{5})", 
-            RegexOptions.ECMAScript | RegexOptions.Compiled
-        ),
-        StraightRegExp = new Regex(
-            "([\x1f0a1\x1f0b1\x1f0d1\x1f0c1][\x1f0ae\x1f0be\x1f0de\x1f0ce][\x1f0ad\x1f0bd\x1f0dd\x1f0cd][\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca])|[\x1f0ae\x1f0be\x1f0de\x1f0ce][\x1f0ad\x1f0bd\x1f0dd\x1f0cd][\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9]|[\x1f0ad\x1f0bd\x1f0dd\x1f0cd][\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8]|[\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7]|[\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6]|[\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5]|[\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4]|[\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4][\x1f0a3\x1f0b3\x1f0d3\x1f0c3]|[\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4][\x1f0a3\x1f0b3\x1f0d3\x1f0c3][\x1f0a2\x1f0b2\x1f0d2\x1f0c2]|[\x1f0a1\x1f0b1\x1f0d1\x1f0c1][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4][\x1f0a3\x1f0b3\x1f0d3\x1f0c3][\x1f0a2\x1f0b2\x1f0d2\x1f0c2]", 
-            RegexOptions.ECMAScript | RegexOptions.Compiled
-        ),
-        OfAKindRegExp = new Regex(
-            "(?:[\x1f0a1\x1f0b1\x1f0d1\x1f0c1]{2,4})|(?:[\x1f0ae\x1f0be\x1f0de\x1f0ce]{2,4})|(?:[\x1f0ad\x1f0bd\x1f0dd\x1f0cd]{2,4})|(?:[\x1f0ab\x1f0bb\x1f0db\x1f0cb]{2,4})|(?:[\x1f0aa\x1f0ba\x1f0da\x1f0ca]{2,4})|(?:[\x1f0a9\x1f0b9\x1f0d9\x1f0c9]{2,4})|(?:[\x1f0a8\x1f0b8\x1f0d8\x1f0c8]{2,4})|(?:[\x1f0a7\x1f0b7\x1f0d7\x1f0c7]{2,4})|(?:[\x1f0a6\x1f0b6\x1f0d6\x1f0c6]{2,4})|(?:[\x1f0a5\x1f0b5\x1f0d5\x1f0c5]{2,4})|(?:[\x1f0a4\x1f0b4\x1f0d4\x1f0c4]{2,4})|(?:[\x1f0a3\x1f0b3\x1f0d3\x1f0c3]{2,4})|(?:[\x1f0a2\x1f0b2\x1f0d2\x1f0c2]{2,4})", 
-            RegexOptions.ECMAScript | RegexOptions.Compiled
-        );
+        "([\x1f0a1-\x1f0ae]{5})|([\x1f0b1-\x1f0be]{5})|([\x1f0c1-\x1f0ce]{5})|([\x1f0d1-\x1f0de]{5})",
+        RegexOptions.ECMAScript | RegexOptions.Compiled
+    ),
+    StraightRegExp = new Regex(
+        "([\x1f0a1\x1f0b1\x1f0d1\x1f0c1][\x1f0ae\x1f0be\x1f0de\x1f0ce][\x1f0ad\x1f0bd\x1f0dd\x1f0cd][\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca])|[\x1f0ae\x1f0be\x1f0de\x1f0ce][\x1f0ad\x1f0bd\x1f0dd\x1f0cd][\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9]|[\x1f0ad\x1f0bd\x1f0dd\x1f0cd][\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8]|[\x1f0ab\x1f0bb\x1f0db\x1f0cb][\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7]|[\x1f0aa\x1f0ba\x1f0da\x1f0ca][\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6]|[\x1f0a9\x1f0b9\x1f0d9\x1f0c9][\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5]|[\x1f0a8\x1f0b8\x1f0d8\x1f0c8][\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4]|[\x1f0a7\x1f0b7\x1f0d7\x1f0c7][\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4][\x1f0a3\x1f0b3\x1f0d3\x1f0c3]|[\x1f0a6\x1f0b6\x1f0d6\x1f0c6][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4][\x1f0a3\x1f0b3\x1f0d3\x1f0c3][\x1f0a2\x1f0b2\x1f0d2\x1f0c2]|[\x1f0a1\x1f0b1\x1f0d1\x1f0c1][\x1f0a5\x1f0b5\x1f0d5\x1f0c5][\x1f0a4\x1f0b4\x1f0d4\x1f0c4][\x1f0a3\x1f0b3\x1f0d3\x1f0c3][\x1f0a2\x1f0b2\x1f0d2\x1f0c2]",
+        RegexOptions.ECMAScript | RegexOptions.Compiled
+    ),
+    OfAKindRegExp = new Regex(
+        "(?:[\x1f0a1\x1f0b1\x1f0d1\x1f0c1]{2,4})|(?:[\x1f0ae\x1f0be\x1f0de\x1f0ce]{2,4})|(?:[\x1f0ad\x1f0bd\x1f0dd\x1f0cd]{2,4})|(?:[\x1f0ab\x1f0bb\x1f0db\x1f0cb]{2,4})|(?:[\x1f0aa\x1f0ba\x1f0da\x1f0ca]{2,4})|(?:[\x1f0a9\x1f0b9\x1f0d9\x1f0c9]{2,4})|(?:[\x1f0a8\x1f0b8\x1f0d8\x1f0c8]{2,4})|(?:[\x1f0a7\x1f0b7\x1f0d7\x1f0c7]{2,4})|(?:[\x1f0a6\x1f0b6\x1f0d6\x1f0c6]{2,4})|(?:[\x1f0a5\x1f0b5\x1f0d5\x1f0c5]{2,4})|(?:[\x1f0a4\x1f0b4\x1f0d4\x1f0c4]{2,4})|(?:[\x1f0a3\x1f0b3\x1f0d3\x1f0c3]{2,4})|(?:[\x1f0a2\x1f0b2\x1f0d2\x1f0c2]{2,4})",
+        RegexOptions.ECMAScript | RegexOptions.Compiled
+    );
 
     public const int RoyalFlush = 0x900000;
     public const int StraightFlush = 0x800000;
@@ -195,9 +195,9 @@ public class Hand
                 var remainingCardsIndex = handString.IndexOf(firstOfAKind) + firstOfAKind.Length;
                 Match secondOfAKindResult = null;
                 if (remainingCardsIndex <= 6
-                    && (secondOfAKindResult = Hand.OfAKindRegExp.Match(handString.slice(remainingCardsIndex))).Success) {
+                        && (secondOfAKindResult = Hand.OfAKindRegExp.Match(handString.slice(remainingCardsIndex))).Success) {
                     if ((firstOfAKind.Length == 6 && secondOfAKindResult.Groups[0].Length == 4)
-                        || (firstOfAKind.Length == 4 && secondOfAKindResult.Groups[0].Length == 6)) {
+                            || (firstOfAKind.Length == 4 && secondOfAKindResult.Groups[0].Length == 6)) {
                         int threeOfAKindCardRank, twoOfAKindCardRank;
                         if (firstOfAKind.Length == 6) {
                             threeOfAKindCardRank = CardDeck.cardRank(firstOfAKind.slice(0,2));

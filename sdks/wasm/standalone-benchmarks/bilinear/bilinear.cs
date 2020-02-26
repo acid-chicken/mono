@@ -33,7 +33,7 @@ public partial class Benchmark
     const int lengthB = 500;
     const double deltaB = (maxXB - minXB) / (double)(lengthB - 1);
 
-    //ref values 
+    //ref values
     double[] A, B, input, output;
 
     public Benchmark()
@@ -55,14 +55,14 @@ public partial class Benchmark
     }
 
     private static double[] BilinearInterpol(double[] x,
-                                             double[] z,
-                                             double[] A,
-                                             double minXA,
-                                             double maxXA,
-                                             double[] B,
-                                             double minXB,
-                                             double maxXB,
-                                             double weightB)
+            double[] z,
+            double[] A,
+            double minXA,
+            double maxXA,
+            double[] B,
+            double minXB,
+            double maxXB,
+            double weightB)
     {
         var weightA = 1.0 - weightB;
 
@@ -107,20 +107,20 @@ public partial class Benchmark
 
             // Finally, compute our result.
             z[i] = weightA * (refALower + lambdaA * (refAUpper - refALower)) +
-                    weightB * (refBLower + lambdaB * (refBUpper - refBLower));
+                   weightB * (refBLower + lambdaB * (refBUpper - refBLower));
         }
         return z;
     }
 
     private double[] BilinearInterpol_Vector(
-                                            double[] x,
-                                            double[] A,
-                                            double minXA,
-                                            double maxXA,
-                                            double[] B,
-                                            double minXB,
-                                            double maxXB,
-                                            double weightB)
+        double[] x,
+        double[] A,
+        double minXA,
+        double maxXA,
+        double[] B,
+        double minXB,
+        double maxXB,
+        double weightB)
     {
         double[] z = new double[outputVectorSize];
 
@@ -191,7 +191,7 @@ public partial class Benchmark
             Vector<double> BVectorPlusOne = new Vector<double>(doubleTemp);
 
             Vector<double> newZ = vWeightA * (AVector + lambdaA * (AVectorPlusOne - AVector)) +
-                        vWeightB * (BVector + lambdaB * (BVectorPlusOne - BVector));
+                                  vWeightB * (BVector + lambdaB * (BVectorPlusOne - BVector));
             newZ.CopyTo(z, i);
         }
         return z;
@@ -199,14 +199,14 @@ public partial class Benchmark
 
 #if !NETCOREAPP2_1 && !NETFRAMEWORK
     private static unsafe double[] BilinearInterpol_AVX(
-                                            double[] x,
-                                            double[] A,
-                                            double minXA,
-                                            double maxXA,
-                                            double[] B,
-                                            double minXB,
-                                            double maxXB,
-                                            double weightB)
+        double[] x,
+        double[] A,
+        double minXA,
+        double maxXA,
+        double[] B,
+        double minXB,
+        double maxXB,
+        double weightB)
     {
         double[] z = new double[outputVectorSize];
 
@@ -271,7 +271,7 @@ public partial class Benchmark
                 Vector256<double> BVectorPlusOne = Avx2.GatherVector256(pB, bPlusOne, 8);
 
                 Vector256<double> newZ = Avx.Add(Avx.Multiply(vWeightA, Avx.Add(AVector, Avx.Multiply(lambdaA, Avx.Subtract(AVectorPlusOne, AVector)))),
-                                             Avx.Multiply(vWeightB, Avx.Add(BVector, Avx.Multiply(lambdaB, Avx.Subtract(BVectorPlusOne, BVector)))));
+                                                 Avx.Multiply(vWeightB, Avx.Add(BVector, Avx.Multiply(lambdaB, Avx.Subtract(BVectorPlusOne, BVector)))));
                 Avx.Store(pZ + i, newZ);
             }
         }

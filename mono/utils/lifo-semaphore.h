@@ -7,16 +7,16 @@ typedef struct _LifoSemaphore LifoSemaphore;
 typedef struct _LifoSemaphoreWaitEntry LifoSemaphoreWaitEntry;
 
 struct _LifoSemaphoreWaitEntry {
-	LifoSemaphoreWaitEntry *previous;
-	LifoSemaphoreWaitEntry *next;
-	MonoCoopCond condition;
-	int signaled;
+    LifoSemaphoreWaitEntry *previous;
+    LifoSemaphoreWaitEntry *next;
+    MonoCoopCond condition;
+    int signaled;
 };
 
 struct _LifoSemaphore {
-	MonoCoopMutex mutex;
-	LifoSemaphoreWaitEntry *head;
-	uint32_t pending_signals;
+    MonoCoopMutex mutex;
+    LifoSemaphoreWaitEntry *head;
+    uint32_t pending_signals;
 };
 
 LifoSemaphore *
