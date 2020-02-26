@@ -3,7 +3,7 @@ set -e
 set -u
 
 # &>> is used to pipe both stdout and stderr to a file in append mode
-# Tee is used to both append full stdout to a log file and then print filtered stdout. 
+# Tee is used to both append full stdout to a log file and then print filtered stdout.
 # Before that we need to merge stdout and stderr using 2>&1.
 # Grep ^\>\>\> is used to only print result messages from the benchmark.
 
