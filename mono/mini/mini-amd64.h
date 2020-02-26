@@ -17,15 +17,15 @@
 #if !defined(_MSC_VER)
 /* sigcontext surrogate */
 struct sigcontext {
-	guint64 eax;
-	guint64 ebx;
-	guint64 ecx;
-	guint64 edx;
-	guint64 ebp;
-	guint64 esp;
-	guint64 esi;
-	guint64 edi;
-	guint64 eip;
+    guint64 eax;
+    guint64 ebx;
+    guint64 ecx;
+    guint64 edx;
+    guint64 ebp;
+    guint64 esp;
+    guint64 esi;
+    guint64 edi;
+    guint64 eip;
 };
 #endif
 
@@ -49,27 +49,27 @@ void win32_seh_set_handler(int type, MonoW32ExceptionHandler handler);
 LONG CALLBACK seh_handler(EXCEPTION_POINTERS* ep);
 
 typedef struct {
-	SRWLOCK lock;
-	PVOID handle;
-	gsize begin_range;
-	gsize end_range;
-	PRUNTIME_FUNCTION rt_funcs;
-	DWORD rt_funcs_current_count;
-	DWORD rt_funcs_max_count;
+    SRWLOCK lock;
+    PVOID handle;
+    gsize begin_range;
+    gsize end_range;
+    PRUNTIME_FUNCTION rt_funcs;
+    DWORD rt_funcs_current_count;
+    DWORD rt_funcs_max_count;
 } DynamicFunctionTableEntry;
 
 #define MONO_UNWIND_INFO_RT_FUNC_SIZE 128
 
 typedef BOOLEAN (WINAPI* RtlInstallFunctionTableCallbackPtr)(
-	DWORD64 TableIdentifier,
-	DWORD64 BaseAddress,
-	DWORD Length,
-	PGET_RUNTIME_FUNCTION_CALLBACK Callback,
-	PVOID Context,
-	PCWSTR OutOfProcessCallbackDll);
+    DWORD64 TableIdentifier,
+    DWORD64 BaseAddress,
+    DWORD Length,
+    PGET_RUNTIME_FUNCTION_CALLBACK Callback,
+    PVOID Context,
+    PCWSTR OutOfProcessCallbackDll);
 
 typedef BOOLEAN (WINAPI* RtlDeleteFunctionTablePtr)(
-	PRUNTIME_FUNCTION FunctionTable);
+    PRUNTIME_FUNCTION FunctionTable);
 
 // On Win8/Win2012Server and later we can use dynamic growable function tables
 // instead of RtlInstallFunctionTableCallback. This gives us the benefit to
@@ -96,27 +96,27 @@ typedef VOID (NTAPI* RtlDeleteGrowableFunctionTablePtr)(
 #  define MONO_ARCH_NOMAP32BIT
 
 struct sigcontext {
-        unsigned short gs, __gsh;
-        unsigned short fs, __fsh;
-        unsigned short es, __esh;
-        unsigned short ds, __dsh;
-        unsigned long edi;
-        unsigned long esi;
-        unsigned long ebp;
-        unsigned long esp;
-        unsigned long ebx;
-        unsigned long edx;
-        unsigned long ecx;
-        unsigned long eax;
-        unsigned long trapno;
-        unsigned long err;
-        unsigned long eip;
-        unsigned short cs, __csh;
-        unsigned long eflags;
-        unsigned long esp_at_signal;
-        unsigned short ss, __ssh;
-        unsigned long fpstate[95];
-      unsigned long filler[5];
+    unsigned short gs, __gsh;
+    unsigned short fs, __fsh;
+    unsigned short es, __esh;
+    unsigned short ds, __dsh;
+    unsigned long edi;
+    unsigned long esi;
+    unsigned long ebp;
+    unsigned long esp;
+    unsigned long ebx;
+    unsigned long edx;
+    unsigned long ecx;
+    unsigned long eax;
+    unsigned long trapno;
+    unsigned long err;
+    unsigned long eip;
+    unsigned short cs, __csh;
+    unsigned long eflags;
+    unsigned long esp_at_signal;
+    unsigned short ss, __ssh;
+    unsigned long fpstate[95];
+    unsigned long filler[5];
 };
 #endif  // sun, Solaris x86
 
@@ -176,47 +176,47 @@ struct sigcontext {
 
 #define MONO_ARCH_FRAME_ALIGNMENT 16
 
-/* fixme: align to 16byte instead of 32byte (we align to 32byte to get 
+/* fixme: align to 16byte instead of 32byte (we align to 32byte to get
  * reproduceable results for benchmarks */
 #define MONO_ARCH_CODE_ALIGNMENT 32
 
 struct MonoLMF {
-	/* 
-	 * The rsp field points to the stack location where the caller ip is saved.
-	 * If the second lowest bit is set, then this is a MonoLMFExt structure, and
-	 * the other fields are not valid.
-	 * If the third lowest bit is set, then this is a MonoLMFTramp structure, and
-	 * the 'rbp' field is not valid.
-	 */
-	gpointer    previous_lmf;
-	guint64     rbp;
-	guint64     rsp;
+    /*
+     * The rsp field points to the stack location where the caller ip is saved.
+     * If the second lowest bit is set, then this is a MonoLMFExt structure, and
+     * the other fields are not valid.
+     * If the third lowest bit is set, then this is a MonoLMFTramp structure, and
+     * the 'rbp' field is not valid.
+     */
+    gpointer    previous_lmf;
+    guint64     rbp;
+    guint64     rsp;
 };
 
 /* LMF structure used by the JIT trampolines */
 typedef struct {
-	struct MonoLMF lmf;
-	MonoContext *ctx;
-	gpointer lmf_addr;
+    struct MonoLMF lmf;
+    MonoContext *ctx;
+    gpointer lmf_addr;
 } MonoLMFTramp;
 
 typedef struct MonoCompileArch {
-	gint32 localloc_offset;
-	gint32 reg_save_area_offset;
-	gint32 stack_alloc_size;
-	gint32 sp_fp_offset;
-	guint32 saved_iregs;
-	gboolean omit_fp;
-	gboolean omit_fp_computed;
-	CallInfo *cinfo;
-	gint32 async_point_count;
-	MonoInst *vret_addr_loc;
-	MonoInst *seq_point_info_var;
-	MonoInst *ss_tramp_var;
-	MonoInst *bp_tramp_var;
-	MonoInst *lmf_var;
+    gint32 localloc_offset;
+    gint32 reg_save_area_offset;
+    gint32 stack_alloc_size;
+    gint32 sp_fp_offset;
+    guint32 saved_iregs;
+    gboolean omit_fp;
+    gboolean omit_fp_computed;
+    CallInfo *cinfo;
+    gint32 async_point_count;
+    MonoInst *vret_addr_loc;
+    MonoInst *seq_point_info_var;
+    MonoInst *ss_tramp_var;
+    MonoInst *bp_tramp_var;
+    MonoInst *lmf_var;
 #ifdef HOST_WIN32
-	struct _UNWIND_INFO* unwindinfo;
+    struct _UNWIND_INFO* unwindinfo;
 #endif
 } MonoCompileArch;
 
@@ -242,109 +242,111 @@ static const AMD64_XMM_Reg_No float_return_regs [] = { AMD64_XMM0 };
 #define FLOAT_RETURN_REGS 2
 
 static const AMD64_Reg_No param_regs [] = {AMD64_RDI, AMD64_RSI, AMD64_RDX,
-					   AMD64_RCX, AMD64_R8,  AMD64_R9};
+                                           AMD64_RCX, AMD64_R8,  AMD64_R9
+                                          };
 
 static const AMD64_XMM_Reg_No float_param_regs[] = {AMD64_XMM0, AMD64_XMM1, AMD64_XMM2,
-						     AMD64_XMM3, AMD64_XMM4, AMD64_XMM5,
-						     AMD64_XMM6, AMD64_XMM7};
+                                                    AMD64_XMM3, AMD64_XMM4, AMD64_XMM5,
+                                                    AMD64_XMM6, AMD64_XMM7
+                                                   };
 
 static const AMD64_Reg_No return_regs [] = {AMD64_RAX, AMD64_RDX};
 #endif
 
 typedef struct {
-	/* Method address to call */
-	gpointer addr;
-	/* The trampoline reads this, so keep the size explicit */
-	int ret_marshal;
-	/* If ret_marshal != NONE, this is the reg of the vret arg, else -1 (used in out case) */
-	/* Equivalent of vret_arg_slot in the x86 implementation. */
-	int vret_arg_reg;
-	/* The stack slot where the return value will be stored (used in in case) */
-	int vret_slot;
-	int stack_usage, map_count;
-	/* If not -1, then make a virtual call using this vtable offset */
-	int vcall_offset;
-	/* If 1, make an indirect call to the address in the rgctx reg */
-	int calli;
-	/* Whenever this is a in or an out call */
-	int gsharedvt_in;
-	/* Maps stack slots/registers in the caller to the stack slots/registers in the callee */
-	int map [MONO_ZERO_LEN_ARRAY];
+    /* Method address to call */
+    gpointer addr;
+    /* The trampoline reads this, so keep the size explicit */
+    int ret_marshal;
+    /* If ret_marshal != NONE, this is the reg of the vret arg, else -1 (used in out case) */
+    /* Equivalent of vret_arg_slot in the x86 implementation. */
+    int vret_arg_reg;
+    /* The stack slot where the return value will be stored (used in in case) */
+    int vret_slot;
+    int stack_usage, map_count;
+    /* If not -1, then make a virtual call using this vtable offset */
+    int vcall_offset;
+    /* If 1, make an indirect call to the address in the rgctx reg */
+    int calli;
+    /* Whenever this is a in or an out call */
+    int gsharedvt_in;
+    /* Maps stack slots/registers in the caller to the stack slots/registers in the callee */
+    int map [MONO_ZERO_LEN_ARRAY];
 } GSharedVtCallInfo;
 
 /* Structure used by the sequence points in AOTed code */
 struct SeqPointInfo {
-	gpointer ss_tramp_addr;
-	gpointer bp_addrs [MONO_ZERO_LEN_ARRAY];
+    gpointer ss_tramp_addr;
+    gpointer bp_addrs [MONO_ZERO_LEN_ARRAY];
 };
 
 typedef struct {
-	host_mgreg_t res;
-	guint8 *ret;
-	double fregs [8];
-	host_mgreg_t has_fp;
-	host_mgreg_t nstack_args;
-	/* This should come last as the structure is dynamically extended */
-	host_mgreg_t regs [PARAM_REGS];
+    host_mgreg_t res;
+    guint8 *ret;
+    double fregs [8];
+    host_mgreg_t has_fp;
+    host_mgreg_t nstack_args;
+    /* This should come last as the structure is dynamically extended */
+    host_mgreg_t regs [PARAM_REGS];
 } DynCallArgs;
 
 typedef enum {
-	ArgInIReg,
-	ArgInFloatSSEReg,
-	ArgInDoubleSSEReg,
-	ArgOnStack,
-	ArgValuetypeInReg,
-	ArgValuetypeAddrInIReg,
-	ArgValuetypeAddrOnStack,
-	/* gsharedvt argument passed by addr */
-	ArgGSharedVtInReg,
-	ArgGSharedVtOnStack,
-	/* Variable sized gsharedvt argument passed/returned by addr */
-	ArgGsharedvtVariableInReg,
-	ArgNone /* only in pair_storage */
+    ArgInIReg,
+    ArgInFloatSSEReg,
+    ArgInDoubleSSEReg,
+    ArgOnStack,
+    ArgValuetypeInReg,
+    ArgValuetypeAddrInIReg,
+    ArgValuetypeAddrOnStack,
+    /* gsharedvt argument passed by addr */
+    ArgGSharedVtInReg,
+    ArgGSharedVtOnStack,
+    /* Variable sized gsharedvt argument passed/returned by addr */
+    ArgGsharedvtVariableInReg,
+    ArgNone /* only in pair_storage */
 } ArgStorage;
 
 typedef struct {
-	gint16 offset;
-	gint8  reg;
-	ArgStorage storage : 8;
+    gint16 offset;
+    gint8  reg;
+    ArgStorage storage : 8;
 
-	/* Only if storage == ArgValuetypeInReg */
-	ArgStorage pair_storage [2];
-	gint8 pair_regs [2];
-	/* The size of each pair (bytes) */
-	int pair_size [2];
-	int nregs;
-	/* Only if storage == ArgOnStack */
-	int arg_size; // Bytes, will always be rounded up/aligned to 8 byte boundary
-	// Size in bytes for small arguments
-	int byte_arg_size;
-	guint8 pass_empty_struct : 1; // Set in scenarios when empty structs needs to be represented as argument.
-	guint8 is_signed : 1;
+    /* Only if storage == ArgValuetypeInReg */
+    ArgStorage pair_storage [2];
+    gint8 pair_regs [2];
+    /* The size of each pair (bytes) */
+    int pair_size [2];
+    int nregs;
+    /* Only if storage == ArgOnStack */
+    int arg_size; // Bytes, will always be rounded up/aligned to 8 byte boundary
+    // Size in bytes for small arguments
+    int byte_arg_size;
+    guint8 pass_empty_struct : 1; // Set in scenarios when empty structs needs to be represented as argument.
+    guint8 is_signed : 1;
 } ArgInfo;
 
 struct CallInfo {
-	int nargs;
-	guint32 stack_usage;
-	guint32 reg_usage;
-	guint32 freg_usage;
-	gboolean need_stack_align;
-	gboolean gsharedvt;
-	/* The index of the vret arg in the argument list */
-	int vret_arg_index;
-	ArgInfo ret;
-	ArgInfo sig_cookie;
-	ArgInfo args [1];
+    int nargs;
+    guint32 stack_usage;
+    guint32 reg_usage;
+    guint32 freg_usage;
+    gboolean need_stack_align;
+    gboolean gsharedvt;
+    /* The index of the vret arg in the argument list */
+    int vret_arg_index;
+    ArgInfo ret;
+    ArgInfo sig_cookie;
+    ArgInfo args [1];
 };
 
 typedef struct {
-	/* General registers */
-	host_mgreg_t gregs [AMD64_NREG];
-	/* Floating registers */
-	double fregs [AMD64_XMM_NREG];
-	/* Stack usage, used for passing params on stack */
-	guint32 stack_size;
-	guint8 *stack;
+    /* General registers */
+    host_mgreg_t gregs [AMD64_NREG];
+    /* Floating registers */
+    double fregs [AMD64_XMM_NREG];
+    /* Stack usage, used for passing params on stack */
+    guint32 stack_size;
+    guint8 *stack;
 } CallContext;
 
 #define MONO_CONTEXT_SET_LLVM_EXC_REG(ctx, exc) do { (ctx)->gregs [AMD64_RAX] = (gsize)exc; } while (0)
@@ -364,7 +366,7 @@ typedef struct {
 
 #else
 
-/* 
+/*
  * __builtin_frame_address () is broken on some older gcc versions in the presence of
  * frame pointer elimination, see bug #82095.
  */
@@ -496,23 +498,23 @@ typedef struct {
 // can pass context to generics or interfaces?
 #define MONO_ARCH_HAVE_VOLATILE_NON_PARAM_REGISTER 1
 
-void 
+void
 mono_amd64_patch (unsigned char* code, gpointer target);
 
 void
 mono_amd64_throw_exception (guint64 dummy1, guint64 dummy2, guint64 dummy3, guint64 dummy4,
-							guint64 dummy5, guint64 dummy6,
-							MonoContext *mctx, MonoObject *exc, gboolean rethrow, gboolean preserve_ips);
+                            guint64 dummy5, guint64 dummy6,
+                            MonoContext *mctx, MonoObject *exc, gboolean rethrow, gboolean preserve_ips);
 
 void
 mono_amd64_throw_corlib_exception (guint64 dummy1, guint64 dummy2, guint64 dummy3, guint64 dummy4,
-								   guint64 dummy5, guint64 dummy6,
-								   MonoContext *mctx, guint32 ex_token_index, gint64 pc_offset);
+                                   guint64 dummy5, guint64 dummy6,
+                                   MonoContext *mctx, guint32 ex_token_index, gint64 pc_offset);
 
 void
 mono_amd64_resume_unwind (guint64 dummy1, guint64 dummy2, guint64 dummy3, guint64 dummy4,
-						  guint64 dummy5, guint64 dummy6,
-						  MonoContext *mctx, guint32 dummy7, gint64 dummy8);
+                          guint64 dummy5, guint64 dummy6,
+                          MonoContext *mctx, guint32 dummy7, gint64 dummy8);
 
 gpointer
 mono_amd64_start_gsharedvt_call (GSharedVtCallInfo *info, gpointer *caller, gpointer *callee, gpointer mrgctx_reg);
@@ -556,36 +558,36 @@ typedef union _UNWIND_CODE {
 } UNWIND_CODE, *PUNWIND_CODE;
 
 typedef struct _UNWIND_INFO {
-	guchar Version       : 3;
-	guchar Flags         : 5;
-	guchar SizeOfProlog;
-	guchar CountOfCodes;
-	guchar FrameRegister : 4;
-	guchar FrameOffset   : 4;
-	UNWIND_CODE UnwindCode[MONO_MAX_UNWIND_CODES];
-/*	UNWIND_CODE MoreUnwindCode[((CountOfCodes + 1) & ~1) - 1];
- *	union {
- *		OPTIONAL ULONG ExceptionHandler;
- *		OPTIONAL ULONG FunctionEntry;
- *	};
- *	OPTIONAL ULONG ExceptionData[]; */
+    guchar Version       : 3;
+    guchar Flags         : 5;
+    guchar SizeOfProlog;
+    guchar CountOfCodes;
+    guchar FrameRegister : 4;
+    guchar FrameOffset   : 4;
+    UNWIND_CODE UnwindCode[MONO_MAX_UNWIND_CODES];
+    /*	UNWIND_CODE MoreUnwindCode[((CountOfCodes + 1) & ~1) - 1];
+     *	union {
+     *		OPTIONAL ULONG ExceptionHandler;
+     *		OPTIONAL ULONG FunctionEntry;
+     *	};
+     *	OPTIONAL ULONG ExceptionData[]; */
 } UNWIND_INFO, *PUNWIND_INFO;
 
 static inline guint
 mono_arch_unwindinfo_get_size (guchar code_count)
 {
-	// Returned size will be used as the allocated size for unwind data trailing the memory used by compiled method.
-	// Windows x64 ABI have some requirements on the data written into this memory. Both the RUNTIME_FUNCTION
-	// and UNWIND_INFO struct needs to be DWORD aligned and the number of elements in unwind codes array
-	// should have an even number of entries, while the count stored in UNWIND_INFO struct should hold the real number
-	// of unwind codes. Adding extra bytes to the total size will make sure we can properly align the RUNTIME_FUNCTION
-	// struct. Since our UNWIND_INFO follows RUNTIME_FUNCTION struct in memory, it will automatically be DWORD aligned
-	// as well. Also make sure to allocate room for a padding UNWIND_CODE, if needed.
-	return (sizeof (target_mgreg_t) + sizeof (UNWIND_INFO)) -
-		(sizeof (UNWIND_CODE) * ((MONO_MAX_UNWIND_CODES - ((code_count + 1) & ~1))));
-/* FIXME Something simpler should work:
-	return sizeof (UNWIND_INFO) + sizeof (UNWIND_CODE) * (code_count + (code_count & 1));
-*/
+    // Returned size will be used as the allocated size for unwind data trailing the memory used by compiled method.
+    // Windows x64 ABI have some requirements on the data written into this memory. Both the RUNTIME_FUNCTION
+    // and UNWIND_INFO struct needs to be DWORD aligned and the number of elements in unwind codes array
+    // should have an even number of entries, while the count stored in UNWIND_INFO struct should hold the real number
+    // of unwind codes. Adding extra bytes to the total size will make sure we can properly align the RUNTIME_FUNCTION
+    // struct. Since our UNWIND_INFO follows RUNTIME_FUNCTION struct in memory, it will automatically be DWORD aligned
+    // as well. Also make sure to allocate room for a padding UNWIND_CODE, if needed.
+    return (sizeof (target_mgreg_t) + sizeof (UNWIND_INFO)) -
+           (sizeof (UNWIND_CODE) * ((MONO_MAX_UNWIND_CODES - ((code_count + 1) & ~1))));
+    /* FIXME Something simpler should work:
+    	return sizeof (UNWIND_INFO) + sizeof (UNWIND_CODE) * (code_count + (code_count & 1));
+    */
 }
 
 guchar
@@ -622,8 +624,8 @@ mono_arch_code_chunk_destroy (void *chunk);
 static inline gboolean
 mono_arch_unwindinfo_validate_size (GSList *unwind_ops, guint max_size)
 {
-	guint current_size = mono_arch_unwindinfo_get_size (mono_arch_unwindinfo_get_code_count (unwind_ops));
-	return current_size <= max_size;
+    guint current_size = mono_arch_unwindinfo_get_size (mono_arch_unwindinfo_get_code_count (unwind_ops));
+    return current_size <= max_size;
 }
 
 #else
@@ -634,11 +636,11 @@ mono_arch_unwindinfo_validate_size (GSList *unwind_ops, guint max_size)
 static inline gboolean
 mono_arch_unwindinfo_validate_size (GSList *unwind_ops, guint max_size)
 {
-	return TRUE;
+    return TRUE;
 }
 #endif
 
 CallInfo* mono_arch_get_call_info (MonoMemPool *mp, MonoMethodSignature *sig);
 
-#endif /* __MONO_MINI_AMD64_H__ */  
+#endif /* __MONO_MINI_AMD64_H__ */
 

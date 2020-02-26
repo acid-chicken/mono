@@ -19,7 +19,7 @@
 #endif
 
 /*
- * This is a platform-independent interface for unwinding through stack frames 
+ * This is a platform-independent interface for unwinding through stack frames
  * based on the Dwarf unwinding interface.
  * See http://dwarfstd.org/Dwarf3.pdf, section "Call Frame Information".
  */
@@ -83,13 +83,13 @@
 
 /* Represents one unwind instruction */
 typedef struct {
-	guint8 op; /* One of DW_CFA_... */
-	guint16 reg; /* register number in the hardware encoding */
-	gint32 val; /* arbitrary value */
-	guint32 when; /* The offset _after_ the cpu instruction this unwind op belongs to */
+    guint8 op; /* One of DW_CFA_... */
+    guint16 reg; /* register number in the hardware encoding */
+    gint32 val; /* arbitrary value */
+    guint32 when; /* The offset _after_ the cpu instruction this unwind op belongs to */
 } MonoUnwindOp;
 
-/* 
+/*
  * Macros for emitting MonoUnwindOp structures.
  * These should be called _after_ emitting the cpu instruction the unwind op
  * belongs to.
@@ -143,20 +143,20 @@ typedef struct {
 
 /* Pointer Encoding in the .eh_frame */
 enum {
-	DW_EH_PE_absptr = 0x00,
-	DW_EH_PE_omit = 0xff,
+    DW_EH_PE_absptr = 0x00,
+    DW_EH_PE_omit = 0xff,
 
-	DW_EH_PE_udata4 = 0x03,
-	DW_EH_PE_sdata4 = 0x0b,
-	DW_EH_PE_sdata8 = 0x0c,
+    DW_EH_PE_udata4 = 0x03,
+    DW_EH_PE_sdata4 = 0x0b,
+    DW_EH_PE_sdata8 = 0x0c,
 
-	DW_EH_PE_pcrel = 0x10,
-	DW_EH_PE_textrel = 0x20,
-	DW_EH_PE_datarel = 0x30,
-	DW_EH_PE_funcrel = 0x40,
-	DW_EH_PE_aligned = 0x50,
+    DW_EH_PE_pcrel = 0x10,
+    DW_EH_PE_textrel = 0x20,
+    DW_EH_PE_datarel = 0x30,
+    DW_EH_PE_funcrel = 0x40,
+    DW_EH_PE_aligned = 0x50,
 
-	DW_EH_PE_indirect = 0x80
+    DW_EH_PE_indirect = 0x80
 };
 
 int
@@ -178,11 +178,11 @@ guint8*
 mono_unwind_ops_encode (GSList *unwind_ops, guint32 *out_len);
 
 gboolean
-mono_unwind_frame (guint8 *unwind_info, guint32 unwind_info_len, 
-				   guint8 *start_ip, guint8 *end_ip, guint8 *ip, guint8 **mark_locations,
-				   mono_unwind_reg_t *regs, int nregs,
-				   host_mgreg_t **save_locations, int save_locations_len,
-				   guint8 **out_cfa);
+mono_unwind_frame (guint8 *unwind_info, guint32 unwind_info_len,
+                   guint8 *start_ip, guint8 *end_ip, guint8 *ip, guint8 **mark_locations,
+                   mono_unwind_reg_t *regs, int nregs,
+                   host_mgreg_t **save_locations, int save_locations_len,
+                   guint8 **out_cfa);
 
 void mono_unwind_init (void);
 
@@ -196,11 +196,11 @@ guint8* mono_unwind_decode_fde (guint8 *fde, guint32 *out_len, guint32 *code_len
 
 /* Data retrieved from an LLVM Mono FDE entry */
 typedef struct {
-	guint32 unw_info_len;
-	guint32 ex_info_len;
-	int type_info_len;
-	int this_reg;
-	int this_offset;
+    guint32 unw_info_len;
+    guint32 ex_info_len;
+    int type_info_len;
+    int this_reg;
+    int this_offset;
 } MonoLLVMFDEInfo;
 
 void
