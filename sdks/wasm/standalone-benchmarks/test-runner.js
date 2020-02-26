@@ -1,5 +1,6 @@
 if (process.argv.length != 4) {
-  console.log("usage: node test-runner.js assemblyName packagerOutputDirectory");
+  console.log(
+      "usage: node test-runner.js assemblyName packagerOutputDirectory");
   process.exit(1);
 }
 
@@ -15,7 +16,8 @@ var context = Object.create(null);
 // Necessary because dotnet.js decides we're v8/sm shell without it
 context.process = process;
 
-// dotnet.js assumes __dirname and similar globals will be available but they aren't
+// dotnet.js assumes __dirname and similar globals will be available but they
+// aren't
 //  unless you're the top-level script being run from the command line
 context.require = require;
 context.console = console;
@@ -24,16 +26,17 @@ context.setInterval = setInterval;
 context.clearInterval = clearInterval;
 
 context.App = {
-  init: function () {
+  init : function() {
     console.log("Priming interpreter...");
-    var wu = context.Module.mono_bind_static_method ("[" + assemblyName + "] Program:WakeUp");
+    var wu = context.Module.mono_bind_static_method("[" + assemblyName +
+                                                    "] Program:WakeUp");
     wu();
     console.log("Sleeping to allow time for tiered JIT...");
-    setTimeout(function () {
-      var f = context.Module.cwrap ('mono_wasm_enable_on_demand_gc', 'void', []);
-      f ();
+    setTimeout(function() {
+      var f = context.Module.cwrap('mono_wasm_enable_on_demand_gc', 'void', []);
+      f();
       console.log("Running benchmark...");
-      context.Module.mono_call_assembly_entry_point (assemblyName, []);
+      context.Module.mono_call_assembly_entry_point(assemblyName, []);
       console.log("Benchmark complete.");
     }, 5000);
   }
@@ -43,7 +46,7 @@ context.global = context;
 var contextOptions = {};
 vm.createContext(context, contextOptions);
 
-function loadAndRun (filename) {
+function loadAndRun(filename) {
   var virtualFilename, virtualDirname, absoluteRoot;
   if ((root[0] === "/") || (root[1] === ":"))
     absoluteRoot = root;
