@@ -82,23 +82,23 @@
 struct g_cast
 {
 private:
-	void * const x;
+    void * const x;
 public:
-	explicit g_cast (void volatile *y) : x((void*)y) { }
-	// Lack of rvalue constructor inhibits ternary operator.
-	// Either don't use ternary, or cast each side.
-	// sa = (salen <= 128) ? g_alloca (salen) : g_malloc (salen);
-	// w32socket.c:1045:24: error: call to deleted constructor of 'monoeg_g_cast'
-	//g_cast (g_cast&& y) : x(y.x) { }
-	g_cast (g_cast&&) = delete;
-	g_cast () = delete;
-	g_cast (const g_cast&) = delete;
+    explicit g_cast (void volatile *y) : x((void*)y) { }
+    // Lack of rvalue constructor inhibits ternary operator.
+    // Either don't use ternary, or cast each side.
+    // sa = (salen <= 128) ? g_alloca (salen) : g_malloc (salen);
+    // w32socket.c:1045:24: error: call to deleted constructor of 'monoeg_g_cast'
+    //g_cast (g_cast&& y) : x(y.x) { }
+    g_cast (g_cast&&) = delete;
+    g_cast () = delete;
+    g_cast (const g_cast&) = delete;
 
-	template <typename TTo>
-	operator TTo* () const
-	{
-		return (TTo*)x;
-	}
+    template <typename TTo>
+    operator TTo* () const
+    {
+        return (TTo*)x;
+    }
 };
 
 #else
@@ -124,10 +124,18 @@ public:
 template <size_t> struct g_size_to_int;
 
 // Template specializations.
-template <> struct g_size_to_int<1> { typedef int8_t type; };
-template <> struct g_size_to_int<2> { typedef int16_t type; };
-template <> struct g_size_to_int<4> { typedef int32_t type; };
-template <> struct g_size_to_int<8> { typedef int64_t type; };
+template <> struct g_size_to_int<1> {
+    typedef int8_t type;
+};
+template <> struct g_size_to_int<2> {
+    typedef int16_t type;
+};
+template <> struct g_size_to_int<4> {
+    typedef int32_t type;
+};
+template <> struct g_size_to_int<8> {
+    typedef int64_t type;
+};
 
 // g++4.4 does not accept:
 //template <typename T>
@@ -238,7 +246,7 @@ typedef guint32 gunichar;
 
 #define G_LITTLE_ENDIAN 1234
 #define G_BIG_ENDIAN    4321
-#define G_STMT_START    do 
+#define G_STMT_START    do
 #define G_STMT_END      while (0)
 
 #define G_USEC_PER_SEC  1000000
@@ -299,21 +307,26 @@ gpointer g_try_realloc (gpointer obj, gsize size);
 
 G_EXTERN_C // Used by libtest, at least.
 gpointer g_memdup (gconstpointer mem, guint byte_size);
-static inline gchar   *g_strdup (const gchar *str) { if (str) { return (gchar*) g_memdup (str, (guint)strlen (str) + 1); } return NULL; }
+static inline gchar   *g_strdup (const gchar *str) {
+    if (str) {
+        return (gchar*) g_memdup (str, (guint)strlen (str) + 1);
+    }
+    return NULL;
+}
 gchar **g_strdupv (gchar **str_array);
 
 typedef struct {
-	gpointer (*malloc)      (gsize    n_bytes);
-	gpointer (*realloc)     (gpointer mem, gsize n_bytes);
-	void     (*free)        (gpointer mem);
-	gpointer (*calloc)      (gsize    n_blocks, gsize n_block_bytes);
+    gpointer (*malloc)      (gsize    n_bytes);
+    gpointer (*realloc)     (gpointer mem, gsize n_bytes);
+    void     (*free)        (gpointer mem);
+    gpointer (*calloc)      (gsize    n_blocks, gsize n_block_bytes);
 } GMemVTable;
 
 void g_mem_set_vtable (GMemVTable* vtable);
 void g_mem_get_vtable (GMemVTable* vtable);
 
 struct _GMemChunk {
-	guint alloc_size;
+    guint alloc_size;
 };
 
 typedef struct _GMemChunk GMemChunk;
@@ -342,10 +355,10 @@ gchar*           g_win32_getlocale(void);
  * Errors
  */
 typedef struct {
-	/* In the real glib, this is a GQuark, but we dont use/need that */
-	gpointer domain;
-	gint     code;
-	gchar   *message;
+    /* In the real glib, this is a GQuark, but we dont use/need that */
+    gpointer domain;
+    gint     code;
+    gchar   *message;
 } GError;
 
 void    g_clear_error (GError **gerror);
@@ -458,9 +471,9 @@ g_asciiz_equal_caseinsensitive (const char *s1, const char *s2)
  * String type
  */
 typedef struct {
-	char *str;
-	gsize len;
-	gsize allocated_len;
+    char *str;
+    gsize len;
+    gsize allocated_len;
 } GString;
 
 GString     *g_string_new           (const gchar *init);
@@ -496,62 +509,62 @@ typedef void     (*GFreeFunc)      (gpointer       data);
  */
 typedef struct _GSList GSList;
 struct _GSList {
-	gpointer data;
-	GSList *next;
+    gpointer data;
+    GSList *next;
 };
 
 GSList *g_slist_alloc         (void);
 GSList *g_slist_append        (GSList        *list,
-			       gpointer       data);
+                               gpointer       data);
 GSList *g_slist_prepend       (GSList        *list,
-			       gpointer       data);
+                               gpointer       data);
 void    g_slist_free          (GSList        *list);
 void    g_slist_free_1        (GSList        *list);
 GSList *g_slist_copy          (GSList        *list);
 GSList *g_slist_concat        (GSList        *list1,
-			       GSList        *list2);
+                               GSList        *list2);
 void    g_slist_foreach       (GSList        *list,
-			       GFunc          func,
-			       gpointer       user_data);
+                               GFunc          func,
+                               gpointer       user_data);
 GSList *g_slist_last          (GSList        *list);
 GSList *g_slist_find          (GSList        *list,
-			       gconstpointer  data);
+                               gconstpointer  data);
 GSList *g_slist_find_custom   (GSList	     *list,
-			       gconstpointer  data,
-			       GCompareFunc   func);
+                               gconstpointer  data,
+                               GCompareFunc   func);
 GSList *g_slist_remove        (GSList        *list,
-			       gconstpointer  data);
+                               gconstpointer  data);
 GSList *g_slist_remove_all    (GSList        *list,
-			       gconstpointer  data);
+                               gconstpointer  data);
 GSList *g_slist_reverse       (GSList        *list);
 guint   g_slist_length        (GSList        *list);
 GSList *g_slist_remove_link   (GSList        *list,
-			       GSList        *link);
+                               GSList        *link);
 GSList *g_slist_delete_link   (GSList        *list,
-			       GSList        *link);
+                               GSList        *link);
 GSList *g_slist_insert_sorted (GSList        *list,
-			       gpointer       data,
-			       GCompareFunc   func);
+                               gpointer       data,
+                               GCompareFunc   func);
 GSList *g_slist_insert_before (GSList        *list,
-			       GSList        *sibling,
-			       gpointer       data);
+                               GSList        *sibling,
+                               gpointer       data);
 GSList *g_slist_sort          (GSList        *list,
-			       GCompareFunc   func);
+                               GCompareFunc   func);
 gint    g_slist_index	      (GSList        *list,
-			       gconstpointer  data);
+                               gconstpointer  data);
 GSList *g_slist_nth	      (GSList	     *list,
-			       guint	      n);
+                           guint	      n);
 gpointer g_slist_nth_data     (GSList	     *list,
-			       guint	      n);
+                               guint	      n);
 
 #define g_slist_next(slist) ((slist) ? (((GSList *) (slist))->next) : NULL)
 
 
 typedef struct _GList GList;
 struct _GList {
-  gpointer data;
-  GList *next;
-  GList *prev;
+    gpointer data;
+    GList *next;
+    GList *prev;
 };
 
 #define g_list_next(list) ((list) ? (((GList *) (list))->next) : NULL)
@@ -559,48 +572,48 @@ struct _GList {
 
 GList *g_list_alloc         (void);
 GList *g_list_append        (GList         *list,
-			     gpointer       data);
+                             gpointer       data);
 GList *g_list_prepend       (GList         *list,
-			     gpointer       data);
+                             gpointer       data);
 void   g_list_free          (GList         *list);
 void   g_list_free_1        (GList         *list);
 GList *g_list_copy          (GList         *list);
 guint  g_list_length        (GList         *list);
 gint   g_list_index         (GList         *list,
-			     gconstpointer  data);
+                             gconstpointer  data);
 GList *g_list_nth           (GList         *list,
-			     guint          n);
+                             guint          n);
 gpointer g_list_nth_data      (GList         *list,
-			     guint          n);
+                               guint          n);
 GList *g_list_last          (GList         *list);
 GList *g_list_concat        (GList         *list1,
-			     GList         *list2);
+                             GList         *list2);
 void   g_list_foreach       (GList         *list,
-			     GFunc          func,
-			     gpointer       user_data);
+                             GFunc          func,
+                             gpointer       user_data);
 GList *g_list_first         (GList         *list);
 GList *g_list_find          (GList         *list,
-			     gconstpointer  data);
+                             gconstpointer  data);
 GList *g_list_find_custom   (GList	   *list,
-			     gconstpointer  data,
-			     GCompareFunc   func);
+                             gconstpointer  data,
+                             GCompareFunc   func);
 GList *g_list_remove        (GList         *list,
-			     gconstpointer  data);
+                             gconstpointer  data);
 GList *g_list_remove_all    (GList         *list,
-			     gconstpointer  data);
+                             gconstpointer  data);
 GList *g_list_reverse       (GList         *list);
 GList *g_list_remove_link   (GList         *list,
-			     GList         *link);
+                             GList         *link);
 GList *g_list_delete_link   (GList         *list,
-			     GList         *link);
+                             GList         *link);
 GList *g_list_insert_sorted (GList         *list,
-			     gpointer       data,
-			     GCompareFunc   func);
+                             gpointer       data,
+                             GCompareFunc   func);
 GList *g_list_insert_before (GList         *list,
-			     GList         *sibling,
-			     gpointer       data);
+                             GList         *sibling,
+                             gpointer       data);
 GList *g_list_sort          (GList         *sort,
-			     GCompareFunc   func);
+                             GCompareFunc   func);
 
 /*
  * Hashtables
@@ -611,13 +624,13 @@ typedef struct _GHashTableIter GHashTableIter;
 /* Private, but needed for stack allocation */
 struct _GHashTableIter
 {
-	gpointer dummy [8];
+    gpointer dummy [8];
 };
 
 G_EXTERN_C // Used by MonoPosixHelper or MonoSupportW, at least.
 GHashTable     *g_hash_table_new             (GHashFunc hash_func, GEqualFunc key_equal_func);
 GHashTable     *g_hash_table_new_full        (GHashFunc hash_func, GEqualFunc key_equal_func,
-					      GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func);
+        GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func);
 G_EXTERN_C // Used by MonoPosixHelper or MonoSupportW, at least.
 void            g_hash_table_insert_replace  (GHashTable *hash, gpointer key, gpointer value, gboolean replace);
 guint           g_hash_table_size            (GHashTable *hash);
@@ -664,8 +677,8 @@ guint    g_str_hash     (gconstpointer v1);
 
 typedef struct _GByteArray GByteArray;
 struct _GByteArray {
-	guint8 *data;
-	gint len;
+    guint8 *data;
+    gint len;
 };
 
 GByteArray *g_byte_array_new    (void);
@@ -679,8 +692,8 @@ void     g_byte_array_set_size  (GByteArray *array, gint length);
 
 typedef struct _GArray GArray;
 struct _GArray {
-	gchar *data;
-	gint len;
+    gchar *data;
+    gint len;
 };
 
 GArray *g_array_new               (gboolean zero_terminated, gboolean clear_, guint element_size);
@@ -709,8 +722,8 @@ void g_qsort_with_data (gpointer base, size_t nmemb, size_t size, GCompareDataFu
 
 typedef struct _GPtrArray GPtrArray;
 struct _GPtrArray {
-	gpointer *pdata;
-	guint len;
+    gpointer *pdata;
+    guint len;
 };
 
 GPtrArray *g_ptr_array_new                (void);
@@ -733,16 +746,16 @@ guint      g_ptr_array_capacity           (GPtrArray *array);
  * Queues
  */
 typedef struct {
-	GList *head;
-	GList *tail;
-	guint length;
+    GList *head;
+    GList *tail;
+    guint length;
 } GQueue;
 
 gpointer g_queue_pop_head  (GQueue   *queue);
 void     g_queue_push_head (GQueue   *queue,
-			    gpointer  data);
+                            gpointer  data);
 void     g_queue_push_tail (GQueue   *queue,
-			    gpointer  data);
+                            gpointer  data);
 gboolean g_queue_is_empty  (GQueue   *queue);
 GQueue  *g_queue_new       (void);
 void     g_queue_free      (GQueue   *queue);
@@ -756,17 +769,17 @@ void     g_queue_foreach   (GQueue   *queue, GFunc func, gpointer user_data);
 #endif
 
 typedef enum {
-	G_LOG_FLAG_RECURSION          = 1 << 0,
-	G_LOG_FLAG_FATAL              = 1 << 1,
-	
-	G_LOG_LEVEL_ERROR             = 1 << 2,
-	G_LOG_LEVEL_CRITICAL          = 1 << 3,
-	G_LOG_LEVEL_WARNING           = 1 << 4,
-	G_LOG_LEVEL_MESSAGE           = 1 << 5,
-	G_LOG_LEVEL_INFO              = 1 << 6,
-	G_LOG_LEVEL_DEBUG             = 1 << 7,
-	
-	G_LOG_LEVEL_MASK              = ~(G_LOG_FLAG_RECURSION | G_LOG_FLAG_FATAL)
+    G_LOG_FLAG_RECURSION          = 1 << 0,
+    G_LOG_FLAG_FATAL              = 1 << 1,
+
+    G_LOG_LEVEL_ERROR             = 1 << 2,
+    G_LOG_LEVEL_CRITICAL          = 1 << 3,
+    G_LOG_LEVEL_WARNING           = 1 << 4,
+    G_LOG_LEVEL_MESSAGE           = 1 << 5,
+    G_LOG_LEVEL_INFO              = 1 << 6,
+    G_LOG_LEVEL_DEBUG             = 1 << 7,
+
+    G_LOG_LEVEL_MASK              = ~(G_LOG_FLAG_RECURSION | G_LOG_FLAG_FATAL)
 } GLogLevelFlags;
 
 G_ENUM_FUNCTIONS (GLogLevelFlags)
@@ -825,75 +838,75 @@ gpointer g_convert_error_quark(void);
  */
 
 typedef enum {
-	G_UNICODE_CONTROL,
-	G_UNICODE_FORMAT,
-	G_UNICODE_UNASSIGNED,
-	G_UNICODE_PRIVATE_USE,
-	G_UNICODE_SURROGATE,
-	G_UNICODE_LOWERCASE_LETTER,
-	G_UNICODE_MODIFIER_LETTER,
-	G_UNICODE_OTHER_LETTER,
-	G_UNICODE_TITLECASE_LETTER,
-	G_UNICODE_UPPERCASE_LETTER,
-	G_UNICODE_COMBINING_MARK,
-	G_UNICODE_ENCLOSING_MARK,
-	G_UNICODE_NON_SPACING_MARK,
-	G_UNICODE_DECIMAL_NUMBER,
-	G_UNICODE_LETTER_NUMBER,
-	G_UNICODE_OTHER_NUMBER,
-	G_UNICODE_CONNECT_PUNCTUATION,
-	G_UNICODE_DASH_PUNCTUATION,
-	G_UNICODE_CLOSE_PUNCTUATION,
-	G_UNICODE_FINAL_PUNCTUATION,
-	G_UNICODE_INITIAL_PUNCTUATION,
-	G_UNICODE_OTHER_PUNCTUATION,
-	G_UNICODE_OPEN_PUNCTUATION,
-	G_UNICODE_CURRENCY_SYMBOL,
-	G_UNICODE_MODIFIER_SYMBOL,
-	G_UNICODE_MATH_SYMBOL,
-	G_UNICODE_OTHER_SYMBOL,
-	G_UNICODE_LINE_SEPARATOR,
-	G_UNICODE_PARAGRAPH_SEPARATOR,
-	G_UNICODE_SPACE_SEPARATOR
+    G_UNICODE_CONTROL,
+    G_UNICODE_FORMAT,
+    G_UNICODE_UNASSIGNED,
+    G_UNICODE_PRIVATE_USE,
+    G_UNICODE_SURROGATE,
+    G_UNICODE_LOWERCASE_LETTER,
+    G_UNICODE_MODIFIER_LETTER,
+    G_UNICODE_OTHER_LETTER,
+    G_UNICODE_TITLECASE_LETTER,
+    G_UNICODE_UPPERCASE_LETTER,
+    G_UNICODE_COMBINING_MARK,
+    G_UNICODE_ENCLOSING_MARK,
+    G_UNICODE_NON_SPACING_MARK,
+    G_UNICODE_DECIMAL_NUMBER,
+    G_UNICODE_LETTER_NUMBER,
+    G_UNICODE_OTHER_NUMBER,
+    G_UNICODE_CONNECT_PUNCTUATION,
+    G_UNICODE_DASH_PUNCTUATION,
+    G_UNICODE_CLOSE_PUNCTUATION,
+    G_UNICODE_FINAL_PUNCTUATION,
+    G_UNICODE_INITIAL_PUNCTUATION,
+    G_UNICODE_OTHER_PUNCTUATION,
+    G_UNICODE_OPEN_PUNCTUATION,
+    G_UNICODE_CURRENCY_SYMBOL,
+    G_UNICODE_MODIFIER_SYMBOL,
+    G_UNICODE_MATH_SYMBOL,
+    G_UNICODE_OTHER_SYMBOL,
+    G_UNICODE_LINE_SEPARATOR,
+    G_UNICODE_PARAGRAPH_SEPARATOR,
+    G_UNICODE_SPACE_SEPARATOR
 } GUnicodeType;
 
 typedef enum {
-	G_UNICODE_BREAK_MANDATORY,
-	G_UNICODE_BREAK_CARRIAGE_RETURN,
-	G_UNICODE_BREAK_LINE_FEED,
-	G_UNICODE_BREAK_COMBINING_MARK,
-	G_UNICODE_BREAK_SURROGATE,
-	G_UNICODE_BREAK_ZERO_WIDTH_SPACE,
-	G_UNICODE_BREAK_INSEPARABLE,
-	G_UNICODE_BREAK_NON_BREAKING_GLUE,
-	G_UNICODE_BREAK_CONTINGENT,
-	G_UNICODE_BREAK_SPACE,
-	G_UNICODE_BREAK_AFTER,
-	G_UNICODE_BREAK_BEFORE,
-	G_UNICODE_BREAK_BEFORE_AND_AFTER,
-	G_UNICODE_BREAK_HYPHEN,
-	G_UNICODE_BREAK_NON_STARTER,
-	G_UNICODE_BREAK_OPEN_PUNCTUATION,
-	G_UNICODE_BREAK_CLOSE_PUNCTUATION,
-	G_UNICODE_BREAK_QUOTATION,
-	G_UNICODE_BREAK_EXCLAMATION,
-	G_UNICODE_BREAK_IDEOGRAPHIC,
-	G_UNICODE_BREAK_NUMERIC,
-	G_UNICODE_BREAK_INFIX_SEPARATOR,
-	G_UNICODE_BREAK_SYMBOL,
-	G_UNICODE_BREAK_ALPHABETIC,
-	G_UNICODE_BREAK_PREFIX,
-	G_UNICODE_BREAK_POSTFIX,
-	G_UNICODE_BREAK_COMPLEX_CONTEXT,
-	G_UNICODE_BREAK_AMBIGUOUS,
-	G_UNICODE_BREAK_UNKNOWN,
-	G_UNICODE_BREAK_NEXT_LINE,
-	G_UNICODE_BREAK_WORD_JOINER,
-	G_UNICODE_BREAK_HANGUL_L_JAMO,
-	G_UNICODE_BREAK_HANGUL_V_JAMO,
-	G_UNICODE_BREAK_HANGUL_T_JAMO,
-	G_UNICODE_BREAK_HANGUL_LV_SYLLABLE,
-	G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE
+    G_UNICODE_BREAK_MANDATORY,
+    G_UNICODE_BREAK_CARRIAGE_RETURN,
+    G_UNICODE_BREAK_LINE_FEED,
+    G_UNICODE_BREAK_COMBINING_MARK,
+    G_UNICODE_BREAK_SURROGATE,
+    G_UNICODE_BREAK_ZERO_WIDTH_SPACE,
+    G_UNICODE_BREAK_INSEPARABLE,
+    G_UNICODE_BREAK_NON_BREAKING_GLUE,
+    G_UNICODE_BREAK_CONTINGENT,
+    G_UNICODE_BREAK_SPACE,
+    G_UNICODE_BREAK_AFTER,
+    G_UNICODE_BREAK_BEFORE,
+    G_UNICODE_BREAK_BEFORE_AND_AFTER,
+    G_UNICODE_BREAK_HYPHEN,
+    G_UNICODE_BREAK_NON_STARTER,
+    G_UNICODE_BREAK_OPEN_PUNCTUATION,
+    G_UNICODE_BREAK_CLOSE_PUNCTUATION,
+    G_UNICODE_BREAK_QUOTATION,
+    G_UNICODE_BREAK_EXCLAMATION,
+    G_UNICODE_BREAK_IDEOGRAPHIC,
+    G_UNICODE_BREAK_NUMERIC,
+    G_UNICODE_BREAK_INFIX_SEPARATOR,
+    G_UNICODE_BREAK_SYMBOL,
+    G_UNICODE_BREAK_ALPHABETIC,
+    G_UNICODE_BREAK_PREFIX,
+    G_UNICODE_BREAK_POSTFIX,
+    G_UNICODE_BREAK_COMPLEX_CONTEXT,
+    G_UNICODE_BREAK_AMBIGUOUS,
+    G_UNICODE_BREAK_UNKNOWN,
+    G_UNICODE_BREAK_NEXT_LINE,
+    G_UNICODE_BREAK_WORD_JOINER,
+    G_UNICODE_BREAK_HANGUL_L_JAMO,
+    G_UNICODE_BREAK_HANGUL_V_JAMO,
+    G_UNICODE_BREAK_HANGUL_T_JAMO,
+    G_UNICODE_BREAK_HANGUL_LV_SYLLABLE,
+    G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE
 } GUnicodeBreakType;
 
 gunichar       g_unichar_toupper (gunichar c);
@@ -961,16 +974,16 @@ GUnicodeBreakType   g_unichar_break_type (gunichar c);
  * Where you might have said:
  * 	if (!(expr))
  * 		g_error("%s invalid bar:%d", __func__, bar)
- * 
+ *
  * You can say:
  * 	g_assertf(expr, "bar:%d", bar);
- * 
+ *
  * The usual assertion text of file/line/expr/newline are builtin, and __func__.
- * 
+ *
  * g_assertf is a boolean expression -- the precise value is not preserved, just true or false.
- * 
+ *
  * Other than expr, the parameters are not evaluated unless expr is false.
- * 
+ *
  * format must be a string literal, in order to be concatenated.
  * If this is too restrictive, g_error remains.
  */
@@ -989,12 +1002,12 @@ GUnicodeBreakType   g_unichar_break_type (gunichar c);
 #define G_CONVERT_ERROR g_convert_error_quark()
 
 typedef enum {
-	G_CONVERT_ERROR_NO_CONVERSION,
-	G_CONVERT_ERROR_ILLEGAL_SEQUENCE,
-	G_CONVERT_ERROR_FAILED,
-	G_CONVERT_ERROR_PARTIAL_INPUT,
-	G_CONVERT_ERROR_BAD_URI,
-	G_CONVERT_ERROR_NOT_ABSOLUTE_PATH
+    G_CONVERT_ERROR_NO_CONVERSION,
+    G_CONVERT_ERROR_ILLEGAL_SEQUENCE,
+    G_CONVERT_ERROR_FAILED,
+    G_CONVERT_ERROR_PARTIAL_INPUT,
+    G_CONVERT_ERROR_BAD_URI,
+    G_CONVERT_ERROR_NOT_ABSOLUTE_PATH
 } GConvertError;
 
 gchar     *g_utf8_strup (const gchar *str, gssize len);
@@ -1065,20 +1078,20 @@ int eg_getdtablesize (void);
  * Spawn
  */
 typedef enum {
-	G_SPAWN_LEAVE_DESCRIPTORS_OPEN = 1,
-	G_SPAWN_DO_NOT_REAP_CHILD      = 1 << 1,
-	G_SPAWN_SEARCH_PATH            = 1 << 2,
-	G_SPAWN_STDOUT_TO_DEV_NULL     = 1 << 3,
-	G_SPAWN_STDERR_TO_DEV_NULL     = 1 << 4,
-	G_SPAWN_CHILD_INHERITS_STDIN   = 1 << 5,
-	G_SPAWN_FILE_AND_ARGV_ZERO     = 1 << 6
+    G_SPAWN_LEAVE_DESCRIPTORS_OPEN = 1,
+    G_SPAWN_DO_NOT_REAP_CHILD      = 1 << 1,
+    G_SPAWN_SEARCH_PATH            = 1 << 2,
+    G_SPAWN_STDOUT_TO_DEV_NULL     = 1 << 3,
+    G_SPAWN_STDERR_TO_DEV_NULL     = 1 << 4,
+    G_SPAWN_CHILD_INHERITS_STDIN   = 1 << 5,
+    G_SPAWN_FILE_AND_ARGV_ZERO     = 1 << 6
 } GSpawnFlags;
 
 typedef void (*GSpawnChildSetupFunc) (gpointer user_data);
 
 gboolean g_spawn_command_line_sync (const gchar *command_line, gchar **standard_output, gchar **standard_error, gint *exit_status, GError **gerror);
 gboolean g_spawn_async_with_pipes  (const gchar *working_directory, gchar **argv, gchar **envp, GSpawnFlags flags, GSpawnChildSetupFunc child_setup,
-				gpointer user_data, GPid *child_pid, gint *standard_input, gint *standard_output, gint *standard_error, GError **gerror);
+                                    gpointer user_data, GPid *child_pid, gint *standard_input, gint *standard_output, gint *standard_error, GError **gerror);
 
 #endif
 #endif
@@ -1098,8 +1111,8 @@ void g_timer_start (GTimer *timer);
  * Date and time
  */
 typedef struct {
-	glong tv_sec;
-	glong tv_usec;
+    glong tv_sec;
+    glong tv_usec;
 } GTimeVal;
 
 void g_get_current_time (GTimeVal *result);
@@ -1114,39 +1127,39 @@ gpointer g_file_error_quark (void);
 #define G_FILE_ERROR g_file_error_quark ()
 
 typedef enum {
-	G_FILE_ERROR_EXIST,
-	G_FILE_ERROR_ISDIR,
-	G_FILE_ERROR_ACCES,
-	G_FILE_ERROR_NAMETOOLONG,
-	G_FILE_ERROR_NOENT,
-	G_FILE_ERROR_NOTDIR,
-	G_FILE_ERROR_NXIO,
-	G_FILE_ERROR_NODEV,
-	G_FILE_ERROR_ROFS,
-	G_FILE_ERROR_TXTBSY,
-	G_FILE_ERROR_FAULT,
-	G_FILE_ERROR_LOOP,
-	G_FILE_ERROR_NOSPC,
-	G_FILE_ERROR_NOMEM,
-	G_FILE_ERROR_MFILE,
-	G_FILE_ERROR_NFILE,
-	G_FILE_ERROR_BADF,
-	G_FILE_ERROR_INVAL,
-	G_FILE_ERROR_PIPE,
-	G_FILE_ERROR_AGAIN,
-	G_FILE_ERROR_INTR,
-	G_FILE_ERROR_IO,
-	G_FILE_ERROR_PERM,
-	G_FILE_ERROR_NOSYS,
-	G_FILE_ERROR_FAILED
+    G_FILE_ERROR_EXIST,
+    G_FILE_ERROR_ISDIR,
+    G_FILE_ERROR_ACCES,
+    G_FILE_ERROR_NAMETOOLONG,
+    G_FILE_ERROR_NOENT,
+    G_FILE_ERROR_NOTDIR,
+    G_FILE_ERROR_NXIO,
+    G_FILE_ERROR_NODEV,
+    G_FILE_ERROR_ROFS,
+    G_FILE_ERROR_TXTBSY,
+    G_FILE_ERROR_FAULT,
+    G_FILE_ERROR_LOOP,
+    G_FILE_ERROR_NOSPC,
+    G_FILE_ERROR_NOMEM,
+    G_FILE_ERROR_MFILE,
+    G_FILE_ERROR_NFILE,
+    G_FILE_ERROR_BADF,
+    G_FILE_ERROR_INVAL,
+    G_FILE_ERROR_PIPE,
+    G_FILE_ERROR_AGAIN,
+    G_FILE_ERROR_INTR,
+    G_FILE_ERROR_IO,
+    G_FILE_ERROR_PERM,
+    G_FILE_ERROR_NOSYS,
+    G_FILE_ERROR_FAILED
 } GFileError;
 
 typedef enum {
-	G_FILE_TEST_IS_REGULAR = 1 << 0,
-	G_FILE_TEST_IS_SYMLINK = 1 << 1,
-	G_FILE_TEST_IS_DIR = 1 << 2,
-	G_FILE_TEST_IS_EXECUTABLE = 1 << 3,
-	G_FILE_TEST_EXISTS = 1 << 4
+    G_FILE_TEST_IS_REGULAR = 1 << 0,
+    G_FILE_TEST_IS_SYMLINK = 1 << 1,
+    G_FILE_TEST_IS_DIR = 1 << 2,
+    G_FILE_TEST_IS_EXECUTABLE = 1 << 3,
+    G_FILE_TEST_EXISTS = 1 << 4
 } GFileTest;
 
 G_ENUM_FUNCTIONS (GFileTest)
@@ -1207,65 +1220,65 @@ gchar *g_mkdtemp (gchar *tmpl);
 static inline int
 g_async_safe_fgets (char *str, int num, int handle, gboolean *newline)
 {
-	memset (str, 0, num);
-	// Make sure we don't overwrite the last index so that we are
-	// guaranteed to be NULL-terminated
-	int without_padding = num - 1;
-	int i=0;
-	while (i < without_padding && g_read (handle, &str [i], sizeof(char))) {
-		if (str [i] == '\n') {
-			str [i] = '\0';
-			*newline = TRUE;
-		}
-		
-		if (!isprint (str [i]))
-			str [i] = '\0';
+    memset (str, 0, num);
+    // Make sure we don't overwrite the last index so that we are
+    // guaranteed to be NULL-terminated
+    int without_padding = num - 1;
+    int i=0;
+    while (i < without_padding && g_read (handle, &str [i], sizeof(char))) {
+        if (str [i] == '\n') {
+            str [i] = '\0';
+            *newline = TRUE;
+        }
 
-		if (str [i] == '\0')
-			break;
+        if (!isprint (str [i]))
+            str [i] = '\0';
 
-		i++;
-	}
+        if (str [i] == '\0')
+            break;
 
-	return i;
+        i++;
+    }
+
+    return i;
 }
 
 static inline gint
 g_async_safe_vfprintf (int handle, gchar const *format, va_list args)
 {
-	char print_buff [1024];
-	print_buff [0] = '\0';
-	g_vsnprintf (print_buff, sizeof(print_buff), format, args);
-	int ret = g_write (handle, print_buff, (guint32) strlen (print_buff));
+    char print_buff [1024];
+    print_buff [0] = '\0';
+    g_vsnprintf (print_buff, sizeof(print_buff), format, args);
+    int ret = g_write (handle, print_buff, (guint32) strlen (print_buff));
 
-	return ret;
+    return ret;
 }
 
 static inline gint
 g_async_safe_fprintf (int handle, gchar const *format, ...)
 {
-	va_list args;
-	va_start (args, format);
-	int ret = g_async_safe_vfprintf (handle, format, args);
-	va_end (args);
-	return ret;
+    va_list args;
+    va_start (args, format);
+    int ret = g_async_safe_vfprintf (handle, format, args);
+    va_end (args);
+    return ret;
 }
 
 static inline gint
 g_async_safe_vprintf (gchar const *format, va_list args)
 {
-	return g_async_safe_vfprintf (1, format, args);
+    return g_async_safe_vfprintf (1, format, args);
 }
 
 static inline gint
 g_async_safe_printf (gchar const *format, ...)
 {
-	va_list args;
-	va_start (args, format);
-	int ret = g_async_safe_vfprintf (1, format, args);
-	va_end (args);
+    va_list args;
+    va_start (args, format);
+    int ret = g_async_safe_vfprintf (1, format, args);
+    va_end (args);
 
-	return ret;
+    return ret;
 }
 
 
@@ -1296,49 +1309,49 @@ typedef struct _GMarkupParseContext GMarkupParseContext;
 
 typedef enum
 {
-	G_MARKUP_DO_NOT_USE_THIS_UNSUPPORTED_FLAG = 1 << 0,
-	G_MARKUP_TREAT_CDATA_AS_TEXT              = 1 << 1
+    G_MARKUP_DO_NOT_USE_THIS_UNSUPPORTED_FLAG = 1 << 0,
+    G_MARKUP_TREAT_CDATA_AS_TEXT              = 1 << 1
 } GMarkupParseFlags;
 
 typedef struct {
-	void (*start_element)  (GMarkupParseContext *context,
-				const gchar *element_name,
-				const gchar **attribute_names,
-				const gchar **attribute_values,
-				gpointer user_data,
-				GError **gerror);
+    void (*start_element)  (GMarkupParseContext *context,
+                            const gchar *element_name,
+                            const gchar **attribute_names,
+                            const gchar **attribute_values,
+                            gpointer user_data,
+                            GError **gerror);
 
-	void (*end_element)    (GMarkupParseContext *context,
-				const gchar         *element_name,
-				gpointer             user_data,
-				GError             **gerror);
-	
-	void (*text)           (GMarkupParseContext *context,
-				const gchar         *text,
-				gsize                text_len,  
-				gpointer             user_data,
-				GError             **gerror);
-	
-	void (*passthrough)    (GMarkupParseContext *context,
-				const gchar         *passthrough_text,
-				gsize                text_len,  
-				gpointer             user_data,
-				GError             **gerror);
-	void (*error)          (GMarkupParseContext *context,
-				GError              *gerror,
-				gpointer             user_data);
+    void (*end_element)    (GMarkupParseContext *context,
+                            const gchar         *element_name,
+                            gpointer             user_data,
+                            GError             **gerror);
+
+    void (*text)           (GMarkupParseContext *context,
+                            const gchar         *text,
+                            gsize                text_len,
+                            gpointer             user_data,
+                            GError             **gerror);
+
+    void (*passthrough)    (GMarkupParseContext *context,
+                            const gchar         *passthrough_text,
+                            gsize                text_len,
+                            gpointer             user_data,
+                            GError             **gerror);
+    void (*error)          (GMarkupParseContext *context,
+                            GError              *gerror,
+                            gpointer             user_data);
 } GMarkupParser;
 
 GMarkupParseContext *g_markup_parse_context_new   (const GMarkupParser *parser,
-						   GMarkupParseFlags flags,
-						   gpointer user_data,
-						   GDestroyNotify user_data_dnotify);
+        GMarkupParseFlags flags,
+        gpointer user_data,
+        GDestroyNotify user_data_dnotify);
 void                 g_markup_parse_context_free  (GMarkupParseContext *context);
 gboolean             g_markup_parse_context_parse (GMarkupParseContext *context,
-						   const gchar *text, gssize text_len,
-						   GError **gerror);
+        const gchar *text, gssize text_len,
+        GError **gerror);
 gboolean         g_markup_parse_context_end_parse (GMarkupParseContext *context,
-						   GError **gerror);
+        GError **gerror);
 
 /*
  * Character set conversion
@@ -1351,15 +1364,15 @@ int g_iconv_close (GIConv cd);
 
 gboolean  g_get_charset        (G_CONST_RETURN char **charset);
 gchar    *g_locale_to_utf8     (const gchar *opsysstring, gssize len,
-				gsize *bytes_read, gsize *bytes_written,
-				GError **gerror);
+                                gsize *bytes_read, gsize *bytes_written,
+                                GError **gerror);
 gchar    *g_locale_from_utf8   (const gchar *utf8string, gssize len, gsize *bytes_read,
-				gsize *bytes_written, GError **gerror);
+                                gsize *bytes_written, GError **gerror);
 gchar    *g_filename_from_utf8 (const gchar *utf8string, gssize len, gsize *bytes_read,
-				gsize *bytes_written, GError **gerror);
+                                gsize *bytes_written, GError **gerror);
 gchar    *g_convert            (const gchar *str, gssize len,
-				const gchar *to_codeset, const gchar *from_codeset,
-				gsize *bytes_read, gsize *bytes_written, GError **gerror);
+                                const gchar *to_codeset, const gchar *from_codeset,
+                                gsize *bytes_read, gsize *bytes_written, GError **gerror);
 
 /*
  * Unicode manipulation
@@ -1388,12 +1401,12 @@ glong     g_utf8_pointer_to_offset (const gchar *str, const gchar *pos);
 				 ((((guint32) (x)) & 0xff0000) >> 8) | \
 		                 ((((guint32) (x)) & 0xff00) << 8) | \
 			         (((guint32) (x)) >> 24)) )
- 
+
 #define GUINT64_SWAP_LE_BE(x) ((guint64) (((guint64)(GUINT32_SWAP_LE_BE(((guint64)x) & 0xffffffff))) << 32) | \
 	      	               GUINT32_SWAP_LE_BE(((guint64)x) >> 32))
 
-				  
- 
+
+
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN
 #   define GUINT64_FROM_BE(x) GUINT64_SWAP_LE_BE(x)
 #   define GUINT32_FROM_BE(x) GUINT32_SWAP_LE_BE(x)
@@ -1440,7 +1453,7 @@ glong     g_utf8_pointer_to_offset (const gchar *str, const gchar *pos);
 #define _EGLIB_MAJOR  2
 #define _EGLIB_MIDDLE 4
 #define _EGLIB_MINOR  0
- 
+
 #define GLIB_CHECK_VERSION(a,b,c) ((a < _EGLIB_MAJOR) || (a == _EGLIB_MAJOR && (b < _EGLIB_MIDDLE || (b == _EGLIB_MIDDLE && c <= _EGLIB_MINOR))))
 
 #define G_HAVE_API_SUPPORT(x) (x)
@@ -1475,11 +1488,11 @@ static inline
 void
 mono_qsort (void* base, size_t num, size_t size, int (*compare)(const void*, const void*))
 {
-	g_assert (compare);
-	g_assert (size);
-	if (num < 2 || !size || !base)
-		return;
-	qsort (base, num, size, compare);
+    g_assert (compare);
+    g_assert (size);
+    if (num < 2 || !size || !base)
+        return;
+    qsort (base, num, size, compare);
 }
 
 #define MONO_DECL_CALLBACK(prefix, ret, name, sig) ret (*name) sig;
