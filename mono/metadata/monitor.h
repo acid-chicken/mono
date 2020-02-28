@@ -25,24 +25,24 @@
 
 struct _MonoThreadsSync
 {
-	/*
-	 * The entry count field can be negative, which would mean that the entry_sem is
-	 * signaled and nobody is waiting to acquire it. This can happen when the thread
-	 * that was waiting is either interrupted or timeouts, and the owner releases
-	 * the lock before the forementioned thread updates the entry count.
-	 *
-	 * The 0 entry_count value is encoded as ENTRY_COUNT_ZERO, positive numbers being
-	 * greater than it and negative numbers smaller than it.
-	 */
-	guint32 status;			/* entry_count (16) | owner_id (16) */
-	guint32 nest;
+    /*
+     * The entry count field can be negative, which would mean that the entry_sem is
+     * signaled and nobody is waiting to acquire it. This can happen when the thread
+     * that was waiting is either interrupted or timeouts, and the owner releases
+     * the lock before the forementioned thread updates the entry count.
+     *
+     * The 0 entry_count value is encoded as ENTRY_COUNT_ZERO, positive numbers being
+     * greater than it and negative numbers smaller than it.
+     */
+    guint32 status;			/* entry_count (16) | owner_id (16) */
+    guint32 nest;
 #ifdef HAVE_MOVING_COLLECTOR
-	gint32 hash_code;
+    gint32 hash_code;
 #endif
-	GSList *wait_list;
-	void *data;
-	MonoCoopMutex *entry_mutex;
-	MonoCoopCond *entry_cond;
+    GSList *wait_list;
+    void *data;
+    MonoCoopMutex *entry_mutex;
+    MonoCoopCond *entry_cond;
 };
 
 /*
@@ -77,24 +77,24 @@ struct _MonoThreadsSync
  */
 
 typedef union {
-	gsize lock_word;
-	MonoThreadsSync *sync;
+    gsize lock_word;
+    MonoThreadsSync *sync;
 } LockWord;
 
 enum {
-	LOCK_WORD_FLAT = 0,
-	LOCK_WORD_HAS_HASH = 1,
-	LOCK_WORD_INFLATED = 2,
+    LOCK_WORD_FLAT = 0,
+    LOCK_WORD_HAS_HASH = 1,
+    LOCK_WORD_INFLATED = 2,
 
-	LOCK_WORD_STATUS_BITS = 2,
-	LOCK_WORD_NEST_BITS = 8,
+    LOCK_WORD_STATUS_BITS = 2,
+    LOCK_WORD_NEST_BITS = 8,
 
-	LOCK_WORD_STATUS_MASK = (1 << LOCK_WORD_STATUS_BITS) - 1,
-	LOCK_WORD_NEST_MASK = ((1 << LOCK_WORD_NEST_BITS) - 1) << LOCK_WORD_STATUS_BITS,
+    LOCK_WORD_STATUS_MASK = (1 << LOCK_WORD_STATUS_BITS) - 1,
+    LOCK_WORD_NEST_MASK = ((1 << LOCK_WORD_NEST_BITS) - 1) << LOCK_WORD_STATUS_BITS,
 
-	LOCK_WORD_HASH_SHIFT = LOCK_WORD_STATUS_BITS,
-	LOCK_WORD_NEST_SHIFT = LOCK_WORD_STATUS_BITS,
-	LOCK_WORD_OWNER_SHIFT = LOCK_WORD_STATUS_BITS + LOCK_WORD_NEST_BITS
+    LOCK_WORD_HASH_SHIFT = LOCK_WORD_STATUS_BITS,
+    LOCK_WORD_NEST_SHIFT = LOCK_WORD_STATUS_BITS,
+    LOCK_WORD_OWNER_SHIFT = LOCK_WORD_STATUS_BITS + LOCK_WORD_NEST_BITS
 };
 
 MONO_API void

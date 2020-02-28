@@ -32,7 +32,7 @@ The handle stack is designed so it's efficient to pop a large amount of entries 
 The stack is made out of a series of fixed size segments.
 
 To do bulk operations you use a stack mark.
-	
+
 */
 
 /*
@@ -65,36 +65,36 @@ typedef struct _HandleChunk HandleChunk;
 /*#define MONO_HANDLE_TRACK_SP*/
 
 typedef struct {
-	gpointer o; /* MonoObject ptr */
+    gpointer o; /* MonoObject ptr */
 #ifdef MONO_HANDLE_TRACK_OWNER
-	const char *owner;
-	gpointer backtrace_ips[7]; /* result of backtrace () at time of allocation */
+    const char *owner;
+    gpointer backtrace_ips[7]; /* result of backtrace () at time of allocation */
 #endif
 #ifdef MONO_HANDLE_TRACK_SP
-	gpointer alloc_sp; /* sp from HandleStack:stackmark_sp at time of allocation */
+    gpointer alloc_sp; /* sp from HandleStack:stackmark_sp at time of allocation */
 #endif
 } HandleChunkElem;
 
 struct _HandleChunk {
-	int size; //number of handles
-	HandleChunk *prev, *next;
-	HandleChunkElem elems [OBJECTS_PER_HANDLES_CHUNK];
+    int size; //number of handles
+    HandleChunk *prev, *next;
+    HandleChunkElem elems [OBJECTS_PER_HANDLES_CHUNK];
 };
 
 typedef struct MonoHandleStack {
-	HandleChunk *top; //alloc from here
-	HandleChunk *bottom; //scan from here
+    HandleChunk *top; //alloc from here
+    HandleChunk *bottom; //scan from here
 #ifdef MONO_HANDLE_TRACK_SP
-	gpointer stackmark_sp; // C stack pointer top when from most recent mono_stack_mark_init
+    gpointer stackmark_sp; // C stack pointer top when from most recent mono_stack_mark_init
 #endif
 } HandleStack;
 
 // Keep this in sync with RuntimeStructs.cs
 typedef struct {
-	int size;
-	HandleChunk *chunk;
+    int size;
+    HandleChunk *chunk;
 #ifdef MONO_HANDLE_TRACK_SP
-	gpointer prev_sp; // C stack pointer from prior mono_stack_mark_init
+    gpointer prev_sp; // C stack pointer from prior mono_stack_mark_init
 #endif
 } HandleStackMark;
 
@@ -145,28 +145,28 @@ static inline void
 mono_stack_mark_init (MonoThreadInfo *info, HandleStackMark *stackmark)
 {
 #ifdef MONO_HANDLE_TRACK_SP
-	gpointer sptop = &stackmark;
+    gpointer sptop = &stackmark;
 #endif
-	HandleStack *handles = info->handle_stack;
-	stackmark->size = handles->top->size;
-	stackmark->chunk = handles->top;
+    HandleStack *handles = info->handle_stack;
+    stackmark->size = handles->top->size;
+    stackmark->chunk = handles->top;
 #ifdef MONO_HANDLE_TRACK_SP
-	stackmark->prev_sp = handles->stackmark_sp;
-	handles->stackmark_sp = sptop;
+    stackmark->prev_sp = handles->stackmark_sp;
+    handles->stackmark_sp = sptop;
 #endif
 }
 
 static inline void
 mono_stack_mark_pop (MonoThreadInfo *info, HandleStackMark *stackmark)
 {
-	HandleStack *handles = info->handle_stack;
-	HandleChunk *old_top = stackmark->chunk;
-	old_top->size = stackmark->size;
-	mono_memory_write_barrier ();
-	handles->top = old_top;
+    HandleStack *handles = info->handle_stack;
+    HandleChunk *old_top = stackmark->chunk;
+    old_top->size = stackmark->size;
+    mono_memory_write_barrier ();
+    handles->top = old_top;
 #ifdef MONO_HANDLE_TRACK_SP
-	mono_memory_write_barrier (); /* write to top before prev_sp */
-	handles->stackmark_sp = stackmark->prev_sp;
+    mono_memory_write_barrier (); /* write to top before prev_sp */
+    handles->stackmark_sp = stackmark->prev_sp;
 #endif
 }
 
@@ -272,15 +272,15 @@ Icall macros
 static void
 mono_thread_info_pop_stack_mark (MonoThreadInfo *info, void *old_mark)
 {
-	info->stack_mark = old_mark;
+    info->stack_mark = old_mark;
 }
 
 static void*
 mono_thread_info_push_stack_mark (MonoThreadInfo *info, void *mark)
 {
-	void *old = info->stack_mark;
-	info->stack_mark = mark;
-	return old;
+    void *old = info->stack_mark;
+    info->stack_mark = mark;
+    return old;
 }
 
 #define SETUP_STACK_WATERMARK	\
@@ -521,23 +521,23 @@ TYPED_HANDLE_DECL (MonoAppContext);
 static inline MonoObjectHandle
 mono_handle_cast (gpointer a)
 {
-	return *(MonoObjectHandle*)&a;
+    return *(MonoObjectHandle*)&a;
 }
 
 static inline MONO_ALWAYS_INLINE gboolean
 mono_handle_is_null (MonoRawHandle raw_handle)
 {
-	MONO_HANDLE_SUPPRESS_SCOPE (1);
-	MonoObjectHandle *handle = (MonoObjectHandle*)&raw_handle;
-	return !handle->__raw || !*handle->__raw;
+    MONO_HANDLE_SUPPRESS_SCOPE (1);
+    MonoObjectHandle *handle = (MonoObjectHandle*)&raw_handle;
+    return !handle->__raw || !*handle->__raw;
 }
 
 static inline MONO_ALWAYS_INLINE gpointer
 mono_handle_raw (MonoRawHandle raw_handle)
 {
-	MONO_HANDLE_SUPPRESS_SCOPE (1);
-	MonoObjectHandle *handle = (MonoObjectHandle*)&raw_handle;
-	return handle->__raw ? *handle->__raw : NULL;
+    MONO_HANDLE_SUPPRESS_SCOPE (1);
+    MonoObjectHandle *handle = (MonoObjectHandle*)&raw_handle;
+    return handle->__raw ? *handle->__raw : NULL;
 }
 
 /* Unfortunately MonoThreadHandle is already a typedef used for something unrelated.  So
@@ -557,8 +557,8 @@ be reviewed and probably changed FIXME.
 static inline MonoObjectHandle
 mono_null_value_handle (void)
 {
-	MonoObjectHandle result = NULL_HANDLE_INIT;
-	return result;
+    MonoObjectHandle result = NULL_HANDLE_INIT;
+    return result;
 }
 #define NULL_HANDLE_STRING 		(MONO_HANDLE_CAST (MonoString, NULL_HANDLE))
 #define NULL_HANDLE_ARRAY  		(MONO_HANDLE_CAST (MonoArray,  NULL_HANDLE))
@@ -576,8 +576,8 @@ mono_null_value_handle (void)
 static inline void volatile*
 mono_handle_ref (void volatile* p)
 {
-	g_assert (p);
-	return p;
+    g_assert (p);
+    return p;
 }
 
 // Use this to convert a THandle to a raw T** such as for a ref or out parameter, without
@@ -590,16 +590,16 @@ mono_handle_ref (void volatile* p)
 static inline MonoObjectHandle
 mono_handle_assign_raw (MonoObjectHandleOut dest, void *src)
 {
-	g_assert (dest.__raw);
-	MONO_HANDLE_SUPPRESS (*dest.__raw = (MonoObject*)src);
-	return dest;
+    g_assert (dest.__raw);
+    MONO_HANDLE_SUPPRESS (*dest.__raw = (MonoObject*)src);
+    return dest;
 }
 
 /* It is unsafe to call this function directly - it does not pin the handle!  Use MONO_HANDLE_GET_FIELD_VAL(). */
 static inline gpointer
 mono_handle_unsafe_field_addr (MonoObjectHandle h, MonoClassField *field)
 {
-	return MONO_HANDLE_SUPPRESS (((gchar *)MONO_HANDLE_RAW (h)) + field->offset);
+    return MONO_HANDLE_SUPPRESS (((gchar *)MONO_HANDLE_RAW (h)) + field->offset);
 }
 
 //FIXME this should go somewhere else
@@ -630,7 +630,7 @@ mono_gchandle_target_equal (MonoGCHandle gchandle, MonoObjectHandle equal);
 
 void
 mono_gchandle_target_is_null_or_equal (MonoGCHandle gchandle, MonoObjectHandle equal, gboolean *is_null,
-	gboolean *is_equal);
+                                       gboolean *is_equal);
 
 void
 mono_gchandle_set_target_handle (MonoGCHandle gchandle, MonoObjectHandle obj);
@@ -659,8 +659,8 @@ mono_object_handle_pin_unbox (MonoObjectHandle boxed_valuetype_obj, MonoGCHandle
 static inline gpointer
 mono_handle_unbox_unsafe (MonoObjectHandle handle)
 {
-	g_assert (m_class_is_valuetype (MONO_HANDLE_GETVAL (handle, vtable)->klass));
-	return MONO_HANDLE_SUPPRESS (MONO_HANDLE_RAW (handle) + 1);
+    g_assert (m_class_is_valuetype (MONO_HANDLE_GETVAL (handle, vtable)->klass));
+    return MONO_HANDLE_SUPPRESS (MONO_HANDLE_RAW (handle) + 1);
 }
 
 void

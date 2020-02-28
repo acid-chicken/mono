@@ -186,7 +186,7 @@ void  mono_gc_clear_domain (MonoDomain * domain);
 void  mono_gc_suspend_finalizers (void);
 
 
-/* 
+/*
  * Register a root which can only be written using a write barrier.
  * Writes to the root must be done using a write barrier (MONO_ROOT_SETREF).
  * If the root uses an user defined mark routine, the writes are not required to be
@@ -208,12 +208,12 @@ void mono_gc_wbarrier_set_root (gpointer ptr, MonoObject *value);
 /* fast allocation support */
 
 typedef enum {
-	// Regular fast path allocator.
-	MANAGED_ALLOCATOR_REGULAR,
-	// Managed allocator that just calls into the runtime.
-	MANAGED_ALLOCATOR_SLOW_PATH,
-	// Managed allocator that works like the regular one but also calls into the profiler.
-	MANAGED_ALLOCATOR_PROFILER,
+    // Regular fast path allocator.
+    MANAGED_ALLOCATOR_REGULAR,
+    // Managed allocator that just calls into the runtime.
+    MANAGED_ALLOCATOR_SLOW_PATH,
+    // Managed allocator that works like the regular one but also calls into the profiler.
+    MANAGED_ALLOCATOR_PROFILER,
 } ManagedAllocatorVariant;
 
 int mono_gc_get_aligned_size_for_allocator (int size);
@@ -239,46 +239,46 @@ typedef void (*MonoRangeCopyFunction)(gpointer, gconstpointer, int size);
 MonoRangeCopyFunction
 mono_gc_get_range_copy_func (void);
 
-/* 
+/*
  * Functions supplied by the runtime and called by the GC. Currently only used
  * by SGEN.
  */
 typedef struct {
-	/* 
-	 * Function called during thread startup/attach to allocate thread-local data 
-	 * needed by the other functions.
-	 */
-	gpointer (*thread_attach_func) (void);
-	/* 
-	 * Function called during thread deatch to free the data allocated by
-	 * thread_attach_func.
-	 */
-	void (*thread_detach_func) (gpointer user_data);
-	/* 
-	 * Function called from every thread when suspending for GC. It can save
-	 * data needed for marking from thread stacks. user_data is the data returned 
-	 * by attach_func. This might called with GC locks held and the word stopped,
-	 * so it shouldn't do any synchronization etc.
-	 */
-	void (*thread_suspend_func) (gpointer user_data, void *sigcontext, MonoContext *ctx);
-	/* 
-	 * Function called to mark from thread stacks. user_data is the data returned 
-	 * by attach_func. This is called twice, with the word stopped:
-	 * - in the first pass, it should mark areas of the stack using
-	 *   conservative marking by calling mono_gc_conservatively_scan_area ().
-	 * - in the second pass, it should mark the remaining areas of the stack
-	 *   using precise marking by calling mono_gc_scan_object ().
-	 */
-	void (*thread_mark_func) (gpointer user_data, guint8 *stack_start, guint8 *stack_end, gboolean precise, void *gc_data);
-	/*
-	 * Function called for debugging to get the current managed method for
-	 * tracking the provenances of objects.
-	 */
-	gpointer (*get_provenance_func) (void);
-	/*
-	 * Same as thread_mark_func, mark the intepreter frames.
-	 */
-	void (*interp_mark_func) (gpointer thread_info, GcScanFunc func, gpointer gc_data, gboolean precise);
+    /*
+     * Function called during thread startup/attach to allocate thread-local data
+     * needed by the other functions.
+     */
+    gpointer (*thread_attach_func) (void);
+    /*
+     * Function called during thread deatch to free the data allocated by
+     * thread_attach_func.
+     */
+    void (*thread_detach_func) (gpointer user_data);
+    /*
+     * Function called from every thread when suspending for GC. It can save
+     * data needed for marking from thread stacks. user_data is the data returned
+     * by attach_func. This might called with GC locks held and the word stopped,
+     * so it shouldn't do any synchronization etc.
+     */
+    void (*thread_suspend_func) (gpointer user_data, void *sigcontext, MonoContext *ctx);
+    /*
+     * Function called to mark from thread stacks. user_data is the data returned
+     * by attach_func. This is called twice, with the word stopped:
+     * - in the first pass, it should mark areas of the stack using
+     *   conservative marking by calling mono_gc_conservatively_scan_area ().
+     * - in the second pass, it should mark the remaining areas of the stack
+     *   using precise marking by calling mono_gc_scan_object ().
+     */
+    void (*thread_mark_func) (gpointer user_data, guint8 *stack_start, guint8 *stack_end, gboolean precise, void *gc_data);
+    /*
+     * Function called for debugging to get the current managed method for
+     * tracking the provenances of objects.
+     */
+    gpointer (*get_provenance_func) (void);
+    /*
+     * Same as thread_mark_func, mark the intepreter frames.
+     */
+    void (*interp_mark_func) (gpointer thread_info, GcScanFunc func, gpointer gc_data, gboolean precise);
 } MonoGCCallbacks;
 
 /* Set the callback functions callable by the GC */
@@ -327,10 +327,10 @@ guint64 mono_gc_get_allocated_bytes_for_current_thread (void);
 guint64 mono_gc_get_total_allocated_bytes (MonoBoolean precise);
 
 void mono_gc_get_gcmemoryinfo (gint64* fragmented_bytes,
-						       gint64* heap_size_bytes,
-						       gint64* high_memory_load_threshold_bytes,
-						       gint64* memory_load_bytes,
- 						       gint64* total_available_memory_bytes);
+                               gint64* heap_size_bytes,
+                               gint64* high_memory_load_threshold_bytes,
+                               gint64* memory_load_bytes,
+                               gint64* total_available_memory_bytes);
 
 guint8* mono_gc_get_card_table (int *shift_bits, gpointer *card_mask);
 guint8* mono_gc_get_target_card_table (int *shift_bits, target_mgreg_t *card_mask);
@@ -368,28 +368,28 @@ gboolean mono_gc_precise_stack_mark_enabled (void);
 typedef struct _RefQueueEntry RefQueueEntry;
 
 struct _RefQueueEntry {
-	void *dis_link;
-	MonoGCHandle gchandle;
-	MonoDomain *domain;
-	void *user_data;
-	RefQueueEntry *next;
+    void *dis_link;
+    MonoGCHandle gchandle;
+    MonoDomain *domain;
+    void *user_data;
+    RefQueueEntry *next;
 };
 
 struct _MonoReferenceQueue {
-	RefQueueEntry *queue;
-	mono_reference_queue_callback callback;
-	MonoReferenceQueue *next;
-	gboolean should_be_deleted;
+    RefQueueEntry *queue;
+    mono_reference_queue_callback callback;
+    MonoReferenceQueue *next;
+    gboolean should_be_deleted;
 };
 
 enum {
-	MONO_GC_FINALIZER_EXTENSION_VERSION = 1,
+    MONO_GC_FINALIZER_EXTENSION_VERSION = 1,
 };
 
 typedef struct {
-	int version;
-	gboolean (*is_class_finalization_aware) (MonoClass *klass);
-	void (*object_queued_for_finalization) (MonoObject *object);
+    int version;
+    gboolean (*is_class_finalization_aware) (MonoClass *klass);
+    void (*object_queued_for_finalization) (MonoObject *object);
 } MonoGCFinalizerCallbacks;
 
 MONO_API void mono_gc_register_finalizer_callbacks (MonoGCFinalizerCallbacks *callbacks);

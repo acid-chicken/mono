@@ -18,44 +18,44 @@
 /* Per-domain information maintained by the JIT */
 typedef struct
 {
-	/* Maps MonoMethod's to a GSList of GOT slot addresses pointing to its code */
-	GHashTable *jump_target_got_slot_hash;
-	GHashTable *jump_target_hash;
-	/* Maps methods/klasses to the address of the given type of trampoline */
-	GHashTable *class_init_trampoline_hash;
-	GHashTable *jump_trampoline_hash;
-	GHashTable *jit_trampoline_hash;
-	GHashTable *delegate_trampoline_hash;
-	/* Maps ClassMethodPair -> MonoDelegateTrampInfo */
-	GHashTable *static_rgctx_trampoline_hash;
-	GHashTable *llvm_vcall_trampoline_hash;
-	/* maps MonoMethod -> MonoJitDynamicMethodInfo */
-	GHashTable *dynamic_code_hash;
-	GHashTable *method_code_hash;
-	/* Maps methods to a RuntimeInvokeInfo structure, protected by the associated MonoDomain lock */
-	MonoConcurrentHashTable *runtime_invoke_hash;
-	/* Maps MonoMethod to a GPtrArray containing sequence point locations */
-	/* Protected by the domain lock */
-	GHashTable *seq_points;
-	/* Debugger agent data */
-	gpointer agent_info;
-	/* Maps MonoMethod to an arch-specific structure */
-	GHashTable *arch_seq_points;
-	/* Maps a GSharedVtTrampInfo structure to a trampoline address */
-	GHashTable *gsharedvt_arg_tramp_hash;
-	/* memcpy/bzero methods specialized for small constant sizes */
-	gpointer *memcpy_addr [17];
-	gpointer *bzero_addr [17];
-	gpointer llvm_module;
-	/* Maps MonoMethod -> GSlist of addresses */
-	GHashTable *llvm_jit_callees;
-	/* Maps MonoMethod -> RuntimeMethod */
-	MonoInternalHashTable interp_code_hash;
-	/* Maps MonoMethod -> 	MonoMethodRuntimeGenericContext */
-	GHashTable *mrgctx_hash;
-	GHashTable *method_rgctx_hash;
-	/* Maps gpointer -> InterpMethod */
-	GHashTable *interp_method_pointer_hash;
+    /* Maps MonoMethod's to a GSList of GOT slot addresses pointing to its code */
+    GHashTable *jump_target_got_slot_hash;
+    GHashTable *jump_target_hash;
+    /* Maps methods/klasses to the address of the given type of trampoline */
+    GHashTable *class_init_trampoline_hash;
+    GHashTable *jump_trampoline_hash;
+    GHashTable *jit_trampoline_hash;
+    GHashTable *delegate_trampoline_hash;
+    /* Maps ClassMethodPair -> MonoDelegateTrampInfo */
+    GHashTable *static_rgctx_trampoline_hash;
+    GHashTable *llvm_vcall_trampoline_hash;
+    /* maps MonoMethod -> MonoJitDynamicMethodInfo */
+    GHashTable *dynamic_code_hash;
+    GHashTable *method_code_hash;
+    /* Maps methods to a RuntimeInvokeInfo structure, protected by the associated MonoDomain lock */
+    MonoConcurrentHashTable *runtime_invoke_hash;
+    /* Maps MonoMethod to a GPtrArray containing sequence point locations */
+    /* Protected by the domain lock */
+    GHashTable *seq_points;
+    /* Debugger agent data */
+    gpointer agent_info;
+    /* Maps MonoMethod to an arch-specific structure */
+    GHashTable *arch_seq_points;
+    /* Maps a GSharedVtTrampInfo structure to a trampoline address */
+    GHashTable *gsharedvt_arg_tramp_hash;
+    /* memcpy/bzero methods specialized for small constant sizes */
+    gpointer *memcpy_addr [17];
+    gpointer *bzero_addr [17];
+    gpointer llvm_module;
+    /* Maps MonoMethod -> GSlist of addresses */
+    GHashTable *llvm_jit_callees;
+    /* Maps MonoMethod -> RuntimeMethod */
+    MonoInternalHashTable interp_code_hash;
+    /* Maps MonoMethod -> 	MonoMethodRuntimeGenericContext */
+    GHashTable *mrgctx_hash;
+    GHashTable *method_rgctx_hash;
+    /* Maps gpointer -> InterpMethod */
+    GHashTable *interp_method_pointer_hash;
 } MonoJitDomainInfo;
 
 #define domain_jit_info(domain) ((MonoJitDomainInfo*)((domain)->runtime_info))
@@ -64,82 +64,82 @@ typedef struct
  * Stores state need to resume exception handling when using LLVM
  */
 typedef struct {
-	MonoJitInfo *ji;
-	int clause_index;
-	MonoContext ctx, new_ctx;
-	/* FIXME: GC */
-	gpointer        ex_obj;
-	MonoLMF *lmf;
-	int first_filter_idx, filter_idx;
+    MonoJitInfo *ji;
+    int clause_index;
+    MonoContext ctx, new_ctx;
+    /* FIXME: GC */
+    gpointer        ex_obj;
+    MonoLMF *lmf;
+    int first_filter_idx, filter_idx;
 } ResumeState;
 
 typedef void (*MonoAbortFunction)(MonoObject*);
 
 struct MonoJitTlsData {
-	gpointer          end_of_stack;
-	guint32           stack_size;
-	MonoLMF          *lmf;
-	MonoLMF          *first_lmf;
-	guint            handling_stack_ovf : 1;
-	gpointer         signal_stack;
-	guint32          signal_stack_size;
-	gpointer         stack_ovf_guard_base;
-	guint32          stack_ovf_guard_size;
-	guint            stack_ovf_valloced : 1;
-	guint            stack_ovf_pending : 1;
-	MonoAbortFunction abort_func;
-	/* Used to implement --debug=casts */
-	MonoClass       *class_cast_from, *class_cast_to;
+    gpointer          end_of_stack;
+    guint32           stack_size;
+    MonoLMF          *lmf;
+    MonoLMF          *first_lmf;
+    guint            handling_stack_ovf : 1;
+    gpointer         signal_stack;
+    guint32          signal_stack_size;
+    gpointer         stack_ovf_guard_base;
+    guint32          stack_ovf_guard_size;
+    guint            stack_ovf_valloced : 1;
+    guint            stack_ovf_pending : 1;
+    MonoAbortFunction abort_func;
+    /* Used to implement --debug=casts */
+    MonoClass       *class_cast_from, *class_cast_to;
 
-	/* Stores state needed by handler block with a guard */
-	MonoContext     ex_ctx;
-	ResumeState resume_state;
+    /* Stores state needed by handler block with a guard */
+    MonoContext     ex_ctx;
+    ResumeState resume_state;
 
-	/* handler block been guarded. It's safe to store this even for dynamic methods since there
-	is an activation on stack making sure it will remain alive.*/
-	MonoJitExceptionInfo *handler_block;
+    /* handler block been guarded. It's safe to store this even for dynamic methods since there
+    is an activation on stack making sure it will remain alive.*/
+    MonoJitExceptionInfo *handler_block;
 
-	/* context to be used by the guard trampoline when resuming interruption.*/
-	MonoContext handler_block_context;
-	/* 
-	 * Stores the state at the exception throw site to be used by mono_stack_walk ()
-	 * when it is called from profiler functions during exception handling.
-	 */
-	MonoContext orig_ex_ctx;
-	gboolean orig_ex_ctx_set;
+    /* context to be used by the guard trampoline when resuming interruption.*/
+    MonoContext handler_block_context;
+    /*
+     * Stores the state at the exception throw site to be used by mono_stack_walk ()
+     * when it is called from profiler functions during exception handling.
+     */
+    MonoContext orig_ex_ctx;
+    gboolean orig_ex_ctx_set;
 
-	/* 
-	 * The current exception in flight
-	 */
-	MonoGCHandle thrown_exc;
-	/*
-	 * If the current exception is not a subclass of Exception,
-	 * the original exception.
-	 */
-	MonoGCHandle thrown_non_exc;
+    /*
+     * The current exception in flight
+     */
+    MonoGCHandle thrown_exc;
+    /*
+     * If the current exception is not a subclass of Exception,
+     * the original exception.
+     */
+    MonoGCHandle thrown_non_exc;
 
-	/*
-	 * The calling assembly in llvmonly mode.
-	 */
-	MonoImage *calling_image;
+    /*
+     * The calling assembly in llvmonly mode.
+     */
+    MonoImage *calling_image;
 
-	/*
-	 * The stack frame "high water mark" for ThreadAbortExceptions.
-	 * We will rethrow the exception upon exiting a catch clause that's
-	 * in a function stack frame above the water mark(isn't being called by
-	 * the catch block that caught the ThreadAbortException).
-	 */
-	gpointer abort_exc_stack_threshold;
+    /*
+     * The stack frame "high water mark" for ThreadAbortExceptions.
+     * We will rethrow the exception upon exiting a catch clause that's
+     * in a function stack frame above the water mark(isn't being called by
+     * the catch block that caught the ThreadAbortException).
+     */
+    gpointer abort_exc_stack_threshold;
 
-	/*
-	 * List of methods being JIT'd in the current thread.
-	 */
-	int active_jit_methods;
+    /*
+     * List of methods being JIT'd in the current thread.
+     */
+    int active_jit_methods;
 
-	gpointer interp_context;
+    gpointer interp_context;
 
 #if defined(TARGET_WIN32)
-	MonoContext stack_restore_ctx;
+    MonoContext stack_restore_ctx;
 #endif
 };
 
@@ -151,113 +151,113 @@ struct MonoJitTlsData {
  * This structure is an extension of MonoLMF and contains extra information.
  */
 typedef struct {
-	struct MonoLMF lmf;
-	int kind;
-	MonoContext ctx; /* valid if kind == DEBUGGER_INVOKE || kind == INTERP_EXIT_WITH_CTX */
-	gpointer interp_exit_data; /* valid if kind == INTERP_EXIT || kind == INTERP_EXIT_WITH_CTX */
+    struct MonoLMF lmf;
+    int kind;
+    MonoContext ctx; /* valid if kind == DEBUGGER_INVOKE || kind == INTERP_EXIT_WITH_CTX */
+    gpointer interp_exit_data; /* valid if kind == INTERP_EXIT || kind == INTERP_EXIT_WITH_CTX */
 #if defined (_MSC_VER)
-	gboolean interp_exit_label_set;
+    gboolean interp_exit_label_set;
 #endif
 } MonoLMFExt;
 
 typedef void (*MonoFtnPtrEHCallback) (MonoGCHandle gchandle);
 
 typedef struct MonoDebugOptions {
-	gboolean handle_sigint;
-	gboolean keep_delegates;
-	gboolean reverse_pinvoke_exceptions;
-	gboolean collect_pagefault_stats;
-	gboolean break_on_unverified;
-	gboolean better_cast_details;
-	gboolean mdb_optimizations;
-	gboolean no_gdb_backtrace;
-	gboolean suspend_on_native_crash;
-	gboolean suspend_on_exception;
-	gboolean suspend_on_unhandled;
-	gboolean dyn_runtime_invoke;
-	gboolean gdb;
-	gboolean lldb;
+    gboolean handle_sigint;
+    gboolean keep_delegates;
+    gboolean reverse_pinvoke_exceptions;
+    gboolean collect_pagefault_stats;
+    gboolean break_on_unverified;
+    gboolean better_cast_details;
+    gboolean mdb_optimizations;
+    gboolean no_gdb_backtrace;
+    gboolean suspend_on_native_crash;
+    gboolean suspend_on_exception;
+    gboolean suspend_on_unhandled;
+    gboolean dyn_runtime_invoke;
+    gboolean gdb;
+    gboolean lldb;
 
-	/*
-	 * Prevent LLVM from inlining any methods
-	 */
-	gboolean llvm_disable_inlining;
-	gboolean llvm_disable_implicit_null_checks;
-	gboolean use_fallback_tls;
-	/*
-	 * Whenever data such as next sequence points and flags is required.
-	 * Next sequence points and flags are required by the debugger agent.
-	 */
-	gboolean gen_sdb_seq_points;
-	gboolean no_seq_points_compact_data;
-	/*
-	 * Setting single_imm_size should guarantee that each time managed code is compiled
-	 * the same instructions and registers are used, regardless of the size of used values.
-	 */
-	gboolean single_imm_size;
-	gboolean explicit_null_checks;
-	/*
-	 * Fill stack frames with 0x2a in method prologs. This helps with the
-	 * debugging of the stack marking code in the GC.
-	 */
-	gboolean init_stacks;
+    /*
+     * Prevent LLVM from inlining any methods
+     */
+    gboolean llvm_disable_inlining;
+    gboolean llvm_disable_implicit_null_checks;
+    gboolean use_fallback_tls;
+    /*
+     * Whenever data such as next sequence points and flags is required.
+     * Next sequence points and flags are required by the debugger agent.
+     */
+    gboolean gen_sdb_seq_points;
+    gboolean no_seq_points_compact_data;
+    /*
+     * Setting single_imm_size should guarantee that each time managed code is compiled
+     * the same instructions and registers are used, regardless of the size of used values.
+     */
+    gboolean single_imm_size;
+    gboolean explicit_null_checks;
+    /*
+     * Fill stack frames with 0x2a in method prologs. This helps with the
+     * debugging of the stack marking code in the GC.
+     */
+    gboolean init_stacks;
 
-	/*
-	 * Whenever to implement single stepping and breakpoints without signals in the
-	 * soft debugger. This is useful on platforms without signals, like the ps3, or during
-	 * runtime debugging, since it avoids SIGSEGVs when a single step location or breakpoint
-	 * is hit.
-	 */
-	gboolean soft_breakpoints;
-	/*
-	 * Whenever to break in the debugger using G_BREAKPOINT on unhandled exceptions.
-	 */
-	gboolean break_on_exc;
-	/*
-	 * Load AOT JIT info eagerly.
-	 */
-	gboolean load_aot_jit_info_eagerly;
-	/*
-	 * Check for pinvoke calling convention mismatches.
-	 */
-	gboolean check_pinvoke_callconv;
-	/*
-	 * Translate Debugger.Break () into a native breakpoint signal
-	 */
-	gboolean native_debugger_break;
-	/*
-	 * Disabling the frame pointer emit optimization can allow debuggers to more easily
-	 * identify the stack on some platforms
-	 */
-	gboolean disable_omit_fp;
-	/*
-	 * Make gdb output on native crashes more verbose.
-	 */
-	gboolean verbose_gdb;
+    /*
+     * Whenever to implement single stepping and breakpoints without signals in the
+     * soft debugger. This is useful on platforms without signals, like the ps3, or during
+     * runtime debugging, since it avoids SIGSEGVs when a single step location or breakpoint
+     * is hit.
+     */
+    gboolean soft_breakpoints;
+    /*
+     * Whenever to break in the debugger using G_BREAKPOINT on unhandled exceptions.
+     */
+    gboolean break_on_exc;
+    /*
+     * Load AOT JIT info eagerly.
+     */
+    gboolean load_aot_jit_info_eagerly;
+    /*
+     * Check for pinvoke calling convention mismatches.
+     */
+    gboolean check_pinvoke_callconv;
+    /*
+     * Translate Debugger.Break () into a native breakpoint signal
+     */
+    gboolean native_debugger_break;
+    /*
+     * Disabling the frame pointer emit optimization can allow debuggers to more easily
+     * identify the stack on some platforms
+     */
+    gboolean disable_omit_fp;
+    /*
+     * Make gdb output on native crashes more verbose.
+     */
+    gboolean verbose_gdb;
 
-	// Internal testing feature.
-	gboolean test_tailcall_require;
+    // Internal testing feature.
+    gboolean test_tailcall_require;
 
-	/*
-	 * Don't enforce any memory model. We will assume the architecture's memory model.
-	 */
-	gboolean weak_memory_model;
+    /*
+     * Don't enforce any memory model. We will assume the architecture's memory model.
+     */
+    gboolean weak_memory_model;
 
-	/*
-	 * Internal testing feature
-	 * Testing feature, skip loading the Nth aot loadable method.
-	 */
-	gboolean aot_skip_set;
-	int aot_skip;
+    /*
+     * Internal testing feature
+     * Testing feature, skip loading the Nth aot loadable method.
+     */
+    gboolean aot_skip_set;
+    int aot_skip;
 
-	/*
-	 * Treat exceptions which reach the topmost runtime invoke as unhandled when
-	 * embedding.
-	 */
-	gboolean top_runtime_invoke_unhandled;
+    /*
+     * Treat exceptions which reach the topmost runtime invoke as unhandled when
+     * embedding.
+     */
+    gboolean top_runtime_invoke_unhandled;
 
 #ifdef ENABLE_NETCORE
-	gboolean enabled;
+    gboolean enabled;
 #endif
 } MonoDebugOptions;
 
@@ -267,21 +267,21 @@ typedef struct MonoDebugOptions {
  * contains the relocation, because of inlining.
  */
 typedef struct MonoJumpInfoToken {
-	MonoImage *image;
-	guint32 token;
-	gboolean has_context;
-	MonoGenericContext context;
+    MonoImage *image;
+    guint32 token;
+    gboolean has_context;
+    MonoGenericContext context;
 } MonoJumpInfoToken;
 
 typedef struct MonoJumpInfoBBTable {
-	MonoBasicBlock **table;
-	int table_size;
+    MonoBasicBlock **table;
+    int table_size;
 } MonoJumpInfoBBTable;
 
 /* Contains information describing an LLVM IMT trampoline */
 typedef struct MonoJumpInfoImtTramp {
-	MonoMethod *method;
-	int vt_offset;
+    MonoMethod *method;
+    int vt_offset;
 } MonoJumpInfoImtTramp;
 
 /*
@@ -290,23 +290,23 @@ typedef struct MonoJumpInfoImtTramp {
  * object described by DATA.
  */
 struct MonoJumpInfoRgctxEntry {
-	union {
-		/* If in_mrgctx is TRUE */
-		MonoMethod *method;
-		/* If in_mrgctx is FALSE */
-		MonoClass *klass;
-	} d;
-	gboolean in_mrgctx;
-	MonoJumpInfo *data; /* describes the data to be loaded */
-	MonoRgctxInfoType info_type;
+    union {
+        /* If in_mrgctx is TRUE */
+        MonoMethod *method;
+        /* If in_mrgctx is FALSE */
+        MonoClass *klass;
+    } d;
+    gboolean in_mrgctx;
+    MonoJumpInfo *data; /* describes the data to be loaded */
+    MonoRgctxInfoType info_type;
 };
 
 /* Contains information about a gsharedvt call */
 struct MonoJumpInfoGSharedVtCall {
-	/* The original signature of the call */
-	MonoMethodSignature *sig;
-	/* The method which is called */
-	MonoMethod *method;
+    /* The original signature of the call */
+    MonoMethodSignature *sig;
+    /* The method which is called */
+    MonoMethod *method;
 };
 
 /*
@@ -314,49 +314,49 @@ struct MonoJumpInfoGSharedVtCall {
  * on a receiver of type KLASS.
  */
 typedef struct {
-	/* Receiver class */
-	MonoClass *klass;
-	/* Virtual method */
-	MonoMethod *method;
+    /* Receiver class */
+    MonoClass *klass;
+    /* Virtual method */
+    MonoMethod *method;
 } MonoJumpInfoVirtMethod;
 
 struct MonoJumpInfo {
-	MonoJumpInfo *next;
-	/* Relocation type for patching */
-	int relocation;
-	union {
-		int i;
-		guint8 *p;
-		MonoInst *label;
-	} ip;
+    MonoJumpInfo *next;
+    /* Relocation type for patching */
+    int relocation;
+    union {
+        int i;
+        guint8 *p;
+        MonoInst *label;
+    } ip;
 
-	MonoJumpInfoType type;
-	union {
-		// In order to allow blindly using target in mono_add_patch_info,
-		// all fields must be pointer-sized. No ints, no untyped enums.
-		gconstpointer   target;
-		gssize		index;	// only 32 bits used but widened per above
-		gsize		uindex;	// only 32 bits used but widened per above
-		MonoBasicBlock *bb;
-		MonoInst       *inst;
-		MonoMethod     *method;
-		MonoClass      *klass;
-		MonoClassField *field;
-		MonoImage      *image;
-		MonoVTable     *vtable;
-		const char     *name;
-		gsize jit_icall_id;	// MonoJitICallId, 9 bits, but widened per above.
-		MonoJumpInfoToken  *token;
-		MonoJumpInfoBBTable *table;
-		MonoJumpInfoRgctxEntry *rgctx_entry;
-		MonoJumpInfoImtTramp *imt_tramp;
-		MonoJumpInfoGSharedVtCall *gsharedvt;
-		MonoGSharedVtMethodInfo *gsharedvt_method;
-		MonoMethodSignature *sig;
-		MonoDelegateClassMethodPair *del_tramp;
-		/* MONO_PATCH_INFO_VIRT_METHOD */
-		MonoJumpInfoVirtMethod *virt_method;
-	} data;
+    MonoJumpInfoType type;
+    union {
+        // In order to allow blindly using target in mono_add_patch_info,
+        // all fields must be pointer-sized. No ints, no untyped enums.
+        gconstpointer   target;
+        gssize		index;	// only 32 bits used but widened per above
+        gsize		uindex;	// only 32 bits used but widened per above
+        MonoBasicBlock *bb;
+        MonoInst       *inst;
+        MonoMethod     *method;
+        MonoClass      *klass;
+        MonoClassField *field;
+        MonoImage      *image;
+        MonoVTable     *vtable;
+        const char     *name;
+        gsize jit_icall_id;	// MonoJitICallId, 9 bits, but widened per above.
+        MonoJumpInfoToken  *token;
+        MonoJumpInfoBBTable *table;
+        MonoJumpInfoRgctxEntry *rgctx_entry;
+        MonoJumpInfoImtTramp *imt_tramp;
+        MonoJumpInfoGSharedVtCall *gsharedvt;
+        MonoGSharedVtMethodInfo *gsharedvt_method;
+        MonoMethodSignature *sig;
+        MonoDelegateClassMethodPair *del_tramp;
+        /* MONO_PATCH_INFO_VIRT_METHOD */
+        MonoJumpInfoVirtMethod *virt_method;
+    } data;
 };
 
 extern gboolean mono_break_on_exc;
@@ -396,30 +396,30 @@ The goal is to transition us to a place were we can more easily compose/describe
 A good feature flag is checked alone, a bad one described many things and keeps breaking some of the modes
 */
 typedef struct {
-	/*
-	 * If true, trampolines are to be fetched from the AOT runtime instead of JIT compiled
-	 */
-	gboolean use_aot_trampolines;
+    /*
+     * If true, trampolines are to be fetched from the AOT runtime instead of JIT compiled
+     */
+    gboolean use_aot_trampolines;
 
-	/*
-	 * If true, the runtime will try to use the interpreter before looking for compiled code.
-	 */
-	gboolean force_use_interpreter;
+    /*
+     * If true, the runtime will try to use the interpreter before looking for compiled code.
+     */
+    gboolean force_use_interpreter;
 } MonoEEFeatures;
 
 extern MonoEEFeatures mono_ee_features;
 
 //XXX this enum *MUST extend MonoAotMode as they are consumed together.
 typedef enum {
-	/* Always execute with interp, will use JIT to produce trampolines */
-	MONO_EE_MODE_INTERP = MONO_AOT_MODE_LAST,
+    /* Always execute with interp, will use JIT to produce trampolines */
+    MONO_EE_MODE_INTERP = MONO_AOT_MODE_LAST,
 } MonoEEMode;
 
 
 static inline MonoMethod*
 jinfo_get_method (MonoJitInfo *ji)
 {
-	return mono_jit_info_get_method (ji);
+    return mono_jit_info_get_method (ji);
 }
 
 /* main function */
@@ -567,7 +567,7 @@ mono_is_addr_implicit_null_check (void *addr);
  */
 
 #if defined(DISABLE_HW_TRAPS) || defined(MONO_ARCH_DISABLE_HW_TRAPS)
- // Signal handlers not available
+// Signal handlers not available
 #define MONO_ARCH_NEED_DIV_CHECK 1
 #endif
 
