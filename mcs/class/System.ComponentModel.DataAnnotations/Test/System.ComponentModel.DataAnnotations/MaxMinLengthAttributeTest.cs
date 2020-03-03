@@ -29,49 +29,49 @@ using System.Text;
 
 using NUnit.Framework;
 
-namespace MonoTests.System.ComponentModel.DataAnnotations
-{
-[TestFixture]
-public class MaxMinLengthAttributeTest
-{
+namespace MonoTests.System.ComponentModel.DataAnnotations {
+  [TestFixture]
+  public class MaxMinLengthAttributeTest {
     [Test]
-    public void CheckMinLength () {
-        var attr = new MinLengthAttribute (2);
+    public void
+    CheckMinLength() {
+      var attr = new MinLengthAttribute(2);
 
-        Assert.IsTrue (attr.IsValid (null), "#A1");
-        Assert.IsFalse (attr.IsValid ("1"), "#A2");
+      Assert.IsTrue(attr.IsValid(null), "#A1");
+      Assert.IsFalse(attr.IsValid("1"), "#A2");
 
-        Assert.IsTrue (attr.IsValid ("12"), "#A3");
-        Assert.IsTrue (attr.IsValid ("123"), "#A4");
+      Assert.IsTrue(attr.IsValid("12"), "#A3");
+      Assert.IsTrue(attr.IsValid("123"), "#A4");
 
-        Assert.IsFalse (attr.IsValid (BuildQuickList (1)), "#A5");
-        Assert.IsTrue (attr.IsValid (BuildQuickList (2)), "#A6");
-        Assert.IsTrue (attr.IsValid (BuildQuickList (3)), "#A7");
+      Assert.IsFalse(attr.IsValid(BuildQuickList(1)), "#A5");
+      Assert.IsTrue(attr.IsValid(BuildQuickList(2)), "#A6");
+      Assert.IsTrue(attr.IsValid(BuildQuickList(3)), "#A7");
     }
 
     [Test]
-    public void CheckMaxLength () {
-        var attr = new MaxLengthAttribute (2);
+    public void
+    CheckMaxLength() {
+      var attr = new MaxLengthAttribute(2);
 
-        Assert.IsTrue (attr.IsValid (null), "#A1");
-        Assert.IsTrue (attr.IsValid ("1"), "#A2");
-        Assert.IsTrue (attr.IsValid ("12"), "#A3");
+      Assert.IsTrue(attr.IsValid(null), "#A1");
+      Assert.IsTrue(attr.IsValid("1"), "#A2");
+      Assert.IsTrue(attr.IsValid("12"), "#A3");
 
-        Assert.IsFalse (attr.IsValid ("123"), "#A4");
+      Assert.IsFalse(attr.IsValid("123"), "#A4");
 
-        Assert.IsTrue (attr.IsValid (BuildQuickList (1)), "#A5");
-        Assert.IsTrue (attr.IsValid (BuildQuickList (2)), "#A6");
-        Assert.IsFalse (attr.IsValid (BuildQuickList (3)), "#A7");
+      Assert.IsTrue(attr.IsValid(BuildQuickList(1)), "#A5");
+      Assert.IsTrue(attr.IsValid(BuildQuickList(2)), "#A6");
+      Assert.IsFalse(attr.IsValid(BuildQuickList(3)), "#A7");
     }
 
-    List<string> BuildQuickList (int count) {
-        var items = new List<string> ();
+    List<string>BuildQuickList(int count) {
+      var items = new List<string>();
 
-        for (int i = 0; i < count; i++) {
-            items.Add(i.ToString());
-        }
+      for (int i = 0; i < count; i++) {
+        items.Add(i.ToString());
+      }
 
-        return items;
+      return items;
     }
-}
+  }
 }
