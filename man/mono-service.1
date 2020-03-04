@@ -1,6 +1,6 @@
-.\" 
+.\"
 .\" mono-service manual page.
-.\" (C) 2005 Novell, Inc. 
+.\" (C) 2005 Novell, Inc.
 .\" Author:
 .\"   Miguel de Icaza (miguel@gnu.org)
 .\"
@@ -24,18 +24,18 @@ use \fImono-service2\fP to run services that use the 2.0 assemblies.
 Services can be paused by sending the SIGUSR1 signal to the process,
 and execution can be resumed by sending the SIGUSR2 signal.   The
 service can be cleanly shutdown by sending the SIGTERM signal to the
-process. 
+process.
 .PP
 The following options can be used to control the service:
 .TP
 .I "-d:DIRECTORY"
 Use this option to specify the working directory for the service.  The
-default is the current directory. 
+default is the current directory.
 .TP
 .I "-l:LOCKFILE"
 Specifies the file to use for locking, the default is a filename
 constructed in /tmp based on the name of the program that hosts the
-service. 
+service.
 .TP
 .I "-m:MESSAGE"
 Name to show in the syslog.

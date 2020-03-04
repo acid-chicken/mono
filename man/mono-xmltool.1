@@ -1,7 +1,7 @@
-.\" 
+.\"
 .\" mono manual page.
-.\" (C) 2003 Ximian, Inc. 
-.\" (C) 2004-2005 Novell, Inc. 
+.\" (C) 2003 Ximian, Inc.
+.\" (C) 2004-2005 Novell, Inc.
 .\" Author:
 .\"   Miguel de Icaza (miguel@gnu.org)
 .\"
@@ -11,7 +11,7 @@
 ..
 .TH Mono "mono-xmltool"
 .SH NAME
-mono-xmltool \- Mono XML validation and transformation tool. 
+mono-xmltool \- Mono XML validation and transformation tool.
 .SH SYNOPSIS
 .PP
 .B mono-xmltool --validate [*.rng | *.rnc | *.nvdl | *.xsd] [instances]
@@ -48,7 +48,7 @@ extension to guess the kind of validation required.  The
 The following lists the flags and the actual class that implements
 them in Mono:
 .TP
-.I --validate-rng 
+.I --validate-rng
 .Sp
 Commons.Xml.Relaxng.RelaxNgPattern as the schema, and
 Commons.Xml.Relaxng.RelaxngValidatingReader validator.
@@ -57,10 +57,10 @@ Commons.Xml.Relaxng.RelaxngValidatingReader validator.
 Commons.Xml.Relaxng.RncParser as the schema, and
 Commons.Xml.Relaxng.RelaxngValidatingReader validator.
 .TP
-.I --validate-nvdl 
+.I --validate-nvdl
 .Sp
 Commons.Xml.Nvdl as the schema and Commons.Xml.NvdlValidatingReader
-validator. 
+validator.
 .TP
 .I --validate-xsd
 System.Xml.Schema.XmlSchema as the schema and uses
@@ -70,11 +70,11 @@ This does an XSLT transformation. The stylesheet must be an XSLT file,
 the instance-xml is the document to be processed.  Output it sent to
 the standard output.
 .SH PRETTY PRINTING
-Produces a pretty-print rendering of the 
+Produces a pretty-print rendering of the
 .I source
 file.  If it is not
-specified it reads the standard input.   If 
-.I result 
+specified it reads the standard input.   If
+.I result
 is not specified, the output is sent to the standard output.
 .SH MAILING LISTS
 Mailing lists are listed at the

@@ -1,4 +1,4 @@
-.\" 
+.\"
 .\" cert-sync  manual page.
 .\" Copyright 2016 Microsoft Corp
 .\" Author:
@@ -11,12 +11,12 @@ cert-sync \- Mono Certificate Store Sync Tool
 .PP
 .B cert-sync [--quiet] [--user] filename
 .SH DESCRIPTION
-This tool allows you to populate a Mono certificate store, from a large 
-concatenated list of certificates in PEM format (commonly provided on most 
+This tool allows you to populate a Mono certificate store, from a large
+concatenated list of certificates in PEM format (commonly provided on most
 Linux distributions).
 
-Its use is intended to be automated at Mono install time, by distribution 
-packagers, to seamlessly provide SSL support to Mono applications without 
+Its use is intended to be automated at Mono install time, by distribution
+packagers, to seamlessly provide SSL support to Mono applications without
 further user interaction.
 .SH OPTIONS
 .TP
@@ -24,11 +24,11 @@ further user interaction.
 Suppress verbose output
 .TP
 .I "--user"
-Populate the per-user store in the user's home directory, instead of the 
+Populate the per-user store in the user's home directory, instead of the
 system-wide store.
 .TP
 .I "filename.crt"
-Path to a certificate bundle. The Mono store will have any extra entries 
+Path to a certificate bundle. The Mono store will have any extra entries
 removed, and new entries added, to reflect the provided file.
 
 .SH EXAMPLES

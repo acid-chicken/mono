@@ -1,6 +1,6 @@
-.\" 
+.\"
 .\" resgen manual page.
-.\" (C) 2007 Novell, Inc. 
+.\" (C) 2007 Novell, Inc.
 .\" Author:
 .\"   Miguel de Icaza (miguel@gnu.org)
 .\"
@@ -13,11 +13,11 @@
 resgen, resgen2 \- Mono/CLI Resource Generator
 .SH SYNOPSIS
 .PP
-.B resgen source.ext [dest.ext] 
+.B resgen source.ext [dest.ext]
 .PP
 .B resgen /compile source.ext[,dest.resources] [...]
 .PP
-.B resgen2 
+.B resgen2
 .SH DESCRIPTION
 Convert a resource file from one format to another.
 .PP
@@ -36,7 +36,7 @@ The value argument can contain special characters as long as they are
 escaped.   The escape sequences currently supported are \\n, \\r, \\t,
 \\\\ (to get the escape sequence itself) and with resgen2 unicode
 escape sequences are supported with the \\uXXXX escape sequence, where
-XXXX is a four digit number. 
+XXXX is a four digit number.
 .Sp
 Lines that start with the # or ; character are considered comments and
 ignored.
@@ -57,7 +57,7 @@ part of mscorlib.dll, this class is part of System.Windows.Forms.
 PO files are the source files used by the Unix gettext infrastructure
 that is typically used to internationalize applications.
 .Sp
-Lines starting with the '#' character are comment lines. 
+Lines starting with the '#' character are comment lines.
 .Sp
 The file contains many instance of strings like this:
 .nf
@@ -73,7 +73,7 @@ message that applications embed in their source code and will be used
 as a fallback if no translation resources are used.
 .Sp
 Since resources are key value pairs, the extended features in PO files
-are not supported (plurals and support for N-cases).  
+are not supported (plurals and support for N-cases).
 .Sp
 To learn more about the po file format, use your info browser and
 point it to the "(gettext)PO Files" node.
@@ -98,7 +98,7 @@ resolve relative paths using the directory of the resx file as current
 directory.
 .SH FILES
 This program will load referenced assemblies from the Mono assembly
-cache. 
+cache.
 .SH MAILING LISTS
 Visit http://lists.ximian.com/mailman/listinfo/mono-devel-list for details.
 .SH WEB SITE

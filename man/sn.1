@@ -1,4 +1,4 @@
-.\" 
+.\"
 .\" sn manual page.
 .\" Copyright 2003 Motus Technologies
 .\" Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
@@ -38,11 +38,11 @@ Currently not supported by sn. You must edit machine.config manually if you
 require this.
 .TP
 .I "-Vu assembly"
-Remove the exemption entry for the specified assembly. Currently not 
+Remove the exemption entry for the specified assembly. Currently not
 supported by sn, you must edit machine.config manually if you require this.
 .TP
 .I "-Vx"
-Remove all exemptions entries. Currently not supported by sn, you must edit 
+Remove all exemptions entries. Currently not supported by sn, you must edit
 machine.config manually if you require this.
 .SH CSP RELATED OPTIONS
 .TP
@@ -75,16 +75,16 @@ Compare if assembly1 and assembly2 are the same except for their signature.
 This is done by comparing the hash of the metadata of both assemblies.
 .TP
 .I "-k [size] keypair.snk"
-Create a new strongname keypair in the specified file. The default key 
-length is 1024 bits and MUST ALWAYS be used when signing 1.x assemblies. 
-Any value from 384 to 16384 bits (in increments of 8 bits) is a valid key 
-length to sign 2.x assemblies. To ensure maximum compatibility you may 
-want to continue using 1024 bits keys. Note that there's no good reason, 
+Create a new strongname keypair in the specified file. The default key
+length is 1024 bits and MUST ALWAYS be used when signing 1.x assemblies.
+Any value from 384 to 16384 bits (in increments of 8 bits) is a valid key
+length to sign 2.x assemblies. To ensure maximum compatibility you may
+want to continue using 1024 bits keys. Note that there's no good reason,
 even if it's possible, to use length lesser than 1024 bits.
 .TP
 .I "-R assembly keypair.snk"
-Re-sign the specified assembly using the specified strongname keypair file 
-(SNK) or a PKCS#12/PFX password protected file. You can only sign an 
+Re-sign the specified assembly using the specified strongname keypair file
+(SNK) or a PKCS#12/PFX password protected file. You can only sign an
 assembly with the private key that matches the public key inside the assembly
 (unless it's public key token has been remapped in machine.config).
 .TP
@@ -126,7 +126,7 @@ Display conversion related help about this tool.
 Display strongname related help about this tool.
 .SH CONFIGURATION FILE
 .TP
-Strongnames configuration is kept in "machine.config" file. Currently two 
+Strongnames configuration is kept in "machine.config" file. Currently two
 features can be configured.
 .TP
 .I "/configuration/strongNames/pubTokenMapping"
@@ -135,24 +135,24 @@ another public key for verification. This is useful in two scenarios. First,
 assemblies signed with the "ECMA key" need to be verified by the "runtime"
 key (as the ECMA key isn't a public key). Second, many assemblies are signed
 with private keys that Mono can't use (e.g. System.Security.dll assembly).
-A new key cannot be used because it should change the strongname (a new key 
-pair would have a new public key which would produce a new token). Public 
+A new key cannot be used because it should change the strongname (a new key
+pair would have a new public key which would produce a new token). Public
 key token remapping is the solution for both problems. Each token must be
-configured in a "map" entry similar to this one: <map Token="b77a5c561934e089" 
+configured in a "map" entry similar to this one: <map Token="b77a5c561934e089"
 PublicKey="00..." />
 .TP
 .I "/configuration/strongNames/verificationSettings"
-It is often useful during development to use delay signed assemblies. 
+It is often useful during development to use delay signed assemblies.
 Normally* the runtime wouldn't allow delay-signed assemblies to be loaded.
 This feature allows some delay-signed assemblies (based on their public key
-token, optionally assembly name and user name) to be used like they were 
-fully signed assemblies. [*] Note that Mono 1.0 "runtime" doesn't validate 
+token, optionally assembly name and user name) to be used like they were
+fully signed assemblies. [*] Note that Mono 1.0 "runtime" doesn't validate
 strongname signatures so this option shouldn't be required in most scenarios.
 .SH AUTHOR
 Written by Sebastien Pouliot
 .SH COPYRIGHT
-Copyright (C) 2003 Motus Technologies. 
-Copyright (C) 2004 Novell. 
+Copyright (C) 2003 Motus Technologies.
+Copyright (C) 2004 Novell.
 Released under BSD license.
 .SH MAILING LISTS
 Visit http://lists.ximian.com/mailman/listinfo/mono-list for details.

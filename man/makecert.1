@@ -1,4 +1,4 @@
-.\" 
+.\"
 .\" makecert manual page.
 .\" Copyright 2003 Motus Technologies
 .\" Copyright 2004-2005, 2011 Novell
@@ -30,7 +30,7 @@ Specify the issuer Distinguished Name (DN).
 Create a self-signed, also called root, certificate.
 .TP
 .I "-iv pvkfile"
-Specify the private key file (.PVK) for the issuer. The private key in the 
+Specify the private key file (.PVK) for the issuer. The private key in the
 specified file will be used to sign the new certificate.
 .TP
 .I "-ic certfile"
@@ -59,7 +59,7 @@ Specify the provider type to be used for the issuer.
 .TP
 .I "-sv pkvfile"
 Specify the private key file (.PVK) for the subject. The public part of the
-key will be inserted into the created certificate. If non-existant the 
+key will be inserted into the created certificate. If non-existant the
 specified file will be created with a new key pair (default to 1024 bits RSA
 key pair).
 .TP
@@ -90,7 +90,7 @@ The date until when the certificate is valid (notAfter).
 .TP
 .I "-m number"
 Specify the certificate validity period in months. This is added to the
-notBefore validity date which can be set with -b or will default to the 
+notBefore validity date which can be set with -b or will default to the
 current date/time.
 .TP
 .I "-cy [authority|end]"
@@ -99,8 +99,8 @@ certificates can be used to sign other certificates (-ic). End-Entity can
 be used by clients (e.g. Authenticode, S/MIME) or servers (e.g. SSL).
 .TP
 .I "-h number"
-Add a path length restriction to the certificate chain. This is only 
-applicable for certificates that have BasicConstraint set to Authority (-cy 
+Add a path length restriction to the certificate chain. This is only
+applicable for certificates that have BasicConstraint set to Authority (-cy
 authority). This is used to limit the chain of certificates than can be
 issued under this authority.
 .TP
@@ -115,7 +115,7 @@ Add some extended key usage OID to the certificate.
 .TP
 .I "-p12 pkcs12file password"
 Create a new PKCS#12 file containing both the certificates (the subject and
-possibly the issuer's) and the private key. The PKCS#12 file is protected 
+possibly the issuer's) and the private key. The PKCS#12 file is protected
 with the specified password. This option is
 .B mono exclusive.
 .TP
@@ -127,10 +127,10 @@ Extended help (for advanced options)
 .SH EXAMPLES
 .PP
 To create a SSL test (i.e. non trusted) certificate is easy
-once your know your host's name. The following command will create a 
+once your know your host's name. The following command will create a
 test certificate for an SSL server:
 .nf
-	$ hostname 
+	$ hostname
 	pollux
 
 	$ makecert -r -eku 1.3.6.1.5.5.7.3.1 -n "CN=pollux" -sv pollux.pvk pollux.cer
@@ -139,33 +139,33 @@ test certificate for an SSL server:
 .PP
 In particular in the above example, the parameters used to build this
 test certificate were:
-.TP 
+.TP
 .I "-r"
-Create a self-signed certificate (i.e. without an hierarchy). 
+Create a self-signed certificate (i.e. without an hierarchy).
 .TP
 .I "-eku 1.3.6.1.5.5.7.3.1"
 Optional (as sadly most client don't require it). This indicates that
 your certificate is intended for server-side authentication.
-.TP 
+.TP
 .I "-n \"CN=pollux\""
 Common Name (CN) = Host name. This is verified the SSL client and must
 match the connected host (or else you'll get a warning or error or
 *gasp* nothing).
-.TP 
+.TP
 .I "-sv private.key"
 The private key file. The key (1024 bits RSA key pair) will be
 automatically generated if the specified file isn't present.
-.TP 
+.TP
 .I "pollux.cer"
 The SSL certificate to be created for your host.
 .SH KNOWN RESTRICTIONS
-Compared to the Windows version some options aren't supported (-$, -d, -l, 
+Compared to the Windows version some options aren't supported (-$, -d, -l,
 -nscp, -is, -sc, -ss). Also PVK files with passwords aren't supported.
 .SH AUTHOR
 Written by Sebastien Pouliot
 .SH COPYRIGHT
-Copyright (C) 2003 Motus Technologies. 
-Copyright (C) 2004-2005 Novell. 
+Copyright (C) 2003 Motus Technologies.
+Copyright (C) 2004-2005 Novell.
 Released under BSD license.
 .SH MAILING LISTS
 Visit http://lists.ximian.com/mailman/listinfo/mono-devel-list for details.

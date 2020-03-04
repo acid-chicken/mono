@@ -1,4 +1,4 @@
-..\" 
+..\"
 .\" gacutil manual page.
 .\" (C) 2004 Novell, Inc.
 .\" Author:
@@ -13,7 +13,7 @@
 gacutil \- Global Assembly Cache management utility.
 .SH SYNOPSIS
 .PP
-.B gacutil [-user] [command] [options] 
+.B gacutil [-user] [command] [options]
 .SH DESCRIPTION
 \fIgacutil\fP is a tool used by developers to install versioned
 assemblies into the system Global Assembly Cache (GAC) to become part
@@ -41,10 +41,10 @@ prefix/lib/mono with the name NAME, and a symlink is created from
 NAME/assembly_name to the assembly on the GAC.  This is used so
 developers can reference a set of libraries at once.
 .Sp
-The -root option is used to specify the "libdir" value of an installation 
+The -root option is used to specify the "libdir" value of an installation
 prefix which differs from the prefix of the system GAC.
 Typical automake usage is "-root $(DESTDIR)$(prefix)/lib".
-To access assemblies installed to a prefix other than the mono prefix, 
+To access assemblies installed to a prefix other than the mono prefix,
 it is necessary to set the MONO_GAC_PREFIX environment variable.
 .Sp
 The -gacdir option is included for backward compatibility but is not

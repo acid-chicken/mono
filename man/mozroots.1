@@ -1,6 +1,6 @@
-.\" 
+.\"
 .\" mozroots man page
-.\" (C) 2005 Novell, Inc. 
+.\" (C) 2005 Novell, Inc.
 .\" Authors:
 .\"   Miguel de Icaza (miguel@gnu.org)
 .\"   Sebastien Pouliot  <sebastien@ximian.com>
@@ -17,11 +17,11 @@ mozroots \- Download and import trusted root certificates from Mozilla's LXR int
 .B mozroots [--import [--machine] [--sync | --ask | --ask-add | --ask-remove]]
 .SH DESCRIPTION
 This program downloads the trusted root certificates from the Mozilla
-LXR web site into the Mono certificate store.  
+LXR web site into the Mono certificate store.
 .PP
 Mono by default does not ship with any default certificates and allows
 the user to pick its trusted certificates.  The mozroots command will
-bring the Mozilla certificates into your local machine. 
+bring the Mozilla certificates into your local machine.
 .SH OPTIONS
 .TP
 .I "--import"
@@ -54,7 +54,7 @@ Always confirm before removing an existing trusted certificate.
 .TP
 .I "--url url"
 Specify an alternative URL for downloading the trusted certificates
-(LXR source format). This should only be useful for testing or if 
+(LXR source format). This should only be useful for testing or if
 the Mozilla's LXR web site address is changed. It can also be used
 to cache a local copy of the LXR file into your local intranet.
 .TP
@@ -65,8 +65,8 @@ This way you can keep a local copy on a file server (and minimize
 network traffic).
 .TP
 .I "--pkcs7 name"
-Export the certificates into a PKCS#7 file. This is useful for 
-debugging purpose or for re-importing the same list into other 
+Export the certificates into a PKCS#7 file. This is useful for
+debugging purpose or for re-importing the same list into other
 software.
 .TP
 .I "--machine"
@@ -78,19 +78,19 @@ Limit console output to errors and confirmations messages. This is
 useful when scripting.
 .SH EXAMPLES
 .PP
-After the initial Mono installation you'll have no trusted roots 
-certificates pre-installed. 
+After the initial Mono installation you'll have no trusted roots
+certificates pre-installed.
 Neither will you have some root test certificates installed (your own
-or the ones provided by using 
+or the ones provided by using
 .B setreg
-). In this case the simplest thing to do, if you want to trust all 
+). In this case the simplest thing to do, if you want to trust all
 those certificates, is to import and synchronize.
 .nf
 	$ mozroots --import --sync
 	Mozilla Roots Importer - version 1.1.9.0
 	Download and import trusted root certificates from Mozilla's LXR.
 	Copyright 2002, 2003 Motus Technologies. Copyright 2004-2005 Novell. BSD licensed.
- 
+
 	Downloading from 'http://lxr.mozilla.org/seamonkey/source/security/nss/lib/ckfw/builtins/certdata.txt'...
 	Importing certificates into user store...
 	93 new root certificates were added to your trust store.
@@ -99,15 +99,15 @@ those certificates, is to import and synchronize.
 .PP
 If you created some test certificates (e.g. for using SSL/TLS with XSP)
 and/or if your enterprise requires some additional root certificates
-(e.g. intranet) then you may want to skip the removal part of the 
-process. You can do this by asking for a removal confirmation 
+(e.g. intranet) then you may want to skip the removal part of the
+process. You can do this by asking for a removal confirmation
 (--ask-remove option) and answer no when prompted.
 .nf
 	$ mozroots --import --ask-remove
 	Mozilla Roots Importer - version 1.1.9.0
 	Download and import trusted root certificates from Mozilla's LXR.
 	Copyright 2002, 2003 Motus Technologies. Copyright 2004-2005 Novell. BSD licensed.
- 
+
 	Downloading from 'http://lxr.mozilla.org/seamonkey/source/security/nss/lib/ckfw/builtins/certdata.txt'...
 	Importing certificates into user store...
 	93 new root certificates were added to your trust store.
@@ -122,7 +122,7 @@ process. You can do this by asking for a removal confirmation
 .PP
 You can still use the synchronize option (--sync) if you have activated
 the default test roots certificate on your system. They will be removed
-at the end of the synchronization process but you can quickly add them 
+at the end of the synchronization process but you can quickly add them
 back with the
 .B setreg
 tool.
@@ -132,22 +132,22 @@ tool.
 .PP
 Another option to ease updates is to synchronize your machine trust store
 (using the --machine option) and keep your customized (test) certificates
-in your personal store (or vice versa). Note that every user on this 
+in your personal store (or vice versa). Note that every user on this
 computer will be trusting all the newly imported certificates.
 .nf
 	$ mozroots --import --machine --sync
 	Mozilla Roots Importer - version 1.1.9.0
 	Download and import trusted root certificates from Mozilla's LXR.
 	Copyright 2002, 2003 Motus Technologies. Copyright 2004-2005 Novell. BSD licensed.
- 
+
 	Downloading from 'http://lxr.mozilla.org/seamonkey/source/security/nss/lib/ckfw/builtins/certdata.txt'...
 	Importing certificates into user store...
 	94 new root certificates were added to your trust store.
 	Import process completed.
 .fi
 .PP
-Once the initial import is complete the number of changes (additions or 
-removals) is generally very low. In this case it makes sense to know 
+Once the initial import is complete the number of changes (additions or
+removals) is generally very low. In this case it makes sense to know
 about any changes (i.e. ask for confirmation). No confirmation will be
 required if no changes are made to your trust store.
 .nf
@@ -155,7 +155,7 @@ required if no changes are made to your trust store.
 	Mozilla Roots Importer - version 1.1.9.0
 	Download and import trusted root certificates from Mozilla's LXR.
 	Copyright 2002, 2003 Motus Technologies. Copyright 2004-2005 Novell. BSD licensed.
- 
+
 	Downloading from 'http://lxr.mozilla.org/seamonkey/source/security/nss/lib/ckfw/builtins/certdata.txt'...
 	Importing certificates into user store...
 	Import process completed.
@@ -164,10 +164,10 @@ required if no changes are made to your trust store.
 .PP
 ~/.config/.mono/certs, /usr/share/.mono/certs
 .PP
-Contains Mono certificate stores for users / machine. See the certmgr(1) 
+Contains Mono certificate stores for users / machine. See the certmgr(1)
 manual page for more information on managing certificate stores.
 .SH COPYRIGHT
-Copyright (C) 2005 Novell. 
+Copyright (C) 2005 Novell.
 .SH MAILING LISTS
 Mailing lists are listed at the
 http://www.mono-project.com/community/help/mailing-lists/

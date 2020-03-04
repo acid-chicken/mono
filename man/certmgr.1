@@ -1,4 +1,4 @@
-.\" 
+.\"
 .\" certmgr manual page.
 .\" Copyright 2004-2005 Novell
 .\" Copyright 2010 Pablo Ruiz
@@ -15,13 +15,13 @@ certmgr \- Mono Certificate Manager (CLI version)
 or
 .B certmgr -ssl [options] url
 .SH DESCRIPTION
-This tool allows to list, add, remove or extract certificates, certificate 
-revocation lists (CRL) or certificate trust lists (CTL) to/from a 
-certificate store. Certificate stores are used to build and validate 
-certificate chains for Authenticode(r) code signing validation and SSL 
+This tool allows to list, add, remove or extract certificates, certificate
+revocation lists (CRL) or certificate trust lists (CTL) to/from a
+certificate store. Certificate stores are used to build and validate
+certificate chains for Authenticode(r) code signing validation and SSL
 server certificates.
 .SH STORES
-The 
+The
 .I store
 represents the certificate store to use. It can be one of the
 following:
@@ -46,14 +46,14 @@ This is for untrusted roots
 List the certificates, CTL or CTL in the specified store.
 .TP
 .I "-add"
-Add a certificate, CRL or CTL to specified store. If filename is a pkcs12 
+Add a certificate, CRL or CTL to specified store. If filename is a pkcs12
 or pfx file, and it contains a private key, it will be imported to local key
 pair container.
 .TP
 .I "-del"
-Remove a certificate, CRL or CTL from specified store. You must specify the 
-object to be removed with it's hash value (and not a filename). This hash 
-value is shown when doing a 
+Remove a certificate, CRL or CTL from specified store. You must specify the
+object to be removed with it's hash value (and not a filename). This hash
+value is shown when doing a
 .B -list
 on the store.
 .TP
@@ -61,12 +61,12 @@ on the store.
 Copy a certificate, CRL or CTL from a store to a file.
 .TP
 .I "-ssl"
-Download and add the certificates from a SSL session. You'll be asked to 
-confirm the addition of every certificate received from the server. Note 
+Download and add the certificates from a SSL session. You'll be asked to
+confirm the addition of every certificate received from the server. Note
 that SSL/TLS protocols do not requires a server to send the root certificate.
-This action assumes a certificate (-c) object type and will import the 
-certificates in appropriate stores (i.e. server certificate in the 
-OtherPeople store, the root certificate in the Trust store and any other 
+This action assumes a certificate (-c) object type and will import the
+certificates in appropriate stores (i.e. server certificate in the
+OtherPeople store, the root certificate in the Trust store and any other
 intermediate certificates in the IntermediateCA store).
 .TP
 .I "-importKey"
@@ -81,7 +81,7 @@ Add, Delete or Put certificates. That is the specified file must/will contain
 X.509 certificates in DER binary encoding.
 .TP
 .I "-crl"
-Add, Delete or Put certificate revocation lists (CRL). That is the specified 
+Add, Delete or Put certificate revocation lists (CRL). That is the specified
 file must/will contain X.509 CRL in DER binary encoding.
 .TP
 .I "-ctl"
@@ -104,7 +104,7 @@ Display help about this tool.
 .SH FILES
 .B WARNING: This details the current behavior of Mono and could change between releases.
 The only safe way to interact with certificate stores is to use the certmgr
-tool. The current releases of Mono keeps all the user certificate stores in 
+tool. The current releases of Mono keeps all the user certificate stores in
 separates directories under
 .I ~/.config/.mono/certs/
 .TP
@@ -114,7 +114,7 @@ For example the trusted root certificates for a user would be kept under
 Certificates files are kept in DER (binary) format (extension .cer).
 .TP
 The filenames either start with
-.I tbp 
+.I tbp
 (thumbprint) or
 .I ski
 (subject key identifier).
@@ -128,7 +128,7 @@ Private key data is stored under
 .TP
 .B mono certmgr.exe -list -c -m Trust
 List all certificates in the machine Trust store. This will display the hash
-value for each certificate. This value can be used to identify uniquely a 
+value for each certificate. This value can be used to identify uniquely a
 certificate for some operations (e.g. delete). E.g.
 .B Unique Hash:   FFA3AC0084DA1673B5A031EBB2156B3E8FBBF6D8
 .TP
@@ -136,11 +136,11 @@ certificate for some operations (e.g. delete). E.g.
 Remove the certificate, represented by the hash value, from the machine Trust
 store. Note that the machine store is normally restricted. The following
 error message will appear if the current user doesn't have the minimum access
-rights to remove the certificate: 
+rights to remove the certificate:
 .B Access to the machine 'Trust' certificate store has been denied.
 .TP
 .B certmgr -ssl https://www.verisign.com
-Import certificates from www.verisign.com used for HTTP over SSL. See KNOWN 
+Import certificates from www.verisign.com used for HTTP over SSL. See KNOWN
 ISSUES (MD2) if you're downloading from www.verisign.com.
 .TP
 .B certmgr -ssl ldaps://www.nldap.com:636
@@ -152,7 +152,7 @@ shortly after the SSL handshake (which gives us the certificate).
 .TP
 .B MD2
 Some Certificate Authorities (CA) old root certificates use the MD2 hash
-algorithm. MD2 is old enough not to be part of the standard .NET framework. 
+algorithm. MD2 is old enough not to be part of the standard .NET framework.
 This makes it impossible to validate a digital signature made with MD2. For
 this reason MD2 is included in the Mono.Security.dll assembly. However the
 machine.config file must be updated so the OID for MD2 is known at runtime.

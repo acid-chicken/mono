@@ -1,6 +1,6 @@
-.\" 
+.\"
 .\" mkbundle manual page.
-.\" (C) 2004 Ximian, Inc. 
+.\" (C) 2004 Ximian, Inc.
 .\" Author:
 .\"   Miguel de Icaza (miguel@gnu.org)
 .\"
@@ -23,12 +23,12 @@ dependencies referenced, use the "--deps" command line option.
 .PP
 There are two modes of operation, one uses an existing Mono binary or
 a server-hosted list of binaries and is enabled when you use either
-the 
+the
 .B --cross,
 .B --sdk
 or the
 .B --runtime
-command line options.   
+command line options.
 .PP
 An older mechanism creates a small C stub that links against the
 libmono library to produce a self-contained executable and requires a
@@ -43,7 +43,7 @@ command:
 .fi
 .PP
 You can configure options to be passed to the Mono runtime directly
-into your executable, for this, use the 
+into your executable, for this, use the
 .I --options
 flag.  For example, the following disables inlining, by passing the
 "-O=-inline" command line option to the embedded executable:
@@ -58,7 +58,7 @@ available.   You can use the "--local-targets" to list all available
 targets, and the "--cross" argument to specify the target, like this:
 .nf
 
-	$ mkbundle --local-targets	
+	$ mkbundle --local-targets
 	Available targets:
 		default	- Current System Mono
 		4.4.0-macosx-x86
@@ -73,11 +73,11 @@ a Debian 8 system running on a PowerPC machine.
 We provide pre-packages binaries for Mono for various architectures,
 which allow you to cross compile, use the
 .B --list-targets
-to get a list of all targets supported, and use the 
+to get a list of all targets supported, and use the
 .B --fetch-target
 flag to retrieve a target that you do not have installed, like this:
 .nf
-	
+
 	$ mkbundle --list-targets
 	Cross-compilation targets available:
 	4.4.0-linux-libc2.13-amd64
@@ -109,7 +109,7 @@ Downloaded targets are stored
 .B ~/.mono/targets
 directory.
 .SH OPTIONS
-.TP 
+.TP
 .I "--config FILE"
 Specifies that a DLLMAP Mono config file must be bundled as well.   In
 the simple and cross compiler modes, if no config file is specified
@@ -129,7 +129,7 @@ the precompiled versions of the runtime using --list-targets and you
 can fetch a specific target using the --fetch-target command line
 option.
 .Sp
-This flag is mutually exclusive with 
+This flag is mutually exclusive with
 .I --sdk
 which is used to specify an absolute path to resolve the Mono runtime
 from and the --runtime option which is used to manually construct the
@@ -163,7 +163,7 @@ parameter to request that no implicit encodings should be bundled,
 including the supporting I18N.dll, use this option if you have ran a
 linker on your own.
 .Sp
-You can use the 
+You can use the
 .B all
 flag to bundle all available encodings.
 .Sp
@@ -217,7 +217,7 @@ compilation target for the cross compiling mode).
 .TP
 .I "--no-config"
 In simple or cross compiling mode, this prevents mkbundle from
-automatically bundling a config file.   
+automatically bundling a config file.
 .TP
 .I  "--nodeps"
 This is the default: \fImkbundle\fP will only include the assemblies that
@@ -226,7 +226,7 @@ image created.
 .TP
 .I "--no-machine-config"
 In simple or cross compiling mode, this prevents mkbundle from
-automatically bundling a machine.config file.   
+automatically bundling a machine.config file.
 .TP
 .I "-o filename"
 Places the output on `out'.  If the flag -c is specified, this is the
@@ -236,15 +236,15 @@ C host program.  If not, this contains the resulting executable.
 Since the resulting executable will be treated as a standalone
 program, you can use this option to pass configuration options to the
 Mono runtime and bake those into the resulting executable.  These
-options are specified as 
+options are specified as
 .I OPTS.
 .Sp
 You can use the above to configure options that you would typically
 pass on the command line to Mono, before the main program is
-executed.   
+executed.
 .Sp
 Additionally, users of your binary can still configure their own
-options by setting the 
+options by setting the
 .I MONO_ENV_OPTIONS
 environment variable.
 .TP
@@ -263,7 +263,7 @@ When this flag is specified,
 will resolve the runtime, the framework libraries, unmanaged resources
 and configuration files from the files located in this directory.
 .Sp
-This flag is mutually exlusive with 
+This flag is mutually exlusive with
 .I --cross
 .
 .TP
@@ -341,10 +341,10 @@ not have a main() function.  Call mono_mkbundle_init() before
 initializing the JIT in your code so that the bundled assemblies
 are available to the embedded runtime.
 .SH OLD EMBEDDING OPTIONS
-These options can only be used instead of using the 
-.B --cross, --runtime 
+These options can only be used instead of using the
+.B --cross, --runtime
 or
-.B --simple 
+.B --simple
 options.
 .TP
 .I "-c"
@@ -459,7 +459,7 @@ NOTE, if console output is expected from output target process then
 set this variable to "console".
 .SH FILES
 This program will load referenced assemblies from the Mono assembly
-cache. 
+cache.
 .PP
 Targets are loaded from ~/.mono/targets/TARGETNAME/mono
 .SH BUGS
