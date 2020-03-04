@@ -30,42 +30,42 @@ mono_threads_state_poll (void);
 
 // 0 also used internally for uninitialized
 typedef enum {
-	MONO_THREADS_SUSPEND_FULL_PREEMPTIVE = 1,
-	MONO_THREADS_SUSPEND_FULL_COOP       = 2,
-	MONO_THREADS_SUSPEND_HYBRID          = 3,
+    MONO_THREADS_SUSPEND_FULL_PREEMPTIVE = 1,
+    MONO_THREADS_SUSPEND_FULL_COOP       = 2,
+    MONO_THREADS_SUSPEND_HYBRID          = 3,
 } MonoThreadsSuspendPolicy;
 
 static inline gboolean
 mono_threads_suspend_policy_is_blocking_transition_enabled (MonoThreadsSuspendPolicy p)
 {
-	switch (p) {
-	case MONO_THREADS_SUSPEND_FULL_COOP:
-	case MONO_THREADS_SUSPEND_HYBRID:
-		return TRUE;
-	case MONO_THREADS_SUSPEND_FULL_PREEMPTIVE:
-		return FALSE;
-	default:
-		g_assert_not_reached ();
-	}
+    switch (p) {
+    case MONO_THREADS_SUSPEND_FULL_COOP:
+    case MONO_THREADS_SUSPEND_HYBRID:
+        return TRUE;
+    case MONO_THREADS_SUSPEND_FULL_PREEMPTIVE:
+        return FALSE;
+    default:
+        g_assert_not_reached ();
+    }
 }
 
 static inline gboolean
 mono_threads_suspend_policy_are_safepoints_enabled (MonoThreadsSuspendPolicy p)
 {
-	switch (p) {
-	case MONO_THREADS_SUSPEND_FULL_COOP:
-	case MONO_THREADS_SUSPEND_HYBRID:
-		return TRUE;
-	default:
-		return FALSE;
-	}
+    switch (p) {
+    case MONO_THREADS_SUSPEND_FULL_COOP:
+    case MONO_THREADS_SUSPEND_HYBRID:
+        return TRUE;
+    default:
+        return FALSE;
+    }
 }
 
 static inline gboolean
 mono_threads_suspend_policy_is_multiphase_stw_enabled (MonoThreadsSuspendPolicy p)
 {
-	/* So far, hybrid suspend is the only one using a multi-phase STW */
-	return p == MONO_THREADS_SUSPEND_HYBRID;
+    /* So far, hybrid suspend is the only one using a multi-phase STW */
+    return p == MONO_THREADS_SUSPEND_HYBRID;
 }
 
 gboolean
@@ -75,7 +75,7 @@ extern char mono_threads_suspend_policy_hidden_dont_modify;
 
 static inline MonoThreadsSuspendPolicy
 mono_threads_suspend_policy (void) {
-	return (MonoThreadsSuspendPolicy)mono_threads_suspend_policy_hidden_dont_modify;
+    return (MonoThreadsSuspendPolicy)mono_threads_suspend_policy_hidden_dont_modify;
 }
 
 void
@@ -87,7 +87,7 @@ mono_threads_suspend_policy_name (MonoThreadsSuspendPolicy p);
 static inline gboolean
 mono_threads_is_blocking_transition_enabled (void)
 {
-	return mono_threads_suspend_policy_is_blocking_transition_enabled (mono_threads_suspend_policy ());
+    return mono_threads_suspend_policy_is_blocking_transition_enabled (mono_threads_suspend_policy ());
 }
 
 gboolean
@@ -99,20 +99,20 @@ mono_threads_is_hybrid_suspension_enabled (void);
 static inline gboolean
 mono_threads_are_safepoints_enabled (void)
 {
-	return mono_threads_suspend_policy_are_safepoints_enabled (mono_threads_suspend_policy ());
+    return mono_threads_suspend_policy_are_safepoints_enabled (mono_threads_suspend_policy ());
 }
 
 static inline gboolean
 mono_threads_is_multiphase_stw_enabled (void)
 {
-	return mono_threads_suspend_policy_is_multiphase_stw_enabled (mono_threads_suspend_policy ());
+    return mono_threads_suspend_policy_is_multiphase_stw_enabled (mono_threads_suspend_policy ());
 }
 
 static inline void
 mono_threads_safepoint (void)
 {
-	if (G_UNLIKELY (mono_polling_required))
-		mono_threads_state_poll ();
+    if (G_UNLIKELY (mono_polling_required))
+        mono_threads_state_poll ();
 }
 
 /* Don't use this. */
@@ -156,7 +156,7 @@ extern char mono_threads_is_runtime_startup_finished_hidden_do_not_modify;
 static inline gboolean
 mono_threads_is_runtime_startup_finished (void)
 {
-	return mono_threads_is_runtime_startup_finished_hidden_do_not_modify != 0;
+    return mono_threads_is_runtime_startup_finished_hidden_do_not_modify != 0;
 }
 
 void
