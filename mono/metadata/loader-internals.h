@@ -19,31 +19,31 @@ typedef struct _MonoAssemblyLoadContext MonoAssemblyLoadContext;
 #ifndef DISABLE_DLLMAP
 typedef struct _MonoDllMap MonoDllMap;
 struct _MonoDllMap {
-	char *dll;
-	char *target;
-	char *func;
-	char *target_func;
-	MonoDllMap *next;
+    char *dll;
+    char *target;
+    char *func;
+    char *target_func;
+    MonoDllMap *next;
 };
 #endif
 
 #ifdef ENABLE_NETCORE
 /* FIXME: this probably belongs somewhere else */
 struct _MonoAssemblyLoadContext {
-	MonoDomain *domain;
-	MonoLoadedImages *loaded_images;
-	GSList *loaded_assemblies;
-	// If taking this with the domain assemblies_lock, always take this second
-	MonoCoopMutex assemblies_lock;
-	/* Handle of the corresponding managed object.  If the ALC is
-	 * collectible, the handle is weak, otherwise it's strong.
-	 */
-	uint32_t gchandle;
+    MonoDomain *domain;
+    MonoLoadedImages *loaded_images;
+    GSList *loaded_assemblies;
+    // If taking this with the domain assemblies_lock, always take this second
+    MonoCoopMutex assemblies_lock;
+    /* Handle of the corresponding managed object.  If the ALC is
+     * collectible, the handle is weak, otherwise it's strong.
+     */
+    uint32_t gchandle;
 
-	// Used in native-library.c for the hash table below; do not access anywhere else
-	MonoCoopMutex pinvoke_lock;
-	// Maps malloc-ed char* pinvoke scope -> MonoDl*
-	GHashTable *pinvoke_scopes;
+    // Used in native-library.c for the hash table below; do not access anywhere else
+    MonoCoopMutex pinvoke_lock;
+    // Maps malloc-ed char* pinvoke scope -> MonoDl*
+    GHashTable *pinvoke_scopes;
 };
 #endif /* ENABLE_NETCORE */
 
@@ -104,9 +104,9 @@ static inline MonoDomain *
 mono_alc_domain (MonoAssemblyLoadContext *alc)
 {
 #ifdef ENABLE_NETCORE
-	return alc->domain;
+    return alc->domain;
 #else
-	return mono_domain_get ();
+    return mono_domain_get ();
 #endif
 }
 
