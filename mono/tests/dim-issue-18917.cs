@@ -2,18 +2,24 @@ using System;
 
 public interface IInterface
 {
-    int getRet() { return -10; }
+    int getRet() {
+        return -10;
+    }
 }
 
 public interface IInterface2 : IInterface
 {
-    int IInterface.getRet() { return -1; }
+    int IInterface.getRet() {
+        return -1;
+    }
 }
 
 
 public class AbstractClass : IInterface2
 {
-    int IInterface.getRet() { return 0; }
+    int IInterface.getRet() {
+        return 0;
+    }
 }
 
 
@@ -33,6 +39,6 @@ public class Test
     }
 
     public static int Main (string[] args) {
-		return TestDriver.RunTests (typeof (Test), args);
-	}
+        return TestDriver.RunTests (typeof (Test), args);
+    }
 }
