@@ -2,7 +2,10 @@
 set -e
 set -x
 set -u
-function realpath { echo "$(cd "$(dirname "${1}")"; pwd)/$(basename "${1}")"; }
+function realpath() { echo "$(
+  cd "$(dirname "${1}")"
+  pwd
+)/$(basename "${1}")"; }
 
 BENCHMARK=$(basename "$1")
 
