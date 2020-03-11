@@ -2,10 +2,13 @@
 set -e
 set -x
 set -u
-function realpath { echo "$(cd "$(dirname "${1}")"; pwd)/$(basename "${1}")"; }
+function realpath() { echo "$(
+  cd "$(dirname "${1}")"
+  pwd
+)/$(basename "${1}")"; }
 
 BENCHMARK=""
-while (( "$#" )); do
+while (("$#")); do
   case "$1" in
     --wasm-runtime-path=*)
       RUNTIME_DIR="${1#*=}"
@@ -15,7 +18,7 @@ while (( "$#" )); do
       MONO_PACKAGE="${1#*=}"
       shift
       ;;
-    -*|--*=)
+    -* | --*=)
       echo "Unknown argument $1" >&2
       exit 1
       ;;
@@ -26,11 +29,10 @@ while (( "$#" )); do
   esac
 done
 
-
 if [ ! -z "${MONO_PACKAGE+x}" ]; then
-    ZIP_DIR=${RUNTIME_DIR:=$(basename ${MONO_PACKAGE%.*})}
-    unzip -u -d "$ZIP_DIR" "$MONO_PACKAGE" "builds/**"
-    RUNTIME_DIR=$ZIP_DIR/builds
+  ZIP_DIR=${RUNTIME_DIR:=$(basename ${MONO_PACKAGE%.*})}
+  unzip -u -d "$ZIP_DIR" "$MONO_PACKAGE" "builds/**"
+  RUNTIME_DIR=$ZIP_DIR/builds
 fi
 RUNTIME_DIR=${RUNTIME_DIR:="../builds"}
 
