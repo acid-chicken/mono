@@ -61,22 +61,22 @@ typedef int64_t mword;
 static int
 read_entry (EntryStream *stream, void *data, unsigned char *windex)
 {
-	unsigned char type;
-	ssize_t size;
+    unsigned char type;
+    ssize_t size;
 
-	if (read_stream (stream, &type, 1) <= 0)
-		return SGEN_PROTOCOL_EOF;
+    if (read_stream (stream, &type, 1) <= 0)
+        return SGEN_PROTOCOL_EOF;
 
-	if (windex) {
-		if (file_version >= 2) {
-			if (read_stream (stream, windex, 1) <= 0)
-				return SGEN_PROTOCOL_EOF;
-		} else {
-			*windex = !!(WORKER (type));
-		}
-	}
+    if (windex) {
+        if (file_version >= 2) {
+            if (read_stream (stream, windex, 1) <= 0)
+                return SGEN_PROTOCOL_EOF;
+        } else {
+            *windex = !!(WORKER (type));
+        }
+    }
 
-	switch (TYPE (type)) {
+    switch (TYPE (type)) {
 
 #define BEGIN_PROTOCOL_ENTRY0(method) \
 	case PROTOCOL_ID(method): size = 0; break;
@@ -121,21 +121,22 @@ read_entry (EntryStream *stream, void *data, unsigned char *windex)
 
 #include <mono/sgen/sgen-protocol-def.h>
 
-	default: assert (0);
-	}
+    default:
+        assert (0);
+    }
 
-	if (size) {
-		size_t size_read = read_stream (stream, data, size);
-		g_assert (size_read == size);
-	}
+    if (size) {
+        size_t size_read = read_stream (stream, data, size);
+        g_assert (size_read == size);
+    }
 
-	return (int)type;
+    return (int)type;
 }
 
 static gboolean
 is_always_match (int type)
 {
-	switch (TYPE (type)) {
+    switch (TYPE (type)) {
 #define BEGIN_PROTOCOL_ENTRY0(method) \
 	case PROTOCOL_ID(method):
 #define BEGIN_PROTOCOL_ENTRY1(method,t1,f1) \
@@ -180,22 +181,22 @@ is_always_match (int type)
 
 #include <mono/sgen/sgen-protocol-def.h>
 
-	default:
-		assert (0);
-		return FALSE;
-	}
+    default:
+        assert (0);
+        return FALSE;
+    }
 }
 
 enum { NO_COLOR = -1 };
 
 typedef struct {
-	int type;
-	const char *name;
-	void *data;
-	/* The index of the ANSI color with which to highlight
-	 * this entry, or NO_COLOR for no highlighting.
-	 */
-	int color;
+    int type;
+    const char *name;
+    void *data;
+    /* The index of the ANSI color with which to highlight
+     * this entry, or NO_COLOR for no highlighting.
+     */
+    int color;
 } PrintEntry;
 
 
@@ -208,57 +209,57 @@ typedef struct {
 static void
 print_entry_content (int entries_size, PrintEntry *entries, gboolean color_output)
 {
-	int i;
-	for (i = 0; i < entries_size; ++i) {
-		printf ("%s%s ", i == 0 ? "" : " ", entries [i].name);
-		if (color_output && entries [i].color != NO_COLOR)
-			/* Set foreground color, excluding black & white. */
-			printf ("\x1B[%dm", 31 + (entries [i].color % 6));
-		switch (entries [i].type) {
-		case TYPE_INT:
-			printf ("%d", *(int*) entries [i].data);
-			break;
-		case TYPE_LONGLONG:
-			printf ("%lld", *(long long*) entries [i].data);
-			break;
-		case TYPE_SIZE:
-			printf ("%" MWORD_FORMAT_SPEC_D, *(mword*) entries [i].data);
-			break;
-		case TYPE_POINTER:
-			printf ("0x%" MWORD_FORMAT_SPEC_P, *(mword*) entries [i].data);
-			break;
-		case TYPE_BOOL:
-			printf ("%s", *(gboolean*) entries [i].data ? "true" : "false");
-			break;
-		default:
-			assert (0);
-		}
-		if (color_output && entries [i].color != NO_COLOR)
-			/* Reset foreground color to default. */
-			printf ("\x1B[0m");
-	}
+    int i;
+    for (i = 0; i < entries_size; ++i) {
+        printf ("%s%s ", i == 0 ? "" : " ", entries [i].name);
+        if (color_output && entries [i].color != NO_COLOR)
+            /* Set foreground color, excluding black & white. */
+            printf ("\x1B[%dm", 31 + (entries [i].color % 6));
+        switch (entries [i].type) {
+        case TYPE_INT:
+            printf ("%d", *(int*) entries [i].data);
+            break;
+        case TYPE_LONGLONG:
+            printf ("%lld", *(long long*) entries [i].data);
+            break;
+        case TYPE_SIZE:
+            printf ("%" MWORD_FORMAT_SPEC_D, *(mword*) entries [i].data);
+            break;
+        case TYPE_POINTER:
+            printf ("0x%" MWORD_FORMAT_SPEC_P, *(mword*) entries [i].data);
+            break;
+        case TYPE_BOOL:
+            printf ("%s", *(gboolean*) entries [i].data ? "true" : "false");
+            break;
+        default:
+            assert (0);
+        }
+        if (color_output && entries [i].color != NO_COLOR)
+            /* Reset foreground color to default. */
+            printf ("\x1B[0m");
+    }
 }
 
 static int
 index_color (int index, int num_nums, int *match_indices)
 {
-	int result;
-	for (result = 0; result < num_nums + 1; ++result)
-		if (index == match_indices [result])
-			return result;
-	return NO_COLOR;
+    int result;
+    for (result = 0; result < num_nums + 1; ++result)
+        if (index == match_indices [result])
+            return result;
+    return NO_COLOR;
 }
 
 static void
 print_entry (int type, void *data, int num_nums, int *match_indices, gboolean color_output, unsigned char worker_index)
 {
-	const char *always_prefix = is_always_match (type) ? "  " : "";
-	if (worker_index)
-		printf ("w%-2d%s ", worker_index, always_prefix);
-	else
-		printf ("   %s ", always_prefix);
+    const char *always_prefix = is_always_match (type) ? "  " : "";
+    if (worker_index)
+        printf ("w%-2d%s ", worker_index, always_prefix);
+    else
+        printf ("   %s ", always_prefix);
 
-	switch (TYPE (type)) {
+    switch (TYPE (type)) {
 
 #define BEGIN_PROTOCOL_ENTRY0(method) \
 	case PROTOCOL_ID(method): { \
@@ -421,8 +422,9 @@ print_entry (int type, void *data, int num_nums, int *match_indices, gboolean co
 
 #include <mono/sgen/sgen-protocol-def.h>
 
-	default: assert (0);
-	}
+    default:
+        assert (0);
+    }
 }
 
 #undef TYPE_INT
@@ -438,7 +440,7 @@ print_entry (int type, void *data, int num_nums, int *match_indices, gboolean co
 static gboolean
 matches_interval (mword ptr, mword start, int size)
 {
-	return ptr >= start && ptr < start + size;
+    return ptr >= start && ptr < start + size;
 }
 
 /* Returns the index of the field where a match was found,
@@ -448,7 +450,7 @@ matches_interval (mword ptr, mword start, int size)
 static int
 match_index (mword ptr, int type, void *data)
 {
-	switch (TYPE (type)) {
+    switch (TYPE (type)) {
 
 #define BEGIN_PROTOCOL_ENTRY0(method) \
 	case PROTOCOL_ID (method): {
@@ -504,16 +506,16 @@ match_index (mword ptr, int type, void *data)
 
 #include <mono/sgen/sgen-protocol-def.h>
 
-	default:
-		assert (0);
-		return 0;
-	}
+    default:
+        assert (0);
+        return 0;
+    }
 }
 
 static gboolean
 is_vtable_match (mword ptr, int type, void *data)
 {
-	switch (TYPE (type)) {
+    switch (TYPE (type)) {
 
 #define BEGIN_PROTOCOL_ENTRY0(method) \
 	case PROTOCOL_ID (method): {
@@ -569,10 +571,10 @@ is_vtable_match (mword ptr, int type, void *data)
 
 #include <mono/sgen/sgen-protocol-def.h>
 
-	default:
-		assert (0);
-		return FALSE;
-	}
+    default:
+        assert (0);
+        return FALSE;
+    }
 }
 
 #undef TYPE_INT
@@ -584,30 +586,30 @@ static gboolean
 sgen_binary_protocol_read_header (EntryStream *stream)
 {
 #ifdef BINPROT_HAS_HEADER
-	char data [MAX_ENTRY_SIZE];
-	int type = read_entry (stream, data, NULL);
-	if (type == SGEN_PROTOCOL_EOF)
-		return FALSE;
-	if (type == PROTOCOL_ID (binary_protocol_header)) {
-		PROTOCOL_STRUCT (binary_protocol_header) * str = (PROTOCOL_STRUCT (binary_protocol_header) *) data;
-		if (str->check == PROTOCOL_HEADER_CHECK && str->ptr_size == BINPROT_SIZEOF_VOID_P) {
-			if (str->version > PROTOCOL_HEADER_VERSION) {
-				fprintf (stderr, "The file contains a newer version %d. We support up to %d. Please update.\n", str->version, PROTOCOL_HEADER_VERSION);
-				exit (1);
-			}
-			file_version = str->version;
-			return TRUE;
-		}
-	}
-	return FALSE;
+    char data [MAX_ENTRY_SIZE];
+    int type = read_entry (stream, data, NULL);
+    if (type == SGEN_PROTOCOL_EOF)
+        return FALSE;
+    if (type == PROTOCOL_ID (binary_protocol_header)) {
+        PROTOCOL_STRUCT (binary_protocol_header) * str = (PROTOCOL_STRUCT (binary_protocol_header) *) data;
+        if (str->check == PROTOCOL_HEADER_CHECK && str->ptr_size == BINPROT_SIZEOF_VOID_P) {
+            if (str->version > PROTOCOL_HEADER_VERSION) {
+                fprintf (stderr, "The file contains a newer version %d. We support up to %d. Please update.\n", str->version, PROTOCOL_HEADER_VERSION);
+                exit (1);
+            }
+            file_version = str->version;
+            return TRUE;
+        }
+    }
+    return FALSE;
 #else
-	/*
-	 * This implementation doesn't account for the presence of a header,
-	 * reading all the entries with the default configuration of the host
-	 * machine. It has to be used only after all other implementations
-	 * fail to identify a header, for backward compatibility.
-	 */
-	return TRUE;
+    /*
+     * This implementation doesn't account for the presence of a header,
+     * reading all the entries with the default configuration of the host
+     * machine. It has to be used only after all other implementations
+     * fail to identify a header, for backward compatibility.
+     */
+    return TRUE;
 #endif
 }
 
@@ -617,82 +619,82 @@ sgen_binary_protocol_read_header (EntryStream *stream)
 
 gboolean
 GREP_ENTRIES_FUNCTION_NAME (EntryStream *stream, int num_nums, long nums [], int num_vtables, long vtables [],
-			gboolean dump_all, gboolean pause_times, gboolean color_output, unsigned long long first_entry_to_consider)
+                            gboolean dump_all, gboolean pause_times, gboolean color_output, unsigned long long first_entry_to_consider)
 {
-	int type;
-	unsigned char worker_index;
-	void *data = g_malloc0 (MAX_ENTRY_SIZE);
-	int i;
-	gboolean pause_times_stopped = FALSE;
-	gboolean pause_times_concurrent = FALSE;
-	gboolean pause_times_finish = FALSE;
-	long long pause_times_ts = 0;
-	unsigned long long entry_index;
+    int type;
+    unsigned char worker_index;
+    void *data = g_malloc0 (MAX_ENTRY_SIZE);
+    int i;
+    gboolean pause_times_stopped = FALSE;
+    gboolean pause_times_concurrent = FALSE;
+    gboolean pause_times_finish = FALSE;
+    long long pause_times_ts = 0;
+    unsigned long long entry_index;
 
-	if (!sgen_binary_protocol_read_header (stream))
-		return FALSE;
+    if (!sgen_binary_protocol_read_header (stream))
+        return FALSE;
 
-	entry_index = 0;
-	while ((type = read_entry (stream, data, &worker_index)) != SGEN_PROTOCOL_EOF) {
-		if (entry_index < first_entry_to_consider)
-			goto next_entry;
-		if (pause_times) {
-			switch (type) {
-			case PROTOCOL_ID (binary_protocol_world_stopping): {
-				PROTOCOL_STRUCT (binary_protocol_world_stopping) *entry = (PROTOCOL_STRUCT (binary_protocol_world_stopping)*)data;
-				assert (!pause_times_stopped);
-				pause_times_concurrent = FALSE;
-				pause_times_finish = FALSE;
-				pause_times_ts = entry->timestamp;
-				pause_times_stopped = TRUE;
-				break;
-			}
-			case PROTOCOL_ID (binary_protocol_concurrent_finish):
-				pause_times_finish = TRUE;
-			case PROTOCOL_ID (binary_protocol_concurrent_start):
-			case PROTOCOL_ID (binary_protocol_concurrent_update):
-				pause_times_concurrent = TRUE;
-				break;
-			case PROTOCOL_ID (binary_protocol_world_restarted): {
-				PROTOCOL_STRUCT (binary_protocol_world_restarted) *entry = (PROTOCOL_STRUCT (binary_protocol_world_restarted)*)data;
-				assert (pause_times_stopped);
-				printf ("pause-time %d %d %d %lld %lld\n",
-						entry->generation,
-						pause_times_concurrent,
-						pause_times_finish,
-						entry->timestamp - pause_times_ts,
-						pause_times_ts);
-				pause_times_stopped = FALSE;
-				break;
-			}
-			}
-		} else {
-			int match_indices [num_nums + 1];
-			gboolean match = is_always_match (type);
-			match_indices [num_nums] = num_nums == 0 ? match_index (0, type, data) : BINARY_PROTOCOL_NO_MATCH;
-			match = match_indices [num_nums] != BINARY_PROTOCOL_NO_MATCH;
-			for (i = 0; i < num_nums; ++i) {
-				match_indices [i] = match_index ((mword) nums [i], type, data);
-				match = match || match_indices [i] != BINARY_PROTOCOL_NO_MATCH;
-			}
-			if (!match) {
-				for (i = 0; i < num_vtables; ++i) {
-					if (is_vtable_match ((mword) vtables [i], type, data)) {
-						match = TRUE;
-						break;
-					}
-				}
-			}
-			if (match || dump_all)
-				printf ("%12lld ", entry_index);
-			if (dump_all)
-				printf (match ? "* " : "  ");
-			if (match || dump_all)
-				print_entry (type, data, num_nums, match_indices, color_output, worker_index);
-		}
-	next_entry:
-		++entry_index;
-	}
-	g_free (data);
-	return TRUE;
+    entry_index = 0;
+    while ((type = read_entry (stream, data, &worker_index)) != SGEN_PROTOCOL_EOF) {
+        if (entry_index < first_entry_to_consider)
+            goto next_entry;
+        if (pause_times) {
+            switch (type) {
+            case PROTOCOL_ID (binary_protocol_world_stopping): {
+                PROTOCOL_STRUCT (binary_protocol_world_stopping) *entry = (PROTOCOL_STRUCT (binary_protocol_world_stopping)*)data;
+                assert (!pause_times_stopped);
+                pause_times_concurrent = FALSE;
+                pause_times_finish = FALSE;
+                pause_times_ts = entry->timestamp;
+                pause_times_stopped = TRUE;
+                break;
+            }
+            case PROTOCOL_ID (binary_protocol_concurrent_finish):
+                pause_times_finish = TRUE;
+            case PROTOCOL_ID (binary_protocol_concurrent_start):
+            case PROTOCOL_ID (binary_protocol_concurrent_update):
+                pause_times_concurrent = TRUE;
+                break;
+            case PROTOCOL_ID (binary_protocol_world_restarted): {
+                PROTOCOL_STRUCT (binary_protocol_world_restarted) *entry = (PROTOCOL_STRUCT (binary_protocol_world_restarted)*)data;
+                assert (pause_times_stopped);
+                printf ("pause-time %d %d %d %lld %lld\n",
+                        entry->generation,
+                        pause_times_concurrent,
+                        pause_times_finish,
+                        entry->timestamp - pause_times_ts,
+                        pause_times_ts);
+                pause_times_stopped = FALSE;
+                break;
+            }
+            }
+        } else {
+            int match_indices [num_nums + 1];
+            gboolean match = is_always_match (type);
+            match_indices [num_nums] = num_nums == 0 ? match_index (0, type, data) : BINARY_PROTOCOL_NO_MATCH;
+            match = match_indices [num_nums] != BINARY_PROTOCOL_NO_MATCH;
+            for (i = 0; i < num_nums; ++i) {
+                match_indices [i] = match_index ((mword) nums [i], type, data);
+                match = match || match_indices [i] != BINARY_PROTOCOL_NO_MATCH;
+            }
+            if (!match) {
+                for (i = 0; i < num_vtables; ++i) {
+                    if (is_vtable_match ((mword) vtables [i], type, data)) {
+                        match = TRUE;
+                        break;
+                    }
+                }
+            }
+            if (match || dump_all)
+                printf ("%12lld ", entry_index);
+            if (dump_all)
+                printf (match ? "* " : "  ");
+            if (match || dump_all)
+                print_entry (type, data, num_nums, match_indices, color_output, worker_index);
+        }
+next_entry:
+        ++entry_index;
+    }
+    g_free (data);
+    return TRUE;
 }
