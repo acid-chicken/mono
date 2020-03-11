@@ -2,18 +2,20 @@
 set -e
 set -x
 set -u
-function realpath { echo "$(cd "$(dirname "${1}")"; pwd)/$(basename "${1}")"; }
-
+function realpath() { echo "$(
+  cd "$(dirname "${1}")"
+  pwd
+)/$(basename "${1}")"; }
 
 RUNTIME_DIR="../builds"
 BENCHMARK=""
-while (( "$#" )); do
+while (("$#")); do
   case "$1" in
     --wasm-runtime-path=*)
       RUNTIME_DIR="${1#*=}"
       shift
       ;;
-    -*|--*=)
+    -* | --*=)
       echo "Unknown argument $1" >&2
       exit 1
       ;;
