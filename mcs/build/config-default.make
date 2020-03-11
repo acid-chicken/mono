@@ -41,9 +41,9 @@ TEST_RUNTIME = MONO_PATH="$(TEST_MONO_PATH)$(PLATFORM_PATH_SEPARATOR)$$MONO_PATH
 DEFAULT_MCS_FLAGS := $(MCS_FLAGS)
 DEFAULT_PROFILE := net_4_x
 
-# You shouldn't need to set these but might on a 
+# You shouldn't need to set these but might on a
 # weird platform.
 
 # CC = cc
 # SHELL = /bin/sh
-# MAKE = gmake 
+# MAKE = gmake

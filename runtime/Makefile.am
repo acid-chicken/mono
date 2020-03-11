@@ -31,7 +31,7 @@ $(symlinks):
 
 SUPPORT_FILES = $(symlinks) mono-wrapper etc/mono/config
 
-build_profiles = 
+build_profiles =
 
 if INSTALL_4_x
 build_profiles += binary_reference_assemblies net_4_x xbuild_12 xbuild_14
