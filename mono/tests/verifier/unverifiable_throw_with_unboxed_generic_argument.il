@@ -32,7 +32,7 @@
 .class private auto ansi beforefieldinit C
        extends [mscorlib]System.Object
 {
-  .method public hidebysig specialname rtspecialname 
+  .method public hidebysig specialname rtspecialname
           instance void  .ctor() cil managed
   {
     // Code size       7 (0x7)
@@ -57,7 +57,7 @@
       IL_0006:  leave      IL_0016
 
     }  // end .try
-    catch !!T 
+    catch !!T
     {
       IL_000b:  unbox.any  !!T
       IL_0010:  stloc.0

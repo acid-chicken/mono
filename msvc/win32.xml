@@ -11,7 +11,7 @@
 	<!-- Copy Consts.cs.in and insert this revision number -->
 	<Copy source="{sourcedir}\mono\mcs\build\common\Consts.cs.in" destination="{sourcedir}\mono\mcs\build\common\Consts.cs" />
 	<Regex source="{sourcedir}\mono\mcs\build\common\Consts.cs" pattern="@MONO_VERSION@" replacement="2.5.0.0" />
-	
+
 	<!-- Make the \etc directory -->
 	<Copy source="{sourcedir}\mono\data\net_2_0\machine.config" destination="{destdir}\etc\mono\2.0\machine.config" />
 	<Copy source="{sourcedir}\mono\data\net_2_0\DefaultWsdlHelpGenerator.aspx" destination="{destdir}\etc\mono\2.0\DefaultWsdlHelpGenerator.aspx" />
@@ -327,7 +327,7 @@
       <Source type="list">System.Core.dll.sources</Source>
     </Sources>
   </Assembly>
-  
+
 	<!-- Build some tools -->
 	<Assembly name="sn" destination="{destdir}\lib\mono\2.0\sn.exe">
 		<References>
@@ -1516,7 +1516,7 @@
 			<Source type="list">System.Web.DynamicData.dll.sources</Source>
 		</Sources>
 	</Assembly>
-  
+
   <Resgen workingdir="{sourcedir}\mono\mcs\class\System.Web.Mvc">{sourcedir}\mono\mcs\class\System.Web.Mvc\System.Web.Mvc\Resources\MvcResources.resx</Resgen>
 
   <Assembly name="System.Web.Mvc" destination="{destdir}\lib\mono\2.0\System.Web.Mvc.dll">

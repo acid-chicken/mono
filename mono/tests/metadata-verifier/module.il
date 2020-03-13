@@ -28,7 +28,7 @@
   .class auto ansi nested public beforefieldinit NestedClass
          extends [mscorlib]System.Object
   {
-    .method public hidebysig virtual instance string 
+    .method public hidebysig virtual instance string
             ToString() cil managed
     {
       // Code size       11 (0xb)
@@ -43,7 +43,7 @@
       IL_000a:  ret
     } // end of method NestedClass::ToString
 
-    .method public hidebysig specialname rtspecialname 
+    .method public hidebysig specialname rtspecialname
             instance void  .ctor() cil managed
     {
       // Code size       7 (0x7)
@@ -55,7 +55,7 @@
 
   } // end of class NestedClass
 
-  .method public hidebysig specialname rtspecialname 
+  .method public hidebysig specialname rtspecialname
           instance void  .ctor() cil managed
   {
     // Code size       7 (0x7)
@@ -66,5 +66,3 @@
   } // end of method Exported::.ctor
 
 } // end of class Module.Exported
-
-

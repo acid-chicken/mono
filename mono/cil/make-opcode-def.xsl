@@ -46,7 +46,7 @@
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise><xsl:value-of select="'ERROR'"/></xsl:otherwise>
-  </xsl:choose>     
+  </xsl:choose>
 </xsl:template>
 
 

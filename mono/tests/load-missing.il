@@ -21,7 +21,7 @@
   .hash algorithm 0x00008004
   .ver 0:0:0:0
 }
-.custom instance void [mscorlib]System.Security.UnverifiableCodeAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom instance void [mscorlib]System.Security.UnverifiableCodeAttribute::.ctor() = ( 01 00 00 00 )
 .imagebase 0x00400000
 .file alignment 0x00000200
 .subsystem 0x0003       // WINDOWS_CUI
@@ -31,25 +31,25 @@
   .class auto ansi sealed public EmptyDelegate
          extends [mscorlib]System.MulticastDelegate
   {
-    .method public hidebysig specialname rtspecialname 
+    .method public hidebysig specialname rtspecialname
             instance void  .ctor(object 'object',
                                  native int 'method') runtime managed
     {
     }
 
-    .method public hidebysig newslot virtual 
+    .method public hidebysig newslot virtual
             instance void  Invoke() runtime managed
     {
     }
 
-    .method public hidebysig newslot virtual 
-            instance class [mscorlib]System.IAsyncResult 
+    .method public hidebysig newslot virtual
+            instance class [mscorlib]System.IAsyncResult
             BeginInvoke(class [mscorlib]System.AsyncCallback callback,
                         object 'object') runtime managed
     {
     }
 
-    .method public hidebysig newslot virtual 
+    .method public hidebysig newslot virtual
             instance void  EndInvoke(class [mscorlib]System.IAsyncResult result) runtime managed
     {
     }
@@ -59,25 +59,25 @@
   .class auto ansi sealed public DelegateWithMissingArgument
          extends [mscorlib]System.MulticastDelegate
   {
-    .method public hidebysig specialname rtspecialname 
+    .method public hidebysig specialname rtspecialname
             instance void  .ctor(object 'object',
                                  native int 'method') runtime managed
     {
     }
 
-    .method public hidebysig newslot virtual 
+    .method public hidebysig newslot virtual
             instance void  Invoke(class [t]Missing t) runtime managed
     {
     }
 
-    .method public hidebysig newslot virtual 
-            instance class [mscorlib]System.IAsyncResult 
+    .method public hidebysig newslot virtual
+            instance class [mscorlib]System.IAsyncResult
             BeginInvoke(class [mscorlib]System.AsyncCallback callback,
                         object 'object') runtime managed
     {
     }
 
-    .method public hidebysig newslot virtual 
+    .method public hidebysig newslot virtual
             instance void  EndInvoke(class [mscorlib]System.IAsyncResult result) runtime managed
     {
     }
@@ -90,7 +90,7 @@
 
   .method public hidebysig static void  missing_class() cil managed
   {
-   
+
     .maxstack  1
     .locals init (class [t]Missing.Foo1 V_0)
     IL_0000:  nop
@@ -101,7 +101,7 @@
 
   .method public hidebysig static void  missing_method() cil managed
   {
-   
+
     .maxstack  1
     .locals init (class [t]Missing.Foo2 V_0)
     IL_0000:  nop
@@ -115,7 +115,7 @@
 
   .method public hidebysig static void  missing_ctor() cil managed
   {
-   
+
     .maxstack  2
     .locals init (class [t]Missing.Foo2 V_0)
     IL_0000:  nop
@@ -127,7 +127,7 @@
 
   .method public hidebysig static void  missing_call() cil managed
   {
-   
+
     .maxstack  1
     .locals init (class [t]Missing.Foo2 V_0)
     IL_0000:  nop
@@ -141,7 +141,7 @@
 
   .method public hidebysig static void  missing_jmp() cil managed
   {
-   
+
     .maxstack  1
     .locals init (class [t]Missing.Foo2 V_0)
 
@@ -150,7 +150,7 @@
 
   .method public hidebysig static void  missing_ldftn() cil managed
   {
-   
+
     .maxstack  3
     .locals init (class [t]Missing.Foo2 V_0,
              class EmptyDelegate V_1)
@@ -167,7 +167,7 @@
 
   .method public hidebysig static void  missing_callvirt() cil managed
   {
-   
+
     .maxstack  1
     .locals init (class [t]Missing.Foo5 V_0)
     IL_0000:  nop
@@ -179,10 +179,10 @@
     IL_000e:  ret
   }
 
-  .method public hidebysig static object 
+  .method public hidebysig static object
           missing_castclass_helper(object o) cil managed
   {
-   
+
     .maxstack  1
     .locals init (object V_0)
     IL_0000:  nop
@@ -198,7 +198,7 @@
   .method public hidebysig static void
           missing_castclass() cil managed
   {
-   
+
     .maxstack  1
     .locals init (object V_0)
 
@@ -233,7 +233,7 @@
 
   .method public hidebysig static bool  missing_isinst_helper(object o) cil managed
   {
-   
+
     .maxstack  2
     .locals init (bool V_0)
     IL_0000:  nop
@@ -251,7 +251,7 @@
   .method public hidebysig static void
           missing_isinst() cil managed
   {
-   
+
     .maxstack  1
     .locals init (object V_0)
 
@@ -263,7 +263,7 @@
 
   .method public hidebysig static void  missing_ldfld() cil managed
   {
-   
+
     .maxstack  1
     .locals init (class [t]Missing.Foo4 V_0,
              int32 V_1)
@@ -280,7 +280,7 @@
 
   .method public hidebysig static void  missing_ldflda() cil managed
   {
-   
+
     .maxstack  1
     .locals init (class [t]Missing.Foo4 V_0,
              int32& pinned V_1)
@@ -300,7 +300,7 @@
 
   .method public hidebysig static void  missing_ldsfld() cil managed
   {
-   
+
     .maxstack  1
     .locals init (int32 V_0)
     IL_0000:  nop
@@ -316,7 +316,7 @@
 
   .method public hidebysig static void  missing_ldsflda() cil managed
   {
-   
+
     .maxstack  1
     .locals init (int32& pinned V_0)
     IL_0000:  nop
@@ -332,7 +332,7 @@
 
   .method public hidebysig static void  missing_ldtoken_type() cil managed
   {
-   
+
     .maxstack  8
     IL_0000:  nop
     IL_0001:  ldtoken    [t]Missing.Foo1
@@ -344,7 +344,7 @@
 
   .method public hidebysig static void  missing_ldtoken_method() cil managed
   {
-   
+
     .maxstack  8
     IL_0000:  nop
     IL_0008:  ldtoken method instance void [t]Missing.Foo2::missing()
@@ -385,7 +385,7 @@
 
   .method public hidebysig static void  missing_ldtoken_field() cil managed
   {
-   
+
     .maxstack  8
     IL_0000:  nop
     IL_0008:  ldtoken field int32 [t]Missing.Foo4::i
@@ -395,7 +395,7 @@
 
   .method public hidebysig static void  missing_ldvirtftn() cil managed
   {
-   
+
     .maxstack  3
     .locals init (class [t]Missing.Foo5 V_0,
              class EmptyDelegate V_1)
@@ -413,7 +413,7 @@
 
   .method public hidebysig static object missing_newarr_helper() cil managed
   {
-   
+
     .maxstack  1
     .locals init (object V_0)
     IL_0000:  nop
@@ -428,7 +428,7 @@
 
   .method public hidebysig static void  missing_newarr() cil managed
   {
-   
+
     .maxstack  8
     IL_0000:  nop
     IL_0001:  call       object LoadMissing::missing_newarr_helper()
@@ -438,7 +438,7 @@
 
   .method public hidebysig static void  missing_newobj() cil managed
   {
-   
+
     .maxstack  2
     .locals init (class [t]Missing.Foo2 V_0)
     IL_0000:  nop
@@ -450,7 +450,7 @@
 
   .method public hidebysig static void  missing_refanyval() cil managed
   {
-   
+
     .maxstack  2
     .locals init (int32 v_0)
 
@@ -463,7 +463,7 @@
 
   .method public hidebysig static void  missing_sizeof() cil managed
   {
-   
+
     .maxstack  8
     IL_0000:  nop
     IL_0001:  sizeof    [t]Missing.Foo1
@@ -473,7 +473,7 @@
 
   .method public hidebysig static void  missing_stfld() cil managed
   {
-   
+
     .maxstack  2
     .locals init (class [t]Missing.Foo4 V_0)
     IL_0000:  nop
@@ -487,7 +487,7 @@
 
   .method public hidebysig static void  missing_stsfld() cil managed
   {
-   
+
     .maxstack  8
     IL_0000:  nop
     IL_0001:  ldc.i4.5
@@ -498,22 +498,22 @@
   .method public hidebysig static void missing_unbox () cil managed
   {
 	  .maxstack 8
-	
+
 	  ldnull
       unbox [t]Missing.Foo6
       pop
       ret
-  }	
+  }
 
   .method public hidebysig static void missing_unbox_any () cil managed
   {
 	  .maxstack 8
-	
+
 	  	ldnull
       unbox.any [t]Missing.Foo6
       pop
       ret
-  }	
+  }
 
 	.method public hidebysig static void missing_local () cil managed
 	{
@@ -521,14 +521,14 @@
 		.locals init (class [t]Missing.Foo1 v_0)
 
 		ret
-	}	
+	}
 
 	.method public static void delegate_target () cil managed
 	{
 		ret
 	}
 
-	.method public hidebysig static void missing_delegate_ctor_argument () cil managed	   
+	.method public hidebysig static void missing_delegate_ctor_argument () cil managed
 	{
 	    .maxstack  3
 		.locals init (class [t]Missing.Foo2 V_0,
@@ -544,10 +544,10 @@
     IL_0014:  ret
 	}
 
-  .method public hidebysig specialname rtspecialname 
+  .method public hidebysig specialname rtspecialname
           instance void  .ctor() cil managed
   {
-   
+
     .maxstack  8
     IL_0000:  ldarg.0
     IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
@@ -562,23 +562,23 @@
 }
 
 .class public auto ansi CCtorClass
-        extends [mscorlib]System.Object     
-  {                                         
+        extends [mscorlib]System.Object
+  {
 
     // method line 48
-    .method public hidebysig  specialname  rtspecialname 
-           instance default void '.ctor' ()  cil managed 
-    {                                                    
-        .maxstack 8                                      
-        IL_0000:  ldarg.0                                
-        IL_0001:  call instance void object::'.ctor'()   
-        IL_0006:  ret                                    
-    } // end of method CCtorClass::.ctor                 
+    .method public hidebysig  specialname  rtspecialname
+           instance default void '.ctor' ()  cil managed
+    {
+        .maxstack 8
+        IL_0000:  ldarg.0
+        IL_0001:  call instance void object::'.ctor'()
+        IL_0006:  ret
+    } // end of method CCtorClass::.ctor
 
     // method line 49
-    .method private static  specialname  rtspecialname 
-           default void '.cctor' ()  cil managed       
-    {                                                  
+    .method private static  specialname  rtspecialname
+           default void '.cctor' ()  cil managed
+    {
     IL_0000:  nop
     IL_0001:  newobj     instance void [t]Missing.Foo2::.ctor()
     IL_0006:  stloc.0
@@ -586,15 +586,15 @@
     IL_0008:  callvirt   instance void [t]Missing.Foo2::missing()
     IL_000d:  nop
     IL_000e:  ret
-    } // end of method CCtorClass::.cctor                                    
+    } // end of method CCtorClass::.cctor
 
     // method line 50
-    .method public static  hidebysig 
-           default void foo ()  cil managed 
-    {                                       
-        .maxstack 8                         
-        IL_0000:  ret                       
-    } // end of method CCtorClass::foo      
+    .method public static  hidebysig
+           default void foo ()  cil managed
+    {
+        .maxstack 8
+        IL_0000:  ret
+    } // end of method CCtorClass::foo
 
   } // end of class CCtorClass
 
@@ -612,11 +612,11 @@
 		ret
 	}
 
-	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed 
+	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed
     {
-		ldarg.0                                
-		call instance void object::'.ctor'()   
-		ret                                    
+		ldarg.0
+		call instance void object::'.ctor'()
+		ret
 	}
 }
 
@@ -634,11 +634,11 @@
 		ret
 	}
 
-	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed 
+	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed
     {
-		ldarg.0                                
-		call instance void object::'.ctor'()   
-		ret                                    
+		ldarg.0
+		call instance void object::'.ctor'()
+		ret
 	}
 }
 
@@ -651,11 +651,11 @@
 		ret
 	}
 
-	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed 
+	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed
     {
-		ldarg.0                                
-		call instance void object::'.ctor'()   
-		ret                                    
+		ldarg.0
+		call instance void object::'.ctor'()
+		ret
 	}
 }
 
@@ -668,11 +668,11 @@
 		ret
 	}
 
-	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed 
+	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed
     {
-		ldarg.0                                
-		call instance void object::'.ctor'()   
-		ret                                    
+		ldarg.0
+		call instance void object::'.ctor'()
+		ret
 	}
 }
 
@@ -685,11 +685,11 @@
 		ret
 	}
 
-	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed 
+	.method public hidebysig  specialname  rtspecialname  instance default void '.ctor' ()  cil managed
     {
-		ldarg.0                                
-		call instance void RandomBaseClass::'.ctor'()   
-		ret                                    
+		ldarg.0
+		call instance void RandomBaseClass::'.ctor'()
+		ret
 	}
 }
 

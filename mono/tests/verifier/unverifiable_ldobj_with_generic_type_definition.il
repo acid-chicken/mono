@@ -37,7 +37,7 @@
   {
     .pack 0
     .size 1
-    .method public hidebysig instance void 
+    .method public hidebysig instance void
             Test() cil managed
     {
       // Code size       22 (0x16)
@@ -52,7 +52,7 @@
 
   } // end of class S
 
-  .method public hidebysig specialname rtspecialname 
+  .method public hidebysig specialname rtspecialname
           instance void  .ctor() cil managed
   {
     // Code size       7 (0x7)
@@ -67,7 +67,7 @@
 .class private auto ansi beforefieldinit C
        extends [mscorlib]System.Object
 {
-  .method public hidebysig specialname rtspecialname 
+  .method public hidebysig specialname rtspecialname
           instance void  .ctor() cil managed
   {
     // Code size       7 (0x7)
