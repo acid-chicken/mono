@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-
 #
 # This tool is used to generate the cpu-<ARCH>.h files used by the JIT. The input is the
 # cpu-<ARCH>.md file, along with the instruction metadata in mini-ops.h.
 #
-
-import sys
 import os
 import re
+import sys
 
 # Keep it in sync with mini.h
 MONO_INST_DEST = 0
