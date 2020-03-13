@@ -18,19 +18,20 @@ MONO_INST_LEN = 4
 MONO_INST_CLOB = 5
 MONO_INST_MAX = 6
 
-allowed_defines = {"TARGET_X86": 1,
-                   "TARGET_AMD64": 1,
-                   "TARGET_ARM": 1,
-                   "TARGET_ARM64": 1,
-                   "TARGET_POWERPC": 1,
-                   "TARGET_SPARC": 1,
-                   "TARGET_S390X": 1,
-                   "TARGET_MIPS": 1,
-                   "TARGET_RISCV": 1,
-                   "TARGET_RISCV32": 1,
-                   "TARGET_RISCV64": 1,
-                   "TARGET_WASM": 1
-                   }
+allowed_defines = {
+    "TARGET_X86": 1,
+    "TARGET_AMD64": 1,
+    "TARGET_ARM": 1,
+    "TARGET_ARM64": 1,
+    "TARGET_POWERPC": 1,
+    "TARGET_SPARC": 1,
+    "TARGET_S390X": 1,
+    "TARGET_MIPS": 1,
+    "TARGET_RISCV": 1,
+    "TARGET_RISCV32": 1,
+    "TARGET_RISCV64": 1,
+    "TARGET_WASM": 1,
+}
 
 
 class OpDef:
@@ -48,7 +49,9 @@ class OpDef:
 
 
 def usage():
-    print("Usage: genmdesc.py <target define> <srcdir> <output file name> <c symbol name> <input file name>")
+    print(
+        "Usage: genmdesc.py <target define> <srcdir> <output file name> <c symbol name> <input file name>"
+    )
 
 
 def parse_mini_ops(target_define):
@@ -63,14 +66,14 @@ def parse_mini_ops(target_define):
     for line in opcode_file:
         line = line.strip()
         # print ("{0} {1}".format (line, is_enabled))
-        m = re.search(r'^\s*#if (.+)', line)
+        m = re.search(r"^\s*#if (.+)", line)
         # FIXME: Check list of defines against an allowed list
         if m != None:
             is_enabled = False
             parts = m.group(1).split("||")
             for part in parts:
                 part = part.strip()
-                m = re.search(r'defined\((.+)\)', part)
+                m = re.search(r"defined\((.+)\)", part)
                 if m == None:
                     print("Unknown #ifdef line {0}".format(line))
                     exit(1)
@@ -87,16 +90,21 @@ def parse_mini_ops(target_define):
         else:
             if is_enabled and line.startswith("MINI_OP"):
                 m = re.search(
-                    r"MINI_OP\(\w+\s*\,\s*\"([^\"]+)\", (\w+), (\w+), (\w+)\)", line)
+                    r"MINI_OP\(\w+\s*\,\s*\"([^\"]+)\", (\w+), (\w+), (\w+)\)", line
+                )
                 if m != None:
-                    opcodes[m.group(1)] = OpDef(opcode_id, m.group(
-                        1), m.group(2), m.group(3), m.group(4))
+                    opcodes[m.group(1)] = OpDef(
+                        opcode_id, m.group(1), m.group(2), m.group(3), m.group(4)
+                    )
                 else:
                     m = re.search(
-                        r"MINI_OP3\(\w+\s*\,\s*\"([^\"]+)\", (\w+), (\w+), (\w+), (\w+)\)", line)
+                        r"MINI_OP3\(\w+\s*\,\s*\"([^\"]+)\", (\w+), (\w+), (\w+), (\w+)\)",
+                        line,
+                    )
                     if m != None:
-                        opcodes[m.group(1)] = OpDef(opcode_id, m.group(
-                            1), m.group(2), m.group(3), m.group(4))
+                        opcodes[m.group(1)] = OpDef(
+                            opcode_id, m.group(1), m.group(2), m.group(3), m.group(4)
+                        )
                     else:
                         print("Unable to parse line: '{0}'".format(line))
                         exit(1)
@@ -203,8 +211,7 @@ def gen_output(f, opcodes):
             op.desc_idx = idx
             idx += 1
         except:
-            print("Error emitting opcode '{0}': '{1}'.".format(
-                op.name, sys.exc_info()))
+            print("Error emitting opcode '{0}': '{1}'.".format(op.name, sys.exc_info()))
     f.write("};\n")
 
     # Write index table
@@ -215,6 +222,7 @@ def gen_output(f, opcodes):
         else:
             f.write("  {0}, // {1}\n".format(op.desc_idx, op.name))
     f.write("};\n\n")
+
 
 #
 # MAIN
@@ -235,10 +243,10 @@ infile_name = sys.argv[5]
 opcodes = parse_mini_ops(target_define)
 
 # Parse input file
-infile = open(infile_name, 'r')
+infile = open(infile_name, "r")
 parse_input(infile, opcodes)
 
 # Generate output
-f = open(outfile_name, 'w')
+f = open(outfile_name, "w")
 gen_output(f, opcodes)
 f.close()
