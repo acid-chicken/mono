@@ -21,29 +21,29 @@
 #if defined(ARM_EMIT)
 #	define WM_EMIT(p, i) ARM_EMIT(p, i)
 #else
-#	define WM_EMIT(p, i) 
+#	define WM_EMIT(p, i)
 #endif
 
 enum {
-	WM_CC_EQ = 0x0,
-	WM_CC_NE = 0x1,
-	WM_CC_CS = 0x2,
-	WM_CC_HS = WM_CC_CS,
-	WM_CC_CC = 0x3,
-	WM_CC_LO = WM_CC_CC,
-	WM_CC_MI = 0x4,
-	WM_CC_PL = 0x5,
-	WM_CC_VS = 0x6,
-	WM_CC_VC = 0x7,
-	WM_CC_HI = 0x8,
-	WM_CC_LS = 0x9,
-	WM_CC_GE = 0xA,
-	WM_CC_LT = 0xB,
-	WM_CC_GT = 0xC,
-	WM_CC_LE = 0xD,
-	WM_CC_AL = 0xE,
-	WM_CC_NV = 0xF,
-	WM_CC_SHIFT = 28
+    WM_CC_EQ = 0x0,
+    WM_CC_NE = 0x1,
+    WM_CC_CS = 0x2,
+    WM_CC_HS = WM_CC_CS,
+    WM_CC_CC = 0x3,
+    WM_CC_LO = WM_CC_CC,
+    WM_CC_MI = 0x4,
+    WM_CC_PL = 0x5,
+    WM_CC_VS = 0x6,
+    WM_CC_VC = 0x7,
+    WM_CC_HI = 0x8,
+    WM_CC_LS = 0x9,
+    WM_CC_GE = 0xA,
+    WM_CC_LT = 0xB,
+    WM_CC_GT = 0xC,
+    WM_CC_LE = 0xD,
+    WM_CC_AL = 0xE,
+    WM_CC_NV = 0xF,
+    WM_CC_SHIFT = 28
 };
 
 #if defined(ARM_DEF_COND)
@@ -54,39 +54,39 @@ enum {
 
 
 enum {
-	WM_R0	= 0x0,
-	WM_R1	= 0x1,
-	WM_R2	= 0x2,
-	WM_R3	= 0x3,
-	WM_R4	= 0x4,
-	WM_R5	= 0x5,
-	WM_R6	= 0x6,
-	WM_R7	= 0x7,
-	WM_R8	= 0x8,
-	WM_R9	= 0x9,
-	WM_R10	= 0xA,
-	WM_R11	= 0xB,
-	WM_R12	= 0xC,
-	WM_R13	= 0xD,
-	WM_R14	= 0xE,
-	WM_R15	= 0xF,
+    WM_R0	= 0x0,
+    WM_R1	= 0x1,
+    WM_R2	= 0x2,
+    WM_R3	= 0x3,
+    WM_R4	= 0x4,
+    WM_R5	= 0x5,
+    WM_R6	= 0x6,
+    WM_R7	= 0x7,
+    WM_R8	= 0x8,
+    WM_R9	= 0x9,
+    WM_R10	= 0xA,
+    WM_R11	= 0xB,
+    WM_R12	= 0xC,
+    WM_R13	= 0xD,
+    WM_R14	= 0xE,
+    WM_R15	= 0xF,
 
-	WM_wR0	= 0x0,
-	WM_wR1	= 0x1,
-	WM_wR2	= 0x2,
-	WM_wR3	= 0x3,
-	WM_wR4	= 0x4,
-	WM_wR5	= 0x5,
-	WM_wR6	= 0x6,
-	WM_wR7	= 0x7,
-	WM_wR8	= 0x8,
-	WM_wR9	= 0x9,
-	WM_wR10	= 0xA,
-	WM_wR11	= 0xB,
-	WM_wR12	= 0xC,
-	WM_wR13	= 0xD,
-	WM_wR14	= 0xE,
-	WM_wR15	= 0xF
+    WM_wR0	= 0x0,
+    WM_wR1	= 0x1,
+    WM_wR2	= 0x2,
+    WM_wR3	= 0x3,
+    WM_wR4	= 0x4,
+    WM_wR5	= 0x5,
+    WM_wR6	= 0x6,
+    WM_wR7	= 0x7,
+    WM_wR8	= 0x8,
+    WM_wR9	= 0x9,
+    WM_wR10	= 0xA,
+    WM_wR11	= 0xB,
+    WM_wR12	= 0xC,
+    WM_wR13	= 0xD,
+    WM_wR14	= 0xE,
+    WM_wR15	= 0xF
 };
 
 
@@ -97,9 +97,9 @@ enum {
  *	D - 64-bit (Double)
  */
 enum {
-	WM_B = 0,
-	WM_H = 1,
-	WM_D = 2
+    WM_B = 0,
+    WM_H = 1,
+    WM_D = 2
 };
 
 /*
@@ -107,23 +107,23 @@ enum {
  * Table B-5
  */
 enum {
-	WM_TMRC_OP2      = 0,
-	WM_TMRC_CPNUM    = 1,
+    WM_TMRC_OP2      = 0,
+    WM_TMRC_CPNUM    = 1,
 
-	WM_TMOVMSK_OP2   = 1,
-	WM_TMOVMSK_CPNUM = 0,
+    WM_TMOVMSK_OP2   = 1,
+    WM_TMOVMSK_CPNUM = 0,
 
-	WM_TANDC_OP2     = 1,
-	WM_TANDC_CPNUM   = 1,
+    WM_TANDC_OP2     = 1,
+    WM_TANDC_CPNUM   = 1,
 
-	WM_TORC_OP2      = 2,
-	WM_TORC_CPNUM    = 1,
+    WM_TORC_OP2      = 2,
+    WM_TORC_CPNUM    = 1,
 
-	WM_TEXTRC_OP2    = 3,
-	WM_TEXTRC_CPNUM  = 1,
+    WM_TEXTRC_OP2    = 3,
+    WM_TEXTRC_CPNUM  = 1,
 
-	WM_TEXTRM_OP2    = 3,
-	WM_TEXTRM_CPNUM  = 0
+    WM_TEXTRM_OP2    = 3,
+    WM_TEXTRM_CPNUM  = 0
 };
 
 
