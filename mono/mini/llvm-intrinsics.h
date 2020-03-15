@@ -224,4 +224,3 @@ INTRINS_OVR(WASM_ANYTRUE_V2, wasm_anytrue)
 
 #undef INTRINS
 #undef INTRINS_OVR
-
