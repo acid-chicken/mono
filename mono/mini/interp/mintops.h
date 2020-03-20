@@ -9,27 +9,27 @@
 
 typedef enum
 {
-	MintOpNoArgs,
-	MintOpShortInt,
-	MintOpUShortInt,
-	MintOpInt,
-	MintOpLongInt,
-	MintOpFloat,
-	MintOpDouble,
-	MintOpBranch,
-	MintOpShortBranch,
-	MintOpSwitch,
-	MintOpMethodToken,
-	MintOpFieldToken,
-	MintOpClassToken,
-	MintOpTwoShorts,
-	MintOpShortAndInt
+    MintOpNoArgs,
+    MintOpShortInt,
+    MintOpUShortInt,
+    MintOpInt,
+    MintOpLongInt,
+    MintOpFloat,
+    MintOpDouble,
+    MintOpBranch,
+    MintOpShortBranch,
+    MintOpSwitch,
+    MintOpMethodToken,
+    MintOpFieldToken,
+    MintOpClassToken,
+    MintOpTwoShorts,
+    MintOpShortAndInt
 } MintOpArgType;
 
 #define OPDEF(a,b,c,d,e,f) a,
 typedef enum {
 #include "mintops.def"
-	MINT_LASTOP
+    MINT_LASTOP
 } MintOpcode;
 #undef OPDEF
 
