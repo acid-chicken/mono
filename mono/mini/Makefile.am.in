@@ -197,7 +197,7 @@ endif
 if SHARED_MONO
 mini_common_lib = libmini.la
 else
-mini_common_lib = 
+mini_common_lib =
 endif
 
 noinst_LTLIBRARIES = $(mini_common_lib)
@@ -239,11 +239,11 @@ LIBMONO_DTRACE_OBJECT = .libs/mono-dtrace.$(OBJEXT)
 if STATIC_MONO
 MONO_DTRACE_OBJECT = mono-dtrace.$(OBJEXT)
 else
-MONO_DTRACE_OBJECT = 
+MONO_DTRACE_OBJECT =
 endif
 else
-MONO_DTRACE_OBJECT = 
-LIBMONO_DTRACE_OBJECT = 
+MONO_DTRACE_OBJECT =
+LIBMONO_DTRACE_OBJECT =
 endif
 
 if STATIC_MONO
@@ -251,7 +251,7 @@ if STATIC_MONO
 # This leads to higher performance, especially with TLS
 MONO_LIB=$(boehm_static_libraries)
 MONO_SGEN_LIB=$(sgen_static_libraries)
-else 
+else
 MONO_LIB=libmonoboehm-2.0.la
 MONO_SGEN_LIB=libmonosgen-2.0.la
 endif
@@ -269,7 +269,7 @@ mono_boehm_LDADD = \
 	$(MONO_DTRACE_OBJECT)
 
 mono_boehm_LDFLAGS = \
-	$(static_flags) $(monobinldflags) $(monobin_platform_ldflags) 
+	$(static_flags) $(monobinldflags) $(monobin_platform_ldflags)
 
 mono_sgen_LDADD = \
 	libmain_a-main-sgen.$(OBJEXT) \
@@ -293,10 +293,10 @@ libmonoldflags += -no-undefined
 endif
 
 # if SUPPORT_SGEN
-# 
+#
 # mono_LDADD = $(mono_sgen_LDADD)
 # mono_LDFLAGS = $(mono_sgen_LDFLAGS)
-# 
+#
 # endif
 
 
@@ -587,7 +587,7 @@ regtests_UNIVERSAL = \
 	basic-vectors.exe	\
 	ratests.exe
 
-regtests_DISABLED = 
+regtests_DISABLED =
 
 if FULL_AOT_TESTS
 regtests_DISABLED += builtin-types.exe
@@ -964,7 +964,7 @@ FULLAOT_LIBS_UNIVERSAL = \
 
 FULLAOT_LIBS_DISABLED =
 
-# Skip aoting the tests that aren't compiled 
+# Skip aoting the tests that aren't compiled
 # on the full aot profiles because they're skipped
 # on mobile profiles
 if FULL_AOT_TESTS
@@ -1029,7 +1029,7 @@ llvmonlycheck: mono $(llvmonly_regtests)
 	for i in $(llvmonly_regtests); do echo $$i; MONO_PATH=fullaot-tmp $(top_builddir)/runtime/mono-wrapper $(MOBILE_RUNTIME_ARG) --llvmonly fullaot-tmp/$$i --exclude '!BITCODE' || exit 1; done
 
 gccheck: gc-test.exe
-	MONO_GC_PARAMS=stack-mark=precise MONO_GC_DEBUG=clear-at-gc ./mono-sgen gc-test.exe	
+	MONO_GC_PARAMS=stack-mark=precise MONO_GC_DEBUG=clear-at-gc ./mono-sgen gc-test.exe
 
 bench: mono test.exe
 	time env $(MINI_RUNTIME) --ncompile $(count) --compile Test:$(mtest) test.exe
@@ -1046,7 +1046,7 @@ stat2: mono basic.exe
 	perl viewstat.pl -e stats.pl
 
 stat3: mono bench.exe
-	$(MINI_RUNTIME) --statfile stats.pl --ncompile 1000 --compile Tests:test_0_many_nested_loops bench.exe 
+	$(MINI_RUNTIME) --statfile stats.pl --ncompile 1000 --compile Tests:test_0_many_nested_loops bench.exe
 	perl viewstat.pl stats.pl
 
 docu: mini.sgm
