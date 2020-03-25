@@ -27,7 +27,7 @@ __AndroidToolchain=aarch64-linux-android
 
 for i in "$@"
     do
-        lowerI="$(echo $i | awk '{print tolower($0)}')"
+        lowerI="$(echo "$i" | awk '{print tolower($0)}')"
         case $lowerI in
         -?|-h|--help)
             usage
@@ -82,18 +82,18 @@ echo "NDK location: $__NDK_Dir"
 echo "Target Toolchain location: $__ToolchainDir"
 
 # Download the NDK if required
-if [ ! -d $__NDK_Dir ]; then
-    echo Downloading the NDK into $__NDK_Dir
-    mkdir -p $__NDK_Dir
-    wget -q --progress=bar:force:noscroll --show-progress https://dl.google.com/android/repository/android-ndk-$__NDK_Version-linux-x86_64.zip -O $__CrossDir/android-ndk-$__NDK_Version-linux-x86_64.zip
-    unzip -q $__CrossDir/android-ndk-$__NDK_Version-linux-x86_64.zip -d $__CrossDir
+if [ ! -d "$__NDK_Dir" ]; then
+    echo Downloading the NDK into "$__NDK_Dir"
+    mkdir -p "$__NDK_Dir"
+    wget -q --progress=bar:force:noscroll --show-progress https://dl.google.com/android/repository/android-ndk-"$__NDK_Version"-linux-x86_64.zip -O "$__CrossDir/android-ndk-$__NDK_Version"-linux-x86_64.zip
+    unzip -q "$__CrossDir/android-ndk-$__NDK_Version"-linux-x86_64.zip -d "$__CrossDir"
 fi
 
-if [ ! -d $__lldb_Dir ]; then
-    mkdir -p $__lldb_Dir
-    echo Downloading LLDB into $__lldb_Dir
-    wget -q --progress=bar:force:noscroll --show-progress https://dl.google.com/android/repository/lldb-2.3.3614996-linux-x86_64.zip -O $__CrossDir/lldb-2.3.3614996-linux-x86_64.zip
-    unzip -q $__CrossDir/lldb-2.3.3614996-linux-x86_64.zip -d $__lldb_Dir
+if [ ! -d "$__lldb_Dir" ]; then
+    mkdir -p "$__lldb_Dir"
+    echo Downloading LLDB into "$__lldb_Dir"
+    wget -q --progress=bar:force:noscroll --show-progress https://dl.google.com/android/repository/lldb-2.3.3614996-linux-x86_64.zip -O "$__CrossDir"/lldb-2.3.3614996-linux-x86_64.zip
+    unzip -q "$__CrossDir"/lldb-2.3.3614996-linux-x86_64.zip -d "$__lldb_Dir"
 fi
 
 echo "Download dependencies..."
@@ -107,12 +107,12 @@ __AndroidPackages+=" liblzma"
 __AndroidPackages+=" krb5"
 __AndroidPackages+=" openssl"
 
-for path in $(wget -qO- http://termux.net/dists/stable/main/binary-$__AndroidArch/Packages |\
-    grep -A15 "Package: \(${__AndroidPackages// /\\|}\)" | grep -v "static\|tool" | grep Filename); do
+for path in "$(wget -qO- http://termux.net/dists/stable/main/binary-"$__AndroidArch"/Packages |\
+    grep -A15 "Package: \(${__AndroidPackages// /\\|}\)" | grep -v "static\|tool" | grep Filename)"; do
 
     if [[ "$path" != "Filename:" ]]; then
         echo "Working on: $path"
-        wget -qO- http://termux.net/$path | dpkg -x - "$__TmpDir"
+        wget -qO- http://termux.net/"$path" | dpkg -x - "$__TmpDir"
     fi
 done
 
@@ -120,12 +120,12 @@ cp -R "$__TmpDir/data/data/com.termux/files/usr/"* "$__ToolchainDir/sysroot/usr/
 
 # Generate platform file for build.sh script to assign to __DistroRid
 echo "Generating platform file..."
-echo "RID=android.${__ApiLevel}-${__BuildArch}" > $__ToolchainDir/sysroot/android_platform
+echo "RID=android.$__ApiLevel-$__BuildArch" > "$__ToolchainDir"/sysroot/android_platform
 
 echo "Now to build coreclr, libraries and installers; run:"
-echo ROOTFS_DIR=\$\(realpath $__ToolchainDir/sysroot\) ./build.sh --cross --arch $__BuildArch \
+echo ROOTFS_DIR=\$\(realpath "$__ToolchainDir"/sysroot\) ./build.sh --cross --arch "$__BuildArch" \
     --subsetCategory coreclr
-echo ROOTFS_DIR=\$\(realpath $__ToolchainDir/sysroot\) ./build.sh --cross --arch $__BuildArch \
+echo ROOTFS_DIR=\$\(realpath "$__ToolchainDir"/sysroot\) ./build.sh --cross --arch "$__BuildArch" \
     --subsetCategory libraries
-echo ROOTFS_DIR=\$\(realpath $__ToolchainDir/sysroot\) ./build.sh --cross --arch $__BuildArch \
+echo ROOTFS_DIR=\$\(realpath "$__ToolchainDir"/sysroot\) ./build.sh --cross --arch "$__BuildArch" \
     --subsetCategory installer
