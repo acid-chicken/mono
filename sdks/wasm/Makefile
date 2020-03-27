@@ -101,7 +101,7 @@ endif
 NPM_VERSION=@^6.13.4
 NPM=$(CURDIR)/node_modules/node/bin/node $(CURDIR)/node_modules/npm/bin/npm-cli.js
 
-.stamp-npm-$(NPM_VERSION): 
+.stamp-npm-$(NPM_VERSION):
 	npm install npm$(NPM_VERSION)
 	node_modules/npm/bin/npm-cli.js install
 	touch $@
@@ -352,7 +352,7 @@ cil-strip:
 
 mono: runtime runtime-threads cross bcl
 
-BCL_DEPS=/r:$(WASM_BCL_DIR)/mscorlib.dll /r:$(WASM_BCL_DIR)/System.Core.dll /r:$(WASM_BCL_DIR)/System.dll /r:$(WASM_BCL_DIR)/System.Net.Http.dll /r:$(WASM_BCL_DIR)/Facades/netstandard.dll /r:$(WASM_BCL_DIR)/System.IO.Compression.dll /r:$(WASM_BCL_DIR)/Facades/System.Memory.dll 
+BCL_DEPS=/r:$(WASM_BCL_DIR)/mscorlib.dll /r:$(WASM_BCL_DIR)/System.Core.dll /r:$(WASM_BCL_DIR)/System.dll /r:$(WASM_BCL_DIR)/System.Net.Http.dll /r:$(WASM_BCL_DIR)/Facades/netstandard.dll /r:$(WASM_BCL_DIR)/System.IO.Compression.dll /r:$(WASM_BCL_DIR)/Facades/System.Memory.dll
 
 main.exe: $(APP_SOURCES)
 	$(CSC) $(CSC_FLAGS) /unsafe -out:$@ $(BCL_DEPS) /r:$(WASM_BCL_DIR)/nunitlite.dll  $(APP_SOURCES)
@@ -747,7 +747,7 @@ package: build build-sdk build-dbg-proxy
 	cp README.md tmp/
 	cp server.py tmp/
 	cp Mono.Cecil.dll tmp/
-	cp $(OPTIONS_CS) tmp/	
+	cp $(OPTIONS_CS) tmp/
 	cp packager.exe tmp/
 	cp runtime.js tmp/
 	cp Mono.WebAssembly.DebuggerProxy/bin/Debug/netstandard2.1/Mono.WebAssembly.DebuggerProxy.dll tmp/
