@@ -8,105 +8,107 @@ using System.IO;
 
 namespace TestSuite
 {
-    public class Program
+public class Program
+{
+    static CancellationTokenSource cts = null;
+
+    public static bool IsStreamingSupported()
     {
-        static CancellationTokenSource cts = null;
+        using (HttpClient httpClient = CreateHttpClient())
+            return WasmHttpMessageHandler.StreamingSupported;
+    }
 
-        public static bool IsStreamingSupported()
+    public static bool IsStreamingEnabled()
+    {
+        using (HttpClient httpClient = CreateHttpClient())
+            return WasmHttpMessageHandler.StreamingEnabled;
+    }
+
+    public static string BasePath()
+    {
+        using (HttpClient httpClient = CreateHttpClient())
+            return httpClient.BaseAddress.ToString();
+    }
+
+    public static async Task<object> RequestStream(bool streamingEnabled, string url)
+    {
+        var requestTcs = new TaskCompletionSource<object>();
+        cts = new CancellationTokenSource();
+
+        try
         {
             using (HttpClient httpClient = CreateHttpClient())
-                return WasmHttpMessageHandler.StreamingSupported;
-        }
-
-        public static bool IsStreamingEnabled()
-        {
-            using (HttpClient httpClient = CreateHttpClient())
-                return WasmHttpMessageHandler.StreamingEnabled;
-        }
-
-        public static string BasePath()
-        {
-            using (HttpClient httpClient = CreateHttpClient())
-                return httpClient.BaseAddress.ToString();
-        }
-
-        public static async Task<object> RequestStream(bool streamingEnabled, string url)
-        {
-            var requestTcs = new TaskCompletionSource<object>();
-            cts = new CancellationTokenSource();
-
-            try
             {
-                using (HttpClient httpClient = CreateHttpClient())
+                Console.WriteLine($"streaming supported: { WasmHttpMessageHandler.StreamingSupported}");
+                WasmHttpMessageHandler.StreamingEnabled = streamingEnabled;
+                Console.WriteLine($"streaming enabled: {WasmHttpMessageHandler.StreamingEnabled}");
+                using (var rspMsg = await httpClient.GetAsync(url, cts.Token))
                 {
-                    Console.WriteLine($"streaming supported: { WasmHttpMessageHandler.StreamingSupported}");
-                    WasmHttpMessageHandler.StreamingEnabled = streamingEnabled;
-                    Console.WriteLine($"streaming enabled: {WasmHttpMessageHandler.StreamingEnabled}");
-                    using (var rspMsg = await httpClient.GetAsync(url, cts.Token))
-                    {
-                        requestTcs.SetResult((int)rspMsg.Content?.ReadAsStreamAsync().Result.Length);
-                    }
+                    requestTcs.SetResult((int)rspMsg.Content?.ReadAsStreamAsync().Result.Length);
                 }
             }
-            catch (Exception exc2)
-            {
-                requestTcs.SetException(exc2);
-            }
-
-            return requestTcs.Task;
+        }
+        catch (Exception exc2)
+        {
+            requestTcs.SetException(exc2);
         }
 
-        public static async Task<object> RequestByteArray(bool streamingEnabled, string url)
+        return requestTcs.Task;
+    }
+
+    public static async Task<object> RequestByteArray(bool streamingEnabled, string url)
+    {
+        var requestTcs = new TaskCompletionSource<object>();
+        cts = new CancellationTokenSource();
+
+        try
         {
-            var requestTcs = new TaskCompletionSource<object>();
-            cts = new CancellationTokenSource();
-
-            try
+            using (HttpClient httpClient = CreateHttpClient())
             {
-                using (HttpClient httpClient = CreateHttpClient())
-                {
-                    Console.WriteLine($"streaming supported: { WasmHttpMessageHandler.StreamingSupported}");
-                    WasmHttpMessageHandler.StreamingEnabled = streamingEnabled;
-                    Console.WriteLine($"streaming enabled: {WasmHttpMessageHandler.StreamingEnabled}");
-                    Console.WriteLine($"url: {url}");
+                Console.WriteLine($"streaming supported: { WasmHttpMessageHandler.StreamingSupported}");
+                WasmHttpMessageHandler.StreamingEnabled = streamingEnabled;
+                Console.WriteLine($"streaming enabled: {WasmHttpMessageHandler.StreamingEnabled}");
+                Console.WriteLine($"url: {url}");
 
-                    using (var rspMsg = await httpClient.GetAsync(url, cts.Token))
-                    {
-                        requestTcs.SetResult(rspMsg.Content?.ReadAsByteArrayAsync().Result.Length);
-                    }
+                using (var rspMsg = await httpClient.GetAsync(url, cts.Token))
+                {
+                    requestTcs.SetResult(rspMsg.Content?.ReadAsByteArrayAsync().Result.Length);
                 }
             }
-            catch (Exception exc2)
-            {
-                requestTcs.SetException(exc2);
-            }
-            return requestTcs.Task;
         }
-
-        public static async Task<object> GetStreamAsync_ReadZeroBytes_Success()
+        catch (Exception exc2)
         {
-            var requestTcs = new TaskCompletionSource<object>();
+            requestTcs.SetException(exc2);
+        }
+        return requestTcs.Task;
+    }
 
-            using (HttpClient client = CreateHttpClient())
+    public static async Task<object> GetStreamAsync_ReadZeroBytes_Success()
+    {
+        var requestTcs = new TaskCompletionSource<object>();
+
+        using (HttpClient client = CreateHttpClient())
             using (Stream stream = await client.GetStreamAsync("base/publish/NowIsTheTime.txt"))
             {
                 requestTcs.SetResult(await stream.ReadAsync(new byte[1], 0, 0));
             }
 
-            return requestTcs.Task;
-        }
-
-        static HttpClient CreateHttpClient()
-        {
-            //Console.WriteLine("Create  HttpClient");
-            string BaseApiUrl = string.Empty;
-            var window = (JSObject)WebAssembly.Runtime.GetGlobalObject("window");
-            using (var location = (JSObject)window.GetObjectProperty("location"))
-            {
-                BaseApiUrl = (string)location.GetObjectProperty("origin");
-            }
-            WasmHttpMessageHandler.StreamingEnabled = true;
-            return new HttpClient() { BaseAddress = new Uri(BaseApiUrl) };
-        }
+        return requestTcs.Task;
     }
+
+    static HttpClient CreateHttpClient()
+    {
+        //Console.WriteLine("Create  HttpClient");
+        string BaseApiUrl = string.Empty;
+        var window = (JSObject)WebAssembly.Runtime.GetGlobalObject("window");
+        using (var location = (JSObject)window.GetObjectProperty("location"))
+        {
+            BaseApiUrl = (string)location.GetObjectProperty("origin");
+        }
+        WasmHttpMessageHandler.StreamingEnabled = true;
+        return new HttpClient() {
+            BaseAddress = new Uri(BaseApiUrl)
+        };
+    }
+}
 }
