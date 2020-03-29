@@ -41,7 +41,7 @@
 	<Target Name="_MonoWasmAssemblyCollectOutput"
 					AfterTargets="_CheckForCompileOutputs">
 
-		<!-- 
+		<!--
 			Make sure we set the runtime paths correctly.
 			If running from a master build the runtime builds path is different
 			from the nuget paths.
@@ -133,7 +133,7 @@
 	<Target Name = "_CleanManagedOutputDir">
 		<ItemGroup>
 			<FilesToDelete Include="$(_MonoWasmManagedOutputDir)**\*"/>
-		</ItemGroup>   
+		</ItemGroup>
     	<Delete Files="@(FilesToDelete)" />
 	</Target>
 </Project>
