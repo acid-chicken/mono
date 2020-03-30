@@ -21,86 +21,86 @@
 #define MONO_INFINITE_WAIT ((guint32) 0xFFFFFFFF)
 
 typedef enum {
-	MONO_W32TYPE_UNUSED = 0,
-	MONO_W32TYPE_SEM,
-	MONO_W32TYPE_MUTEX,
-	MONO_W32TYPE_EVENT,
-	MONO_W32TYPE_PROCESS,
-	MONO_W32TYPE_NAMEDMUTEX,
-	MONO_W32TYPE_NAMEDSEM,
-	MONO_W32TYPE_NAMEDEVENT,
-	MONO_W32TYPE_COUNT
+    MONO_W32TYPE_UNUSED = 0,
+    MONO_W32TYPE_SEM,
+    MONO_W32TYPE_MUTEX,
+    MONO_W32TYPE_EVENT,
+    MONO_W32TYPE_PROCESS,
+    MONO_W32TYPE_NAMEDMUTEX,
+    MONO_W32TYPE_NAMEDSEM,
+    MONO_W32TYPE_NAMEDEVENT,
+    MONO_W32TYPE_COUNT
 } MonoW32Type;
 
 typedef struct {
-	MonoW32Type type;
-	guint ref;
-	gboolean signalled;
-	gboolean in_use;
-	MonoCoopMutex signal_mutex;
-	MonoCoopCond signal_cond;
-	gpointer specific;
+    MonoW32Type type;
+    guint ref;
+    gboolean signalled;
+    gboolean in_use;
+    MonoCoopMutex signal_mutex;
+    MonoCoopCond signal_cond;
+    gpointer specific;
 } MonoW32Handle;
 
 typedef enum {
-	MONO_W32HANDLE_WAIT_RET_SUCCESS_0   =  0,
-	MONO_W32HANDLE_WAIT_RET_ABANDONED_0 =  MONO_W32HANDLE_WAIT_RET_SUCCESS_0 + MONO_W32HANDLE_MAXIMUM_WAIT_OBJECTS,
-	MONO_W32HANDLE_WAIT_RET_ALERTED     = -1,
-	MONO_W32HANDLE_WAIT_RET_TIMEOUT     = -2,
-	MONO_W32HANDLE_WAIT_RET_FAILED      = -3,
-	MONO_W32HANDLE_WAIT_RET_TOO_MANY_POSTS = -4,
-	MONO_W32HANDLE_WAIT_RET_NOT_OWNED_BY_CALLER = -5
+    MONO_W32HANDLE_WAIT_RET_SUCCESS_0   =  0,
+    MONO_W32HANDLE_WAIT_RET_ABANDONED_0 =  MONO_W32HANDLE_WAIT_RET_SUCCESS_0 + MONO_W32HANDLE_MAXIMUM_WAIT_OBJECTS,
+    MONO_W32HANDLE_WAIT_RET_ALERTED     = -1,
+    MONO_W32HANDLE_WAIT_RET_TIMEOUT     = -2,
+    MONO_W32HANDLE_WAIT_RET_FAILED      = -3,
+    MONO_W32HANDLE_WAIT_RET_TOO_MANY_POSTS = -4,
+    MONO_W32HANDLE_WAIT_RET_NOT_OWNED_BY_CALLER = -5
 } MonoW32HandleWaitRet;
 
-typedef struct 
+typedef struct
 {
-	void (*close)(gpointer data);
+    void (*close)(gpointer data);
 
-	/* mono_w32handle_signal_and_wait */
-	gint32 (*signal)(MonoW32Handle *handle_data);
+    /* mono_w32handle_signal_and_wait */
+    gint32 (*signal)(MonoW32Handle *handle_data);
 
-	/* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple,
-	 * with the handle locked (shared handles aren't locked.)
-	 * Returns TRUE if ownership was established, false otherwise.
-	 * If TRUE, *abandoned contains a status code such as
-	 * WAIT_OBJECT_0 or WAIT_ABANDONED_0.
-	 */
-	gboolean (*own_handle)(MonoW32Handle *handle_data, gboolean *abandoned);
+    /* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple,
+     * with the handle locked (shared handles aren't locked.)
+     * Returns TRUE if ownership was established, false otherwise.
+     * If TRUE, *abandoned contains a status code such as
+     * WAIT_OBJECT_0 or WAIT_ABANDONED_0.
+     */
+    gboolean (*own_handle)(MonoW32Handle *handle_data, gboolean *abandoned);
 
-	/* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple, if the
-	 * handle in question is "ownable" (ie mutexes), to see if the current
-	 * thread already owns this handle
-	 */
-	gboolean (*is_owned)(MonoW32Handle *handle_data);
+    /* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple, if the
+     * handle in question is "ownable" (ie mutexes), to see if the current
+     * thread already owns this handle
+     */
+    gboolean (*is_owned)(MonoW32Handle *handle_data);
 
-	/* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple,
-	 * if the handle in question needs a special wait function
-	 * instead of using the normal handle signal mechanism.
-	 * Returns the mono_w32handle_wait_one return code.
-	 */
-	MonoW32HandleWaitRet (*special_wait)(MonoW32Handle *handle_data, guint32 timeout, gboolean *alerted);
+    /* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple,
+     * if the handle in question needs a special wait function
+     * instead of using the normal handle signal mechanism.
+     * Returns the mono_w32handle_wait_one return code.
+     */
+    MonoW32HandleWaitRet (*special_wait)(MonoW32Handle *handle_data, guint32 timeout, gboolean *alerted);
 
-	/* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple,
-	 * if the handle in question needs some preprocessing before the
-	 * signal wait.
-	 */
-	void (*prewait)(MonoW32Handle *handle_data);
+    /* Called by mono_w32handle_wait_one and mono_w32handle_wait_multiple,
+     * if the handle in question needs some preprocessing before the
+     * signal wait.
+     */
+    void (*prewait)(MonoW32Handle *handle_data);
 
-	/* Called when dumping the handles */
-	void (*details)(MonoW32Handle *handle_data);
+    /* Called when dumping the handles */
+    void (*details)(MonoW32Handle *handle_data);
 
-	/* Called to get the name of the handle type */
-	const char* (*type_name) (void);
+    /* Called to get the name of the handle type */
+    const char* (*type_name) (void);
 
-	/* Called to get the size of the handle type */
-	gsize (*typesize) (void);
+    /* Called to get the size of the handle type */
+    gsize (*typesize) (void);
 } MonoW32HandleOps;
 
 typedef enum {
-	MONO_W32HANDLE_CAP_WAIT         = 0x01,
-	MONO_W32HANDLE_CAP_SIGNAL       = 0x02,
-	MONO_W32HANDLE_CAP_OWN          = 0x04,
-	MONO_W32HANDLE_CAP_SPECIAL_WAIT = 0x08,
+    MONO_W32HANDLE_CAP_WAIT         = 0x01,
+    MONO_W32HANDLE_CAP_SIGNAL       = 0x02,
+    MONO_W32HANDLE_CAP_OWN          = 0x04,
+    MONO_W32HANDLE_CAP_SPECIAL_WAIT = 0x08,
 } MonoW32HandleCapability;
 
 void
@@ -173,18 +173,18 @@ mono_w32handle_signal_and_wait (gpointer signal_handle, gpointer wait_handle, gu
 static inline MonoW32HandleWaitRet
 mono_w32handle_convert_wait_ret (guint32 res, guint32 numobjects)
 {
-	if (res >= WAIT_OBJECT_0 && res <= WAIT_OBJECT_0 + numobjects - 1)
-		return (MonoW32HandleWaitRet)(MONO_W32HANDLE_WAIT_RET_SUCCESS_0 + (res - WAIT_OBJECT_0));
-	else if (res >= WAIT_ABANDONED_0 && res <= WAIT_ABANDONED_0 + numobjects - 1)
-		return (MonoW32HandleWaitRet)(MONO_W32HANDLE_WAIT_RET_ABANDONED_0 + (res - WAIT_ABANDONED_0));
-	else if (res == WAIT_IO_COMPLETION)
-		return MONO_W32HANDLE_WAIT_RET_ALERTED;
-	else if (res == WAIT_TIMEOUT)
-		return MONO_W32HANDLE_WAIT_RET_TIMEOUT;
-	else if (res == WAIT_FAILED)
-		return MONO_W32HANDLE_WAIT_RET_FAILED;
-	else
-		g_error ("%s: unknown res value %d", __func__, res);
+    if (res >= WAIT_OBJECT_0 && res <= WAIT_OBJECT_0 + numobjects - 1)
+        return (MonoW32HandleWaitRet)(MONO_W32HANDLE_WAIT_RET_SUCCESS_0 + (res - WAIT_OBJECT_0));
+    else if (res >= WAIT_ABANDONED_0 && res <= WAIT_ABANDONED_0 + numobjects - 1)
+        return (MonoW32HandleWaitRet)(MONO_W32HANDLE_WAIT_RET_ABANDONED_0 + (res - WAIT_ABANDONED_0));
+    else if (res == WAIT_IO_COMPLETION)
+        return MONO_W32HANDLE_WAIT_RET_ALERTED;
+    else if (res == WAIT_TIMEOUT)
+        return MONO_W32HANDLE_WAIT_RET_TIMEOUT;
+    else if (res == WAIT_FAILED)
+        return MONO_W32HANDLE_WAIT_RET_FAILED;
+    else
+        g_error ("%s: unknown res value %d", __func__, res);
 }
 #endif
 
