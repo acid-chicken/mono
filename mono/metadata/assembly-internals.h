@@ -19,16 +19,16 @@
 
 /* Flag bits for mono_assembly_names_equal_flags (). */
 typedef enum {
-	/* Default comparison: all fields must match */
-	MONO_ANAME_EQ_NONE = 0x0,
-	/* Don't compare public key token */
-	MONO_ANAME_EQ_IGNORE_PUBKEY = 0x1,
-	/* Don't compare the versions */
-	MONO_ANAME_EQ_IGNORE_VERSION = 0x2,
-	/* When comparing simple names, ignore case differences */
-	MONO_ANAME_EQ_IGNORE_CASE = 0x4,
+    /* Default comparison: all fields must match */
+    MONO_ANAME_EQ_NONE = 0x0,
+    /* Don't compare public key token */
+    MONO_ANAME_EQ_IGNORE_PUBKEY = 0x1,
+    /* Don't compare the versions */
+    MONO_ANAME_EQ_IGNORE_VERSION = 0x2,
+    /* When comparing simple names, ignore case differences */
+    MONO_ANAME_EQ_IGNORE_CASE = 0x4,
 
-	MONO_ANAME_EQ_MASK = 0x7
+    MONO_ANAME_EQ_MASK = 0x7
 } MonoAssemblyNameEqFlags;
 
 G_ENUM_FUNCTIONS (MonoAssemblyNameEqFlags)
@@ -75,56 +75,56 @@ mono_assembly_invoke_load_hook_internal (MonoAssemblyLoadContext *alc, MonoAssem
 typedef gboolean (*MonoAssemblyCandidatePredicate)(MonoAssembly *, gpointer);
 
 typedef struct MonoAssemblyLoadRequest {
-	/* Assembly Load context that is requesting an assembly. */
-	MonoAssemblyContextKind asmctx;
-	MonoAssemblyLoadContext *alc;
-	/* Predicate to apply to candidate assemblies. Optional. */
-	MonoAssemblyCandidatePredicate predicate;
-	/* user_data for predicate. Optional. */
-	gpointer predicate_ud;
+    /* Assembly Load context that is requesting an assembly. */
+    MonoAssemblyContextKind asmctx;
+    MonoAssemblyLoadContext *alc;
+    /* Predicate to apply to candidate assemblies. Optional. */
+    MonoAssemblyCandidatePredicate predicate;
+    /* user_data for predicate. Optional. */
+    gpointer predicate_ud;
 } MonoAssemblyLoadRequest;
 
 typedef struct MonoAssemblyOpenRequest {
-	MonoAssemblyLoadRequest request;
-	/* Assembly that is requesting the wanted assembly. Optional. */
-	MonoAssembly *requesting_assembly;
+    MonoAssemblyLoadRequest request;
+    /* Assembly that is requesting the wanted assembly. Optional. */
+    MonoAssembly *requesting_assembly;
 } MonoAssemblyOpenRequest;
 
 typedef struct MonoAssemblyByNameRequest {
-	MonoAssemblyLoadRequest request;
-	/* Assembly that is requesting the wanted assembly name. Optional.
-	 * If no_postload_search is TRUE, requesting_assembly is not used.
-	 */
-	MonoAssembly *requesting_assembly;
-	/* basedir to probe for the wanted assembly name.  Optional. */
-	const char *basedir;
-	gboolean no_postload_search; /* FALSE is usual */
-	/* FIXME: predicate unused? */
+    MonoAssemblyLoadRequest request;
+    /* Assembly that is requesting the wanted assembly name. Optional.
+     * If no_postload_search is TRUE, requesting_assembly is not used.
+     */
+    MonoAssembly *requesting_assembly;
+    /* basedir to probe for the wanted assembly name.  Optional. */
+    const char *basedir;
+    gboolean no_postload_search; /* FALSE is usual */
+    /* FIXME: predicate unused? */
 } MonoAssemblyByNameRequest;
 
 void                   mono_assembly_request_prepare_load (MonoAssemblyLoadRequest *req,
-							   MonoAssemblyContextKind asmctx,
-							   MonoAssemblyLoadContext *alc);
+        MonoAssemblyContextKind asmctx,
+        MonoAssemblyLoadContext *alc);
 
 void                   mono_assembly_request_prepare_open (MonoAssemblyOpenRequest *req,
-							   MonoAssemblyContextKind asmctx,
-							   MonoAssemblyLoadContext *alc);
+        MonoAssemblyContextKind asmctx,
+        MonoAssemblyLoadContext *alc);
 
 void                   mono_assembly_request_prepare_byname (MonoAssemblyByNameRequest *req,
-							     MonoAssemblyContextKind asmctx,
-							     MonoAssemblyLoadContext *alc);
+        MonoAssemblyContextKind asmctx,
+        MonoAssemblyLoadContext *alc);
 
 MonoAssembly*          mono_assembly_request_open (const char *filename,
-						     const MonoAssemblyOpenRequest *req,
-						     MonoImageOpenStatus *status);
+        const MonoAssemblyOpenRequest *req,
+        MonoImageOpenStatus *status);
 
 MonoAssembly*          mono_assembly_request_load_from (MonoImage *image, const char *fname,
-							const MonoAssemblyLoadRequest *req,
-							MonoImageOpenStatus *status);
+        const MonoAssemblyLoadRequest *req,
+        MonoImageOpenStatus *status);
 
 MonoAssembly*          mono_assembly_request_byname (MonoAssemblyName *aname,
-						     const MonoAssemblyByNameRequest *req,
-						     MonoImageOpenStatus *status);
+        const MonoAssemblyByNameRequest *req,
+        MonoImageOpenStatus *status);
 
 /* MonoAssemblyCandidatePredicate that compares the assembly name (name, version,
  * culture, public key token) of the candidate with the wanted name, if the
