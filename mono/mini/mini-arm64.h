@@ -76,47 +76,47 @@
 #define MONO_ARCH_LMF_REG_SP 11
 
 struct MonoLMF {
-	/* 
-	 * If the second lowest bit is set to 1, then this is a MonoLMFExt structure, and
-	 * the other fields are not valid.
-	 */
-	gpointer    previous_lmf;
-	gpointer    lmf_addr;
-	host_mgreg_t pc;
-	host_mgreg_t gregs [MONO_ARCH_NUM_LMF_REGS];
+    /*
+     * If the second lowest bit is set to 1, then this is a MonoLMFExt structure, and
+     * the other fields are not valid.
+     */
+    gpointer    previous_lmf;
+    gpointer    lmf_addr;
+    host_mgreg_t pc;
+    host_mgreg_t gregs [MONO_ARCH_NUM_LMF_REGS];
 };
 
 /* Structure used by the sequence points in AOTed code */
 struct SeqPointInfo {
-	gpointer ss_tramp_addr;
-	guint8* bp_addrs [MONO_ZERO_LEN_ARRAY];
+    gpointer ss_tramp_addr;
+    guint8* bp_addrs [MONO_ZERO_LEN_ARRAY];
 };
 
 #define PARAM_REGS 8
 #define FP_PARAM_REGS 8
 
 typedef struct {
-	host_mgreg_t res, res2;
-	guint8 *ret;
-	double fpregs [FP_PARAM_REGS];
-	int n_fpargs, n_fpret, n_stackargs;
-	/* This should come last as the structure is dynamically extended */
-	/* The +1 is for r8 */
-	host_mgreg_t regs [PARAM_REGS + 1];
+    host_mgreg_t res, res2;
+    guint8 *ret;
+    double fpregs [FP_PARAM_REGS];
+    int n_fpargs, n_fpret, n_stackargs;
+    /* This should come last as the structure is dynamically extended */
+    /* The +1 is for r8 */
+    host_mgreg_t regs [PARAM_REGS + 1];
 } DynCallArgs;
 
 typedef struct {
-	CallInfo *cinfo;
-	int saved_gregs_offset;
-	/* Points to arguments received on the stack */
-	int args_reg;
-	gboolean cond_branch_islands;
-	MonoInst *vret_addr_loc;
-	MonoInst *seq_point_info_var;
-	MonoInst *ss_tramp_var;
-	MonoInst *bp_tramp_var;
-	guint8 *thunks;
-	int thunks_size;
+    CallInfo *cinfo;
+    int saved_gregs_offset;
+    /* Points to arguments received on the stack */
+    int args_reg;
+    gboolean cond_branch_islands;
+    MonoInst *vret_addr_loc;
+    MonoInst *seq_point_info_var;
+    MonoInst *ss_tramp_var;
+    MonoInst *bp_tramp_var;
+    guint8 *thunks;
+    int thunks_size;
 } MonoCompileArch;
 
 #define MONO_ARCH_EMULATE_FCONV_TO_U4 1
@@ -206,64 +206,64 @@ typedef struct {
 
 
 typedef enum {
-	ArgInIReg,
-	ArgInFReg,
-	ArgInFRegR4,
-	ArgOnStack,
-	ArgOnStackR8,
-	ArgOnStackR4,
-	/*
-	 * Vtype passed in consecutive int registers.
-	 * ainfo->reg is the firs register,
-	 * ainfo->nregs is the number of registers,
-	 * ainfo->size is the size of the structure.
-	 */
-	ArgVtypeInIRegs,
-	ArgVtypeByRef,
-	ArgVtypeByRefOnStack,
-	ArgVtypeOnStack,
-	ArgHFA,
-	ArgNone
+    ArgInIReg,
+    ArgInFReg,
+    ArgInFRegR4,
+    ArgOnStack,
+    ArgOnStackR8,
+    ArgOnStackR4,
+    /*
+     * Vtype passed in consecutive int registers.
+     * ainfo->reg is the firs register,
+     * ainfo->nregs is the number of registers,
+     * ainfo->size is the size of the structure.
+     */
+    ArgVtypeInIRegs,
+    ArgVtypeByRef,
+    ArgVtypeByRefOnStack,
+    ArgVtypeOnStack,
+    ArgHFA,
+    ArgNone
 } ArgStorage;
 
 typedef struct {
-	ArgStorage storage;
-	int reg;
-	/* ArgOnStack */
-	int offset;
-	/* ArgVtypeInIRegs/ArgHFA */
-	int nregs, size;
-	/* ArgHFA */
-	int esize;
-	/* ArgHFA */
-	/* The offsets of the float values inside the arg */
-	guint16 foffsets [4];
-	/* ArgOnStack */
-	int slot_size;
-	/* hfa */
-	int nfregs_to_skip;
-	gboolean sign;
-	gboolean gsharedvt;
-	gboolean hfa;
+    ArgStorage storage;
+    int reg;
+    /* ArgOnStack */
+    int offset;
+    /* ArgVtypeInIRegs/ArgHFA */
+    int nregs, size;
+    /* ArgHFA */
+    int esize;
+    /* ArgHFA */
+    /* The offsets of the float values inside the arg */
+    guint16 foffsets [4];
+    /* ArgOnStack */
+    int slot_size;
+    /* hfa */
+    int nfregs_to_skip;
+    gboolean sign;
+    gboolean gsharedvt;
+    gboolean hfa;
 } ArgInfo;
 
 struct CallInfo {
-	int nargs;
-	int gr, fr, stack_usage;
-	gboolean pinvoke;
-	ArgInfo ret;
-	ArgInfo sig_cookie;
-	ArgInfo args [1];
+    int nargs;
+    int gr, fr, stack_usage;
+    gboolean pinvoke;
+    ArgInfo ret;
+    ArgInfo sig_cookie;
+    ArgInfo args [1];
 };
 
 typedef struct {
-	/* General registers + ARMREG_R8 for indirect returns */
-	host_mgreg_t gregs [PARAM_REGS + 1];
-	/* Floating registers */
-	double fregs [FP_PARAM_REGS];
-	/* Stack usage, used for passing params on stack */
-	guint32 stack_size;
-	guint8* stack;
+    /* General registers + ARMREG_R8 for indirect returns */
+    host_mgreg_t gregs [PARAM_REGS + 1];
+    /* Floating registers */
+    double fregs [FP_PARAM_REGS];
+    /* Stack usage, used for passing params on stack */
+    guint32 stack_size;
+    guint8* stack;
 } CallContext;
 
 guint8* mono_arm_emit_imm64 (guint8 *code, int dreg, gint64 imm);
