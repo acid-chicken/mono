@@ -6,7 +6,8 @@
  * Based on mini-arm.h:
  *
  * Copyright 2011 Xamarin Inc
- * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ * Licensed under the MIT license. See LICENSE file in the project root for full
+ * license information.
  */
 
 #ifndef __MONO_MINI_ARM64_H__
@@ -25,13 +26,17 @@
 #define MONO_ARCH_SIMD_INTRINSICS 1
 #endif
 
-#define MONO_CONTEXT_SET_LLVM_EXC_REG(ctx, exc) do { (ctx)->regs [0] = (gsize)exc; } while (0)
+#define MONO_CONTEXT_SET_LLVM_EXC_REG(ctx, exc)                                \
+  do {                                                                         \
+    (ctx)->regs[0] = (gsize)exc;                                               \
+  } while (0)
 
-#define MONO_INIT_CONTEXT_FROM_FUNC(ctx,func) do {	\
-		MONO_CONTEXT_SET_BP ((ctx), __builtin_frame_address (0));	\
-		MONO_CONTEXT_SET_SP ((ctx), __builtin_frame_address (0));	\
-		MONO_CONTEXT_SET_IP ((ctx), (func));	\
-	} while (0)
+#define MONO_INIT_CONTEXT_FROM_FUNC(ctx, func)                                 \
+  do {                                                                         \
+    MONO_CONTEXT_SET_BP((ctx), __builtin_frame_address(0));                    \
+    MONO_CONTEXT_SET_SP((ctx), __builtin_frame_address(0));                    \
+    MONO_CONTEXT_SET_IP((ctx), (func));                                        \
+  } while (0)
 
 #define MONO_ARCH_INIT_TOP_LMF_ENTRY(lmf)
 
@@ -60,7 +65,7 @@
 
 #define MONO_ARCH_INST_IS_FLOAT(desc) ((desc) == 'f')
 
-#define MONO_ARCH_INST_REGPAIR_REG2(desc,hreg1) (-1)
+#define MONO_ARCH_INST_REGPAIR_REG2(desc, hreg1) (-1)
 
 #define MONO_ARCH_USE_FPSTACK FALSE
 
@@ -76,47 +81,47 @@
 #define MONO_ARCH_LMF_REG_SP 11
 
 struct MonoLMF {
-    /*
-     * If the second lowest bit is set to 1, then this is a MonoLMFExt structure, and
-     * the other fields are not valid.
-     */
-    gpointer    previous_lmf;
-    gpointer    lmf_addr;
-    host_mgreg_t pc;
-    host_mgreg_t gregs [MONO_ARCH_NUM_LMF_REGS];
+  /*
+   * If the second lowest bit is set to 1, then this is a MonoLMFExt structure,
+   * and the other fields are not valid.
+   */
+  gpointer previous_lmf;
+  gpointer lmf_addr;
+  host_mgreg_t pc;
+  host_mgreg_t gregs[MONO_ARCH_NUM_LMF_REGS];
 };
 
 /* Structure used by the sequence points in AOTed code */
 struct SeqPointInfo {
-    gpointer ss_tramp_addr;
-    guint8* bp_addrs [MONO_ZERO_LEN_ARRAY];
+  gpointer ss_tramp_addr;
+  guint8 *bp_addrs[MONO_ZERO_LEN_ARRAY];
 };
 
 #define PARAM_REGS 8
 #define FP_PARAM_REGS 8
 
 typedef struct {
-    host_mgreg_t res, res2;
-    guint8 *ret;
-    double fpregs [FP_PARAM_REGS];
-    int n_fpargs, n_fpret, n_stackargs;
-    /* This should come last as the structure is dynamically extended */
-    /* The +1 is for r8 */
-    host_mgreg_t regs [PARAM_REGS + 1];
+  host_mgreg_t res, res2;
+  guint8 *ret;
+  double fpregs[FP_PARAM_REGS];
+  int n_fpargs, n_fpret, n_stackargs;
+  /* This should come last as the structure is dynamically extended */
+  /* The +1 is for r8 */
+  host_mgreg_t regs[PARAM_REGS + 1];
 } DynCallArgs;
 
 typedef struct {
-    CallInfo *cinfo;
-    int saved_gregs_offset;
-    /* Points to arguments received on the stack */
-    int args_reg;
-    gboolean cond_branch_islands;
-    MonoInst *vret_addr_loc;
-    MonoInst *seq_point_info_var;
-    MonoInst *ss_tramp_var;
-    MonoInst *bp_tramp_var;
-    guint8 *thunks;
-    int thunks_size;
+  CallInfo *cinfo;
+  int saved_gregs_offset;
+  /* Points to arguments received on the stack */
+  int args_reg;
+  gboolean cond_branch_islands;
+  MonoInst *vret_addr_loc;
+  MonoInst *seq_point_info_var;
+  MonoInst *ss_tramp_var;
+  MonoInst *bp_tramp_var;
+  guint8 *thunks;
+  int thunks_size;
 } MonoCompileArch;
 
 #define MONO_ARCH_EMULATE_FCONV_TO_U4 1
@@ -204,93 +209,103 @@ typedef struct {
 #define MONO_R_ARM64_BL_SHORT 5
 #define MONO_R_ARM64_CBZ 6
 
-
 typedef enum {
-    ArgInIReg,
-    ArgInFReg,
-    ArgInFRegR4,
-    ArgOnStack,
-    ArgOnStackR8,
-    ArgOnStackR4,
-    /*
-     * Vtype passed in consecutive int registers.
-     * ainfo->reg is the firs register,
-     * ainfo->nregs is the number of registers,
-     * ainfo->size is the size of the structure.
-     */
-    ArgVtypeInIRegs,
-    ArgVtypeByRef,
-    ArgVtypeByRefOnStack,
-    ArgVtypeOnStack,
-    ArgHFA,
-    ArgNone
+  ArgInIReg,
+  ArgInFReg,
+  ArgInFRegR4,
+  ArgOnStack,
+  ArgOnStackR8,
+  ArgOnStackR4,
+  /*
+   * Vtype passed in consecutive int registers.
+   * ainfo->reg is the firs register,
+   * ainfo->nregs is the number of registers,
+   * ainfo->size is the size of the structure.
+   */
+  ArgVtypeInIRegs,
+  ArgVtypeByRef,
+  ArgVtypeByRefOnStack,
+  ArgVtypeOnStack,
+  ArgHFA,
+  ArgNone
 } ArgStorage;
 
 typedef struct {
-    ArgStorage storage;
-    int reg;
-    /* ArgOnStack */
-    int offset;
-    /* ArgVtypeInIRegs/ArgHFA */
-    int nregs, size;
-    /* ArgHFA */
-    int esize;
-    /* ArgHFA */
-    /* The offsets of the float values inside the arg */
-    guint16 foffsets [4];
-    /* ArgOnStack */
-    int slot_size;
-    /* hfa */
-    int nfregs_to_skip;
-    gboolean sign;
-    gboolean gsharedvt;
-    gboolean hfa;
+  ArgStorage storage;
+  int reg;
+  /* ArgOnStack */
+  int offset;
+  /* ArgVtypeInIRegs/ArgHFA */
+  int nregs, size;
+  /* ArgHFA */
+  int esize;
+  /* ArgHFA */
+  /* The offsets of the float values inside the arg */
+  guint16 foffsets[4];
+  /* ArgOnStack */
+  int slot_size;
+  /* hfa */
+  int nfregs_to_skip;
+  gboolean sign;
+  gboolean gsharedvt;
+  gboolean hfa;
 } ArgInfo;
 
 struct CallInfo {
-    int nargs;
-    int gr, fr, stack_usage;
-    gboolean pinvoke;
-    ArgInfo ret;
-    ArgInfo sig_cookie;
-    ArgInfo args [1];
+  int nargs;
+  int gr, fr, stack_usage;
+  gboolean pinvoke;
+  ArgInfo ret;
+  ArgInfo sig_cookie;
+  ArgInfo args[1];
 };
 
 typedef struct {
-    /* General registers + ARMREG_R8 for indirect returns */
-    host_mgreg_t gregs [PARAM_REGS + 1];
-    /* Floating registers */
-    double fregs [FP_PARAM_REGS];
-    /* Stack usage, used for passing params on stack */
-    guint32 stack_size;
-    guint8* stack;
+  /* General registers + ARMREG_R8 for indirect returns */
+  host_mgreg_t gregs[PARAM_REGS + 1];
+  /* Floating registers */
+  double fregs[FP_PARAM_REGS];
+  /* Stack usage, used for passing params on stack */
+  guint32 stack_size;
+  guint8 *stack;
 } CallContext;
 
-guint8* mono_arm_emit_imm64 (guint8 *code, int dreg, gint64 imm);
+guint8 *mono_arm_emit_imm64(guint8 *code, int dreg, gint64 imm);
 
-guint8* mono_arm_emit_ldrx (guint8 *code, int rt, int rn, int imm);
+guint8 *mono_arm_emit_ldrx(guint8 *code, int rt, int rn, int imm);
 
-guint8* mono_arm_emit_destroy_frame (guint8 *code, int stack_offset, guint64 temp_regs);
+guint8 *mono_arm_emit_destroy_frame(guint8 *code, int stack_offset,
+                                    guint64 temp_regs);
 
-guint8* mono_arm_emit_store_regset (guint8 *code, guint64 regs, int basereg, int offset);
+guint8 *mono_arm_emit_store_regset(guint8 *code, guint64 regs, int basereg,
+                                   int offset);
 
-guint8* mono_arm_emit_store_regarray (guint8 *code, guint64 regs, int basereg, int offset);
+guint8 *mono_arm_emit_store_regarray(guint8 *code, guint64 regs, int basereg,
+                                     int offset);
 
-guint8* mono_arm_emit_load_regarray (guint8 *code, guint64 regs, int basereg, int offset);
+guint8 *mono_arm_emit_load_regarray(guint8 *code, guint64 regs, int basereg,
+                                    int offset);
 
 /* MonoJumpInfo **ji */
-guint8* mono_arm_emit_aotconst (gpointer ji, guint8 *code, guint8 *code_start, int dreg, guint32 patch_type, gconstpointer data);
+guint8 *mono_arm_emit_aotconst(gpointer ji, guint8 *code, guint8 *code_start,
+                               int dreg, guint32 patch_type,
+                               gconstpointer data);
 
-void mono_arm_patch (guint8 *code, guint8 *target, int relocation);
+void mono_arm_patch(guint8 *code, guint8 *target, int relocation);
 
-void mono_arm_throw_exception (gpointer arg, host_mgreg_t pc, host_mgreg_t *int_regs, gdouble *fp_regs, gboolean corlib, gboolean rethrow, gboolean preserve_ips);
+void mono_arm_throw_exception(gpointer arg, host_mgreg_t pc,
+                              host_mgreg_t *int_regs, gdouble *fp_regs,
+                              gboolean corlib, gboolean rethrow,
+                              gboolean preserve_ips);
 
-void mono_arm_gsharedvt_init (void);
+void mono_arm_gsharedvt_init(void);
 
-GSList* mono_arm_get_exception_trampolines (gboolean aot);
+GSList *mono_arm_get_exception_trampolines(gboolean aot);
 
-void mono_arm_resume_unwind (gpointer arg, host_mgreg_t pc, host_mgreg_t *int_regs, gdouble *fp_regs, gboolean corlib, gboolean rethrow);
+void mono_arm_resume_unwind(gpointer arg, host_mgreg_t pc,
+                            host_mgreg_t *int_regs, gdouble *fp_regs,
+                            gboolean corlib, gboolean rethrow);
 
-CallInfo* mono_arch_get_call_info (MonoMemPool *mp, MonoMethodSignature *sig);
+CallInfo *mono_arch_get_call_info(MonoMemPool *mp, MonoMethodSignature *sig);
 
 #endif /* __MONO_MINI_ARM64_H__ */
