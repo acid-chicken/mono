@@ -69,7 +69,7 @@ while :; do
         break
     fi
 
-    lowerI="$(echo $1 | awk '{print tolower($0)}')"
+    lowerI="$(echo "$1" | awk '{print tolower($0)}')"
     case $lowerI in
         -?|-h|--help)
             usage
@@ -204,73 +204,73 @@ if [ -z "$__RootfsDir" ]; then
 fi
 
 if [ -d "$__RootfsDir" ]; then
-    if [ $__SkipUnmount == 0 ]; then
-        umount $__RootfsDir/*
+    if [ "$__SkipUnmount" == 0 ]; then
+        umount "$__RootfsDir"/*
     fi
-    rm -rf $__RootfsDir
+    rm -rf "$__RootfsDir"
 fi
 
 if [[ "$__CodeName" == "alpine" ]]; then
     __ApkToolsVersion=2.9.1
     __AlpineVersion=3.9
     __ApkToolsDir=$(mktemp -d)
-    wget https://github.com/alpinelinux/apk-tools/releases/download/v$__ApkToolsVersion/apk-tools-$__ApkToolsVersion-x86_64-linux.tar.gz -P $__ApkToolsDir
-    tar -xf $__ApkToolsDir/apk-tools-$__ApkToolsVersion-x86_64-linux.tar.gz -C $__ApkToolsDir
-    mkdir -p $__RootfsDir/usr/bin
-    cp -v /usr/bin/qemu-$__QEMUArch-static $__RootfsDir/usr/bin
+    wget https://github.com/alpinelinux/apk-tools/releases/download/v"$__ApkToolsVersion/apk-tools-$__ApkToolsVersion"-x86_64-linux.tar.gz -P "$__ApkToolsDir"
+    tar -xf "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"-x86_64-linux.tar.gz -C "$__ApkToolsDir"
+    mkdir -p "$__RootfsDir"/usr/bin
+    cp -v /usr/bin/qemu-"$__QEMUArch"-static "$__RootfsDir"/usr/bin
 
-    $__ApkToolsDir/apk-tools-$__ApkToolsVersion/apk \
-      -X http://dl-cdn.alpinelinux.org/alpine/v$__AlpineVersion/main \
-      -X http://dl-cdn.alpinelinux.org/alpine/v$__AlpineVersion/community \
-      -U --allow-untrusted --root $__RootfsDir --arch $__AlpineArch --initdb \
-      add $__AlpinePackages
+    "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"/apk \
+      -X http://dl-cdn.alpinelinux.org/alpine/v"$__AlpineVersion"/main \
+      -X http://dl-cdn.alpinelinux.org/alpine/v"$__AlpineVersion"/community \
+      -U --allow-untrusted --root "$__RootfsDir" --arch "$__AlpineArch" --initdb \
+      add "$__AlpinePackages"
 
-    $__ApkToolsDir/apk-tools-$__ApkToolsVersion/apk \
+    "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"/apk \
       -X http://dl-cdn.alpinelinux.org/alpine/edge/main \
-      -U --allow-untrusted --root $__RootfsDir --arch $__AlpineArch --initdb \
-      add $__AlpinePackagesEdgeMain
+      -U --allow-untrusted --root "$__RootfsDir" --arch "$__AlpineArch" --initdb \
+      add "$__AlpinePackagesEdgeMain"
 
-    $__ApkToolsDir/apk-tools-$__ApkToolsVersion/apk \
+    "$__ApkToolsDir/apk-tools-$__ApkToolsVersion"/apk \
       -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-      -U --allow-untrusted --root $__RootfsDir --arch $__AlpineArch --initdb \
-      add $__AlpinePackagesEdgeTesting
+      -U --allow-untrusted --root "$__RootfsDir" --arch "$__AlpineArch" --initdb \
+      add "$__AlpinePackagesEdgeTesting"
 
-    rm -r $__ApkToolsDir
+    rm -r "$__ApkToolsDir"
 elif [[ "$__CodeName" == "freebsd" ]]; then
-    mkdir -p $__RootfsDir/usr/local/etc
-    wget -O - https://download.freebsd.org/ftp/releases/amd64/${__FreeBSDBase}/base.txz | tar -C $__RootfsDir -Jxf - ./lib ./usr/lib ./usr/libdata ./usr/include ./usr/share/keys ./etc ./bin/freebsd-version
+    mkdir -p "$__RootfsDir"/usr/local/etc
+    wget -O - https://download.freebsd.org/ftp/releases/amd64/"$__FreeBSDBase"/base.txz | tar -C "$__RootfsDir" -Jxf - ./lib ./usr/lib ./usr/libdata ./usr/include ./usr/share/keys ./etc ./bin/freebsd-version
     # For now, ask for 11 ABI even on 12. This can be revisited later.
-    echo "ABI = \"FreeBSD:11:amd64\"; FINGERPRINTS = \"${__RootfsDir}/usr/share/keys\"; REPOS_DIR = [\"${__RootfsDir}/etc/pkg\"]; REPO_AUTOUPDATE = NO; RUN_SCRIPTS = NO;" > ${__RootfsDir}/usr/local/etc/pkg.conf
-    echo "FreeBSD: { url: "pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly", mirror_type: \"srv\", signature_type: \"fingerprints\", fingerprints: \"${__RootfsDir}/usr/share/keys/pkg\", enabled: yes }" > ${__RootfsDir}/etc/pkg/FreeBSD.conf
-    mkdir -p $__RootfsDir/tmp
+    echo "ABI = \"FreeBSD:11:amd64\"; FINGERPRINTS = \"$__RootfsDir/usr/share/keys\"; REPOS_DIR = [\"$__RootfsDir/etc/pkg\"]; REPO_AUTOUPDATE = NO; RUN_SCRIPTS = NO;" > "$__RootfsDir"/usr/local/etc/pkg.conf
+    echo "FreeBSD: { url: "pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly", mirror_type: \"srv\", signature_type: \"fingerprints\", fingerprints: \"$__RootfsDir/usr/share/keys/pkg\", enabled: yes }" > "$__RootfsDir"/etc/pkg/FreeBSD.conf
+    mkdir -p "$__RootfsDir"/tmp
     # get and build package manager
-    wget -O -  https://github.com/freebsd/pkg/archive/${__FreeBSDPkg}.tar.gz  |  tar -C $__RootfsDir/tmp -zxf -
-    cd $__RootfsDir/tmp/pkg-${__FreeBSDPkg}
-    ./autogen.sh && ./configure --prefix=$__RootfsDir/host && make install
-    rm -rf $__RootfsDir/tmp/pkg-${__FreeBSDPkg}
+    wget -O -  https://github.com/freebsd/pkg/archive/"$__FreeBSDPkg".tar.gz  |  tar -C "$__RootfsDir"/tmp -zxf -
+    cd "$__RootfsDir/tmp/pkg-$__FreeBSDPkg"
+    ./autogen.sh && ./configure --prefix="$__RootfsDir"/host && make install
+    rm -rf "$__RootfsDir/tmp/pkg-$__FreeBSDPkg"
     # install packages we need.
-    $__RootfsDir/host/sbin/pkg -r $__RootfsDir -C $__RootfsDir/usr/local/etc/pkg.conf update
-    $__RootfsDir/host/sbin/pkg -r $__RootfsDir -C $__RootfsDir/usr/local/etc/pkg.conf install --yes $__FreeBSDPackages
+    "$__RootfsDir"/host/sbin/pkg -r "$__RootfsDir" -C "$__RootfsDir"/usr/local/etc/pkg.conf update
+    "$__RootfsDir"/host/sbin/pkg -r "$__RootfsDir" -C "$__RootfsDir"/usr/local/etc/pkg.conf install --yes "$__FreeBSDPackages"
 elif [[ -n $__CodeName ]]; then
-    qemu-debootstrap --arch $__UbuntuArch $__CodeName $__RootfsDir $__UbuntuRepo
-    cp $__CrossDir/$__BuildArch/sources.list.$__CodeName $__RootfsDir/etc/apt/sources.list
-    chroot $__RootfsDir apt-get update
-    chroot $__RootfsDir apt-get -f -y install
-    chroot $__RootfsDir apt-get -y install $__UbuntuPackages
-    chroot $__RootfsDir symlinks -cr /usr
+    qemu-debootstrap --arch "$__UbuntuArch" "$__CodeName" "$__RootfsDir" "$__UbuntuRepo"
+    cp "$__CrossDir/$__BuildArch/sources.list.$__CodeName" "$__RootfsDir"/etc/apt/sources.list
+    chroot "$__RootfsDir" apt-get update
+    chroot "$__RootfsDir" apt-get -f -y install
+    chroot "$__RootfsDir" apt-get -y install "$__UbuntuPackages"
+    chroot "$__RootfsDir" symlinks -cr /usr
 
-    if [ $__SkipUnmount == 0 ]; then
-        umount $__RootfsDir/*
+    if [ "$__SkipUnmount" == 0 ]; then
+        umount "$__RootfsDir"/*
     fi
 
     if [[ "$__BuildArch" == "arm" && "$__CodeName" == "trusty" ]]; then
-        pushd $__RootfsDir
-        patch -p1 < $__CrossDir/$__BuildArch/trusty.patch
-        patch -p1 < $__CrossDir/$__BuildArch/trusty-lttng-2.4.patch
+        pushd "$__RootfsDir"
+        patch -p1 < "$__CrossDir/$__BuildArch"/trusty.patch
+        patch -p1 < "$__CrossDir/$__BuildArch"/trusty-lttng-2.4.patch
         popd
     fi
 elif [ "$__Tizen" == "tizen" ]; then
-    ROOTFS_DIR=$__RootfsDir $__CrossDir/$__BuildArch/tizen-build-rootfs.sh
+    ROOTFS_DIR=$__RootfsDir "$__CrossDir/$__BuildArch"/tizen-build-rootfs.sh
 else
     echo "Unsupported target platform."
     usage;

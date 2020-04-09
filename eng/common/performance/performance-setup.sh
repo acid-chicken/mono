@@ -21,7 +21,7 @@ use_core_run=true
 use_baseline_core_run=true
 
 while (($# > 0)); do
-  lowerI="$(echo $1 | awk '{print tolower($0)}')"
+  lowerI="$(echo "$1" | awk '{print tolower($0)}')"
   case $lowerI in
     --sourcedirectory)
       source_directory=$2
@@ -180,25 +180,25 @@ if [[ "$run_from_perf_repo" = true ]]; then
     performance_directory=$workitem_directory
     setup_arguments="--perf-hash $commit_sha $common_setup_arguments"
 else
-    git clone --branch master --depth 1 --quiet https://github.com/dotnet/performance $performance_directory
+    git clone --branch master --depth 1 --quiet https://github.com/dotnet/performance "$performance_directory"
     
     docs_directory=$performance_directory/docs
-    mv $docs_directory $workitem_directory
+    mv "$docs_directory" "$workitem_directory"
 fi
 
 if [[ "$use_core_run" = true ]]; then
     new_core_root=$payload_directory/Core_Root
-    mv $core_root_directory $new_core_root
+    mv "$core_root_directory" "$new_core_root"
 fi
 
 if [[ "$use_baseline_core_run" = true ]]; then
   new_baseline_core_root=$payload_directory/Baseline_Core_Root
-  mv $baseline_core_root_directory $new_baseline_core_root
+  mv "$baseline_core_root_directory" "$new_baseline_core_root"
 fi
 
 ci=true
 
-_script_dir=$(pwd)/eng/common
+_script_dir=$PWD/eng/common
 . "$_script_dir/pipeline-logging-functions.sh"
 
 # Make sure all of our variables are available for future steps
