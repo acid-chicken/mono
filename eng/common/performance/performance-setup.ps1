@@ -62,7 +62,7 @@ $SetupArguments = "--dotnet-versions $DotNetVersion $SetupArguments"
 
 if ($RunFromPerformanceRepo) {
     $SetupArguments = "--perf-hash $CommitSha $CommonSetupArguments"
-    
+
     robocopy $SourceDirectory $PerformanceDirectory /E /XD $PayloadDirectory $SourceDirectory\artifacts $SourceDirectory\.git
 }
 else {
