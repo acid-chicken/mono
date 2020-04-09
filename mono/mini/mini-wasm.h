@@ -45,19 +45,19 @@
 
 
 struct MonoLMF {
-	/* 
-	 * If the second lowest bit is set to 1, then this is a MonoLMFExt structure, and
-	 * the other fields are not valid.
-	 */
-	gpointer previous_lmf;
-	gpointer lmf_addr;
+    /*
+     * If the second lowest bit is set to 1, then this is a MonoLMFExt structure, and
+     * the other fields are not valid.
+     */
+    gpointer previous_lmf;
+    gpointer lmf_addr;
 
-	/* This is set to signal this is the top lmf entry */
-	gboolean top_entry;
+    /* This is set to signal this is the top lmf entry */
+    gboolean top_entry;
 };
 
 typedef struct {
-	gpointer cinfo;
+    gpointer cinfo;
 } MonoCompileArch;
 
 #define MONO_ARCH_INIT_TOP_LMF_ENTRY(lmf) do { (lmf)->top_entry = TRUE; } while (0)
@@ -112,4 +112,4 @@ void mono_wasm_set_timeout (int timeout, int id);
 void mono_wasm_single_step_hit (void);
 void mono_wasm_breakpoint_hit (void);
 
-#endif /* __MONO_MINI_WASM_H__ */  
+#endif /* __MONO_MINI_WASM_H__ */
