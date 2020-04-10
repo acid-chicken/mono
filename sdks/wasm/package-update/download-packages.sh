@@ -3,7 +3,7 @@ while (("$#"));
 do 
     key="${1}"
     
-    case ${key} in
+    case $key in
     -r|--runtime)
         RUNTIME="$2"
         shift 2
@@ -26,20 +26,20 @@ PACKAGE_PATH=$HOME/.nuget/packages/microsoft.aspnetcore.components.webassembly.r
 
 if [ -z "$FILEPATH" ]
 then
-    wget -O wasm-package.zip $URL
+    wget -O wasm-package.zip "$URL"
     unzip wasm-package.zip -d wasm-package/
     FILEPATH=wasm-package/
 fi
 
-rm -r $PACKAGE_PATH/bcl
-cp $FILEPATH/wasm-bcl $PACKAGE_PATH/bcl
+rm -r "$PACKAGE_PATH"/bcl
+cp "$FILEPATH"/wasm-bcl "$PACKAGE_PATH"/bcl
 
-rm -r $PACKAGE_PATH/framework
-cp $FILEPATH/framework $PACKAGE_PATH/framework
+rm -r "$PACKAGE_PATH"/framework
+cp "$FILEPATH"/framework "$PACKAGE_PATH"/framework
 
 rm "$PACKAGE_PATH"/wasm/*
-cp $FILEPATH/builds/release/dotnet.$RUNTIME.js $PACKAGE_PATH/wasm/
-cp $FILEPATH/builds/release/dotnet.wasm $PACKAGE_PATH/wasm/
+cp "$FILEPATH/builds/release/dotnet.$RUNTIME".js "$PACKAGE_PATH"/wasm/
+cp "$FILEPATH"/builds/release/dotnet.wasm "$PACKAGE_PATH"/wasm/
 
 rm wasm-package.zip
 rm -rf wasm-package
