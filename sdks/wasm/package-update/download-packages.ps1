@@ -4,7 +4,7 @@ $PACKAGE_PATH="~\\.nuget\\packages\\microsoft.aspnetcore.components.webassembly.
 if ($null -eq $filepath) {
 	Invoke-WebRequest -Uri $url -OutFile wasm-package.zip -UseBasicParsing
 
-	Expand-Archive wasm-package.zip 
+	Expand-Archive wasm-package.zip
 	cd wasm-package
 }
 else {
