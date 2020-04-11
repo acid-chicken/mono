@@ -19,143 +19,177 @@ describe("The WebAssembly Issues Test Suite", function() {
       // if the #Document is ready, fire tests
       // the done() callback is the jasmine native async-support function
       if (ready) {
-        karmaHTML.issuesspec.document.onRuntimeDone = function() { done(); }
+        karmaHTML.issuesspec.document.onRuntimeDone = function() {
+          done();
+        };
       }
     };
   });
 
-  it('IssuesTestSuite: https://github.com/mono/mono/issues/12981 Interpreter Recursion',
-     () => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
+  it(
+    "IssuesTestSuite: https://github.com/mono/mono/issues/12981 Interpreter Recursion",
+    () => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
 
-       _document.Module.BINDING.call_static_method(
-           "[IssuesTestSuite]TestSuite.Program:BugInterpRecursion", [ null ]);
-       expect(_document.constructor.name)
-           .toEqual('HTMLDocument'); // really nothing to assert here except if
-                                     // a recursion occurs.
-     },
-     DEFAULT_TIMEOUT);
+      _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:BugInterpRecursion",
+        [null]
+      );
+      expect(_document.constructor.name).toEqual("HTMLDocument"); // really nothing to assert here except if
+      // a recursion occurs.
+    },
+    DEFAULT_TIMEOUT
+  );
 
-  it('IssuesTestSuite: https://github.com/mono/mono/issues/13881 32 bit enum flag values upon reflection',
-     () => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
+  it(
+    "IssuesTestSuite: https://github.com/mono/mono/issues/13881 32 bit enum flag values upon reflection",
+    () => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
 
-       _document.Module.BINDING.call_static_method(
-           "[IssuesTestSuite]TestSuite.Program:Issue13881", []);
-       expect(_document.constructor.name)
-           .toEqual('HTMLDocument'); // really nothing to assert here except if
-                                     // an error occurs.
-     },
-     DEFAULT_TIMEOUT);
+      _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:Issue13881",
+        []
+      );
+      expect(_document.constructor.name).toEqual("HTMLDocument"); // really nothing to assert here except if
+      // an error occurs.
+    },
+    DEFAULT_TIMEOUT
+  );
 
-  it('IssuesTestSuite: https://github.com/mono/mono/issues/13428 Mysterious phenomenon of using Math.Truncate.',
-     () => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
+  it(
+    "IssuesTestSuite: https://github.com/mono/mono/issues/13428 Mysterious phenomenon of using Math.Truncate.",
+    () => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
 
-       var doublevalue = _document.Module.BINDING.call_static_method(
-           "[IssuesTestSuite]TestSuite.Program:Issue13428", []);
-       assert.equal(doublevalue, 20, "result doesn't match 20");
-     },
-     DEFAULT_TIMEOUT);
+      var doublevalue = _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:Issue13428",
+        []
+      );
+      assert.equal(doublevalue, 20, "result doesn't match 20");
+    },
+    DEFAULT_TIMEOUT
+  );
 
-  it('IssuesTestSuite: https://github.com/dotnet/try/issues/290 try.net Math.Truncate.',
-     () => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
+  it(
+    "IssuesTestSuite: https://github.com/dotnet/try/issues/290 try.net Math.Truncate.",
+    () => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
 
-       var doublevalue = _document.Module.BINDING.call_static_method(
-           "[IssuesTestSuite]TestSuite.Program:IssueTry290", []);
-       assert.equal(doublevalue, 11, "result doesn't match 11");
-     },
-     DEFAULT_TIMEOUT);
+      var doublevalue = _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:IssueTry290",
+        []
+      );
+      assert.equal(doublevalue, 11, "result doesn't match 11");
+    },
+    DEFAULT_TIMEOUT
+  );
 
-  it('IssuesTestSuite: https://github.com/mono/mono/issues/14940 should not crash when issuing two fetchs back to back.',
-     (done) => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
-       _document.Module.BINDING
-           .call_static_method(
-               "[IssuesTestSuite]TestSuite.Program:IssueDoubleFetch", [])
-           .then(
-               (result) => {
-                 try {
-                   assert.equal(result.length, 2,
-                                "result does not match Fetch Issue of 2.");
-                   done()
-                 } catch (e) {
-                   done.fail(e);
-                 }
-               },
-               (error) => done.fail(error)
+  it(
+    "IssuesTestSuite: https://github.com/mono/mono/issues/14940 should not crash when issuing two fetchs back to back.",
+    done => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
+      _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:IssueDoubleFetch",
+        []
+      ).then(
+        result => {
+          try {
+            assert.equal(
+              result.length,
+              2,
+              "result does not match Fetch Issue of 2."
+            );
+            done();
+          } catch (e) {
+            done.fail(e);
+          }
+        },
+        error => done.fail(error)
+      );
+    },
+    DEFAULT_TIMEOUT
+  );
 
-           );
-     },
-     DEFAULT_TIMEOUT);
+  it(
+    "IssuesTestSuite: https://github.com/mono/mono/issues/14940 should not crash when retrieving headers issuing two fetchs back to back.",
+    done => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
+      _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:IssueDoubleFetchHeaders",
+        []
+      ).then(
+        result => {
+          try {
+            assert.equal(
+              result.length,
+              2,
+              "result does not match number of headers 2."
+            );
+            done();
+          } catch (e) {
+            done.fail(e);
+          }
+        },
+        error => done.fail(error)
+      );
+    },
+    DEFAULT_TIMEOUT
+  );
+  it(
+    "IssuesTestSuite: https://github.com/mono/mono/issues/12917 IL Linker not working correctly with IQueryable extensions.",
+    () => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
 
-  it('IssuesTestSuite: https://github.com/mono/mono/issues/14940 should not crash when retrieving headers issuing two fetchs back to back.',
-     (done) => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
-       _document.Module.BINDING
-           .call_static_method(
-               "[IssuesTestSuite]TestSuite.Program:IssueDoubleFetchHeaders", [])
-           .then(
-               (result) => {
-                 try {
-                   assert.equal(result.length, 2,
-                                "result does not match number of headers 2.");
-                   done()
-                 } catch (e) {
-                   done.fail(e);
-                 }
-               },
-               (error) => done.fail(error)
+      var ret = _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:IssueIQueryable",
+        []
+      );
+      assert.equal(ret, 4, "result doesn't match 4");
+    },
+    DEFAULT_TIMEOUT
+  );
 
-           );
-     },
-     DEFAULT_TIMEOUT);
-  it('IssuesTestSuite: https://github.com/mono/mono/issues/12917 IL Linker not working correctly with IQueryable extensions.',
-     () => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
+  it(
+    "https://github.com/mono/mono/issues/18933 System.IO.Path.GetFileName does not work - GetFileName.",
+    () => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
 
-       var ret = _document.Module.BINDING.call_static_method(
-           "[IssuesTestSuite]TestSuite.Program:IssueIQueryable", []);
-       assert.equal(ret, 4, "result doesn't match 4");
-     },
-     DEFAULT_TIMEOUT);
+      var ret = _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:Issue18933_FileName_Backslash"
+      );
+      assert.equal(ret, "File1.txt", "result doesn't match File1.txt");
+    },
+    DEFAULT_TIMEOUT
+  );
 
-  it('https://github.com/mono/mono/issues/18933 System.IO.Path.GetFileName does not work - GetFileName.',
-     () => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
+  it(
+    "https://github.com/mono/mono/issues/18933 System.IO.Path.GetFileName does not work - DirectoryInfo.",
+    () => {
+      // karmaHTML.issuesspec.document gives the access to the Document object
+      // of 'http-spec.html' file
+      var _document = karmaHTML.issuesspec.document;
 
-       var ret = _document.Module.BINDING.call_static_method(
-           "[IssuesTestSuite]TestSuite.Program:Issue18933_FileName_Backslash");
-       assert.equal(ret, "File1.txt", "result doesn't match File1.txt");
-     },
-     DEFAULT_TIMEOUT);
-
-  it('https://github.com/mono/mono/issues/18933 System.IO.Path.GetFileName does not work - DirectoryInfo.',
-     () => {
-       // karmaHTML.issuesspec.document gives the access to the Document object
-       // of 'http-spec.html' file
-       var _document = karmaHTML.issuesspec.document;
-
-       var ret = _document.Module.BINDING.call_static_method(
-           "[IssuesTestSuite]TestSuite.Program:Issue18933_Directory_Backslash");
-       assert.equal(ret, "File1.txt", "result doesn't match File1.txt");
-     },
-     DEFAULT_TIMEOUT);
+      var ret = _document.Module.BINDING.call_static_method(
+        "[IssuesTestSuite]TestSuite.Program:Issue18933_Directory_Backslash"
+      );
+      assert.equal(ret, "File1.txt", "result doesn't match File1.txt");
+    },
+    DEFAULT_TIMEOUT
+  );
 });
