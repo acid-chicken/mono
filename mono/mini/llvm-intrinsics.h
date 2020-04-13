@@ -32,7 +32,7 @@ INTRINS_OVR(CEIL, ceil)
 INTRINS_OVR(CEILF, ceil)
 INTRINS_OVR(FMA, fma)
 INTRINS_OVR(FMAF, fma)
-	/* This isn't an intrinsic, instead llvm seems to special case it by name */
+/* This isn't an intrinsic, instead llvm seems to special case it by name */
 INTRINS_OVR(FABS, fabs)
 INTRINS_OVR(ABSF, fabs)
 INTRINS_OVR(SINF, sin)
@@ -217,7 +217,7 @@ INTRINS(AESNI_AESENC, x86_aesni_aesenc)
 INTRINS(AESNI_AESENCLAST, x86_aesni_aesenclast)
 INTRINS(AESNI_AESIMC, x86_aesni_aesimc)
 #if LLVM_API_VERSION >= 800
-	// these intrinsics were renamed in LLVM 8
+// these intrinsics were renamed in LLVM 8
 INTRINS_OVR(SSE_SADD_SATI8, sadd_sat)
 INTRINS_OVR(SSE_UADD_SATI8, uadd_sat)
 INTRINS_OVR(SSE_SADD_SATI16, sadd_sat)
