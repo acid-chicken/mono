@@ -14,7 +14,7 @@
   }
 }
       ]]>
-      </_globalFixedContent>      
+      </_globalFixedContent>
     </PropertyGroup>
 
     <WriteLinesToFile File="$(_globalOutputPath)\global.json" Overwrite="true" Lines="$(_globalFixedContent)" />
