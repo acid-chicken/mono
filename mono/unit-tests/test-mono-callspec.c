@@ -34,17 +34,17 @@
 GArray *test_methods = NULL;
 
 enum test_method_enums {
-	FOO_BAR,
-	FOO_BARP,
-	GOO_BAR,
-	FOO2_BAR,
-	CONSOLE_WRITELINE,
+    FOO_BAR,
+    FOO_BARP,
+    GOO_BAR,
+    FOO2_BAR,
+    CONSOLE_WRITELINE,
 };
 
 struct {
-	int method;
-	const char *callspec;
-	gboolean expect_match;
+    int method;
+    const char *callspec;
+    gboolean expect_match;
 } test_entries[] = {
     /* program tests */
     {FOO_BAR, "program", TRUE},
@@ -85,83 +85,84 @@ struct {
     {GOO_BAR, "M::Bar", TRUE},
     {FOO2_BAR, "M::Bar", TRUE},
 
-    {0, NULL, FALSE}};
+    {0, NULL, FALSE}
+};
 
 static int test_callspec (int test_idx,
-			  MonoMethod *method,
-			  const char *callspec,
-			  gboolean expect_match)
+                          MonoMethod *method,
+                          const char *callspec,
+                          gboolean expect_match)
 {
-	int res = 0;
-	gboolean initialized = FALSE;
-	gboolean match;
-	MonoCallSpec spec = {0};
-	char *errstr;
-	char *method_name = mono_method_full_name (method, TRUE);
-	if (!method_name) {
-		printf ("FAILED getting method name in callspec test #%d\n",
-			test_idx);
-		res = 1;
-		goto out;
-	}
+    int res = 0;
+    gboolean initialized = FALSE;
+    gboolean match;
+    MonoCallSpec spec = {0};
+    char *errstr;
+    char *method_name = mono_method_full_name (method, TRUE);
+    if (!method_name) {
+        printf ("FAILED getting method name in callspec test #%d\n",
+                test_idx);
+        res = 1;
+        goto out;
+    }
 
-	if (!mono_callspec_parse (callspec, &spec, &errstr)) {
-		printf ("FAILED parsing callspec '%s' - %s\n", callspec,
-			errstr);
-		g_free (errstr);
-		res = 1;
-		goto out;
-	}
-	initialized = TRUE;
+    if (!mono_callspec_parse (callspec, &spec, &errstr)) {
+        printf ("FAILED parsing callspec '%s' - %s\n", callspec,
+                errstr);
+        g_free (errstr);
+        res = 1;
+        goto out;
+    }
+    initialized = TRUE;
 
-	match = mono_callspec_eval (method, &spec);
+    match = mono_callspec_eval (method, &spec);
 
-	if (match && !expect_match) {
-		printf ("FAILED unexpected match '%s' against '%s'\n",
-			method_name, callspec);
-		res = 1;
-		goto out;
-	}
-	if (!match && expect_match) {
-		printf ("FAILED unexpected mismatch '%s' against '%s'\n",
-			method_name, callspec);
-		res = 1;
-		goto out;
-	}
+    if (match && !expect_match) {
+        printf ("FAILED unexpected match '%s' against '%s'\n",
+                method_name, callspec);
+        res = 1;
+        goto out;
+    }
+    if (!match && expect_match) {
+        printf ("FAILED unexpected mismatch '%s' against '%s'\n",
+                method_name, callspec);
+        res = 1;
+        goto out;
+    }
 
 out:
-	if (initialized)
-		mono_callspec_cleanup(&spec);
-	if (method_name)
-		g_free (method_name);
-	return res;
+    if (initialized)
+        mono_callspec_cleanup(&spec);
+    if (method_name)
+        g_free (method_name);
+    return res;
 }
 
 static int test_all_callspecs (void)
 {
-	int idx;
-	for (idx = 0; test_entries[idx].callspec; ++idx) {
-		MonoMethod *meth = g_array_index (test_methods, MonoMethod *,
-						  test_entries[idx].method);
-		if (test_callspec (idx, meth, test_entries[idx].callspec,
-				   test_entries[idx].expect_match))
-			return 1;
-	}
+    int idx;
+    for (idx = 0; test_entries[idx].callspec; ++idx) {
+        MonoMethod *meth = g_array_index (test_methods, MonoMethod *,
+                                          test_entries[idx].method);
+        if (test_callspec (idx, meth, test_entries[idx].callspec,
+                           test_entries[idx].expect_match))
+            return 1;
+    }
 
-	return 0;
+    return 0;
 }
 
 static MonoClass *test_mono_class_from_name (MonoImage *image,
-					     const char *name_space,
-					     const char *name)
+        const char *name_space,
+        const char *name)
 {
-	ERROR_DECL (error);
-	MonoClass *klass;
+    ERROR_DECL (error);
+    MonoClass *klass;
 
-	klass = mono_class_from_name_checked (image, name_space, name, error);
-	mono_error_cleanup (error); /* FIXME Don't swallow the error */
+    klass = mono_class_from_name_checked (image, name_space, name, error);
+    mono_error_cleanup (error); /* FIXME Don't swallow the error */
 
-	return klass;
+    return klass;
 }
 
 #ifdef __cplusplus
@@ -173,103 +174,103 @@ test_mono_callspec_main (void);
 int
 test_mono_callspec_main (void)
 {
-	int res = 0;
-	MonoDomain *domain = NULL;
-	MonoAssembly *assembly = NULL;
-	MonoImage *prog_image = NULL;
-	MonoImage *corlib = NULL;
-	MonoClass *prog_klass, *console_klass;
-	MonoMethod *meth;
-	MonoImageOpenStatus status;
+    int res = 0;
+    MonoDomain *domain = NULL;
+    MonoAssembly *assembly = NULL;
+    MonoImage *prog_image = NULL;
+    MonoImage *corlib = NULL;
+    MonoClass *prog_klass, *console_klass;
+    MonoMethod *meth;
+    MonoImageOpenStatus status;
 
-	//FIXME This is a hack due to embedding simply not working from the tree
-	mono_set_assemblies_path ("../../mcs/class/lib/net_4_x");
+    //FIXME This is a hack due to embedding simply not working from the tree
+    mono_set_assemblies_path ("../../mcs/class/lib/net_4_x");
 
-	test_methods = g_array_new (FALSE, TRUE, sizeof (MonoMethod *));
-	if (!test_methods) {
-		res = 1;
-		printf ("FAILED INITIALIZING METHODS ARRAY\n");
-		goto out;
-	}
+    test_methods = g_array_new (FALSE, TRUE, sizeof (MonoMethod *));
+    if (!test_methods) {
+        res = 1;
+        printf ("FAILED INITIALIZING METHODS ARRAY\n");
+        goto out;
+    }
 
-	domain = mono_jit_init_version_for_test_only ("TEST RUNNER", "mobile");
-	assembly = mono_assembly_open (TESTPROG, &status);
-	if (!domain || !assembly) {
-		res = 1;
-		printf("FAILED LOADING TEST PROGRAM\n");
-		goto out;
-	}
+    domain = mono_jit_init_version_for_test_only ("TEST RUNNER", "mobile");
+    assembly = mono_assembly_open (TESTPROG, &status);
+    if (!domain || !assembly) {
+        res = 1;
+        printf("FAILED LOADING TEST PROGRAM\n");
+        goto out;
+    }
 
-	mono_callspec_set_assembly(assembly);
+    mono_callspec_set_assembly(assembly);
 
-	prog_image = mono_assembly_get_image_internal (assembly);
+    prog_image = mono_assembly_get_image_internal (assembly);
 
-	prog_klass = test_mono_class_from_name (prog_image, "Baz", "Foo");
-	if (!prog_klass) {
-		res = 1;
-		printf ("FAILED FINDING Baz.Foo\n");
-		goto out;
-	}
-	meth = mono_class_get_method_from_name (prog_klass, "Bar", 0);
-	if (!meth) {
-		res = 1;
-		printf ("FAILED FINDING Baz.Foo:Bar ()\n");
-		goto out;
-	}
-	g_array_append_val (test_methods, meth);
-	meth = mono_class_get_method_from_name (prog_klass, "Bar", 1);
-	if (!meth) {
-		res = 1;
-		printf ("FAILED FINDING Baz.Foo:Bar (string)\n");
-		goto out;
-	}
-	g_array_append_val (test_methods, meth);
+    prog_klass = test_mono_class_from_name (prog_image, "Baz", "Foo");
+    if (!prog_klass) {
+        res = 1;
+        printf ("FAILED FINDING Baz.Foo\n");
+        goto out;
+    }
+    meth = mono_class_get_method_from_name (prog_klass, "Bar", 0);
+    if (!meth) {
+        res = 1;
+        printf ("FAILED FINDING Baz.Foo:Bar ()\n");
+        goto out;
+    }
+    g_array_append_val (test_methods, meth);
+    meth = mono_class_get_method_from_name (prog_klass, "Bar", 1);
+    if (!meth) {
+        res = 1;
+        printf ("FAILED FINDING Baz.Foo:Bar (string)\n");
+        goto out;
+    }
+    g_array_append_val (test_methods, meth);
 
-	prog_klass = test_mono_class_from_name (prog_image, "Baz", "Goo");
-	if (!prog_klass) {
-		res = 1;
-		printf ("FAILED FINDING Baz.Goo\n");
-		goto out;
-	}
-	meth = mono_class_get_method_from_name (prog_klass, "Bar", 1);
-	if (!meth) {
-		res = 1;
-		printf ("FAILED FINDING Baz.Goo:Bar (string)\n");
-		goto out;
-	}
-	g_array_append_val (test_methods, meth);
+    prog_klass = test_mono_class_from_name (prog_image, "Baz", "Goo");
+    if (!prog_klass) {
+        res = 1;
+        printf ("FAILED FINDING Baz.Goo\n");
+        goto out;
+    }
+    meth = mono_class_get_method_from_name (prog_klass, "Bar", 1);
+    if (!meth) {
+        res = 1;
+        printf ("FAILED FINDING Baz.Goo:Bar (string)\n");
+        goto out;
+    }
+    g_array_append_val (test_methods, meth);
 
-	prog_klass = test_mono_class_from_name (prog_image, "Baz", "Foo2");
-	if (!prog_klass) {
-		res = 1;
-		printf ("FAILED FINDING Baz.Foo2\n");
-		goto out;
-	}
-	meth = mono_class_get_method_from_name (prog_klass, "Bar", 1);
-	if (!meth) {
-		res = 1;
-		printf ("FAILED FINDING Baz.Foo2:Bar (string)\n");
-		goto out;
-	}
-	g_array_append_val (test_methods, meth);
+    prog_klass = test_mono_class_from_name (prog_image, "Baz", "Foo2");
+    if (!prog_klass) {
+        res = 1;
+        printf ("FAILED FINDING Baz.Foo2\n");
+        goto out;
+    }
+    meth = mono_class_get_method_from_name (prog_klass, "Bar", 1);
+    if (!meth) {
+        res = 1;
+        printf ("FAILED FINDING Baz.Foo2:Bar (string)\n");
+        goto out;
+    }
+    g_array_append_val (test_methods, meth);
 
-	corlib = mono_get_corlib ();
+    corlib = mono_get_corlib ();
 
-	console_klass = test_mono_class_from_name (corlib, "System", "Console");
-	if (!console_klass) {
-		res = 1;
-		printf ("FAILED FINDING System.Console\n");
-		goto out;
-	}
-	meth = mono_class_get_method_from_name (console_klass, "WriteLine", 1);
-	if (!meth) {
-		res = 1;
-		printf ("FAILED FINDING System.Console:WriteLine\n");
-		goto out;
-	}
-	g_array_append_val (test_methods, meth);
+    console_klass = test_mono_class_from_name (corlib, "System", "Console");
+    if (!console_klass) {
+        res = 1;
+        printf ("FAILED FINDING System.Console\n");
+        goto out;
+    }
+    meth = mono_class_get_method_from_name (console_klass, "WriteLine", 1);
+    if (!meth) {
+        res = 1;
+        printf ("FAILED FINDING System.Console:WriteLine\n");
+        goto out;
+    }
+    g_array_append_val (test_methods, meth);
 
-	res = test_all_callspecs ();
+    res = test_all_callspecs ();
 out:
-	return res;
+    return res;
 }
