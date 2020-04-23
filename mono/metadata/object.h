@@ -33,8 +33,8 @@ typedef struct _MonoReflectionMethodBody MONO_RT_MANAGED_ATTR MonoReflectionMeth
 typedef struct _MonoAppContext MONO_RT_MANAGED_ATTR MonoAppContext;
 
 struct _MonoObject {
-	MonoVTable *vtable;
-	MonoThreadsSync *synchronisation;
+    MonoVTable *vtable;
+    MonoThreadsSync *synchronisation;
 };
 
 typedef MonoObject* (*MonoInvokeFunc)	     (MonoMethod *method, void *obj, void **params, MonoObject **exc, MonoError *error);
@@ -52,7 +52,7 @@ typedef void	    (*MonoMainThreadFunc)    (void* user_data);
     } while (0)
 
 #define mono_array_addr(array,type,index) ((type*)mono_array_addr_with_size ((array), sizeof (type), (index)))
-#define mono_array_get(array,type,index) ( *(type*)mono_array_addr ((array), type, (index)) ) 
+#define mono_array_get(array,type,index) ( *(type*)mono_array_addr ((array), type, (index)) )
 #define mono_array_set(array,type,index,value)	\
 	do {	\
 		type *__p = (type *) mono_array_addr ((array), type, (index));	\
@@ -101,7 +101,7 @@ mono_array_new		    (MonoDomain *domain, MonoClass *eclass, uintptr_t n);
 MONO_API MONO_RT_EXTERNAL_ONLY
 MonoArray*
 mono_array_new_full	    (MonoDomain *domain, MonoClass *array_class,
-			     uintptr_t *lengths, intptr_t *lower_bounds);
+                         uintptr_t *lengths, intptr_t *lower_bounds);
 
 MONO_API MONO_RT_EXTERNAL_ONLY
 MonoArray *
@@ -264,7 +264,7 @@ mono_object_get_virtual_method (MonoObject *obj, MonoMethod *method);
 
 MONO_API MONO_RT_EXTERNAL_ONLY MonoObject*
 mono_runtime_invoke	    (MonoMethod *method, void *obj, void **params,
-			     MonoObject **exc);
+                         MonoObject **exc);
 
 MONO_API MONO_RT_EXTERNAL_ONLY MonoMethod*
 mono_get_delegate_invoke    (MonoClass *klass);
@@ -277,11 +277,11 @@ mono_get_delegate_end_invoke (MonoClass *klass);
 
 MONO_API MONO_RT_EXTERNAL_ONLY MonoObject*
 mono_runtime_delegate_invoke (MonoObject *delegate, void **params,
-			      MonoObject **exc);
+                              MonoObject **exc);
 
 MONO_API MONO_RT_EXTERNAL_ONLY MonoObject*
 mono_runtime_invoke_array   (MonoMethod *method, void *obj, MonoArray *params,
-			     MonoObject **exc);
+                             MonoObject **exc);
 
 MONO_API MONO_RT_EXTERNAL_ONLY void*
 mono_method_get_unmanaged_thunk (MonoMethod *method);
@@ -291,16 +291,16 @@ mono_runtime_get_main_args  (void);
 
 MONO_API MONO_RT_EXTERNAL_ONLY void
 mono_runtime_exec_managed_code (MonoDomain *domain,
-				MonoMainThreadFunc main_func,
-				void* main_args);
+                                MonoMainThreadFunc main_func,
+                                void* main_args);
 
 MONO_API MONO_RT_EXTERNAL_ONLY int
-mono_runtime_run_main	    (MonoMethod *method, int argc, char* argv[], 
-			     MonoObject **exc);
+mono_runtime_run_main	    (MonoMethod *method, int argc, char* argv[],
+                             MonoObject **exc);
 
 MONO_API MONO_RT_EXTERNAL_ONLY int
 mono_runtime_exec_main	    (MonoMethod *method, MonoArray *args,
-			     MonoObject **exc);
+                             MonoObject **exc);
 
 MONO_API MONO_RT_EXTERNAL_ONLY int
 mono_runtime_set_main_args  (int argc, char* argv[]);
@@ -356,11 +356,11 @@ mono_property_get_value (MonoProperty *prop, void *obj, void **params, MonoObjec
 /* GC handles support
  *
  * A handle can be created to refer to a managed object and either prevent it
- * from being garbage collected or moved or to be able to know if it has been 
+ * from being garbage collected or moved or to be able to know if it has been
  * collected or not (weak references).
  * mono_gchandle_new () is used to prevent an object from being garbage collected
  * until mono_gchandle_free() is called. Use a TRUE value for the pinned argument to
- * prevent the object from being moved (this should be avoided as much as possible 
+ * prevent the object from being moved (this should be avoided as much as possible
  * and this should be used only for shorts periods of time or performance will suffer).
  * To create a weakref use mono_gchandle_new_weakref (): track_resurrection should
  * usually be false (see the GC docs for more details).
