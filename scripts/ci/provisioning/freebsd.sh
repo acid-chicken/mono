@@ -6,12 +6,12 @@
 mkdir -p /mnt/jenkins/pbuilder /mnt/scratch /mnt/jenkins/buildplace
 chown builder /mnt/jenkins /mnt/jenkins/pbuilder /mnt/scratch
 
-## Prevent false System.Security-xunit failures 
+## Prevent false System.Security-xunit failures
 if [ ! -d /usr/share/.mono ]; then
   mkdir /usr/share/.mono
   chown builder /usr/share/.mono
 else
- chown builder /usr/share/.mono
+  chown builder /usr/share/.mono
 fi
 
 ######################################################################
@@ -23,16 +23,16 @@ for km in fdescfs linprocfs; do
 done
 ## Set up the appropriate mounts prior to pkg installation. It's easier this way.
 if [ ! -e /dev/fd ]; then
-  echo "fdesc /dev/fd fdescfs rw 0 0" >> /etc/fstab
+  echo "fdesc /dev/fd fdescfs rw 0 0" >>/etc/fstab
   mount /dev/fd
 fi
 ## Linux compatibility shim here; this may be required for some unit tests and applications
 if [ ! -d /compat/linux/proc ]; then
   mkdir -p /compat/linux/proc
-  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >> /etc/fstab
+  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >>/etc/fstab
   mount /compat/linux/proc
 elif [ -e /compat/linux/proc ]; then
-  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >> /etc/fstab
+  echo "linprocfs /compat/linux/proc linprocfs rw 0 0" >>/etc/fstab
   mount /compat/linux/proc
 fi
 
@@ -40,18 +40,18 @@ fi
 # Package Installation
 ######################################################################
 ## Validate that pkg is working.
-if ! pkg info > /dev/null; then
+if ! pkg info >/dev/null; then
   ## We can't possibly continue.
   echo "[FATAL] pkg is non-functional; build impossible."
   exit 1
 fi
 ## As of 2020Q1, need to update pkg itself due to pkg itself being upgraded.
 if [ "$(date +%s)" -gt 158625000 ]; then
-	sed -i '' -E '/.?IGNORE_OSVERSION.*/d' /usr/local/etc/pkg.conf
-	echo 'IGNORE_OSVERSION = true;' >> /usr/local/etc/pkg.conf
-	/usr/bin/env ASSUME_ALWAYS_YES=yes /usr/sbin/pkg bootstrap -f
-	pkg update
-	pkg upgrade -y
+  sed -i '' -E '/.?IGNORE_OSVERSION.*/d' /usr/local/etc/pkg.conf
+  echo 'IGNORE_OSVERSION = true;' >>/usr/local/etc/pkg.conf
+  /usr/bin/env ASSUME_ALWAYS_YES=yes /usr/sbin/pkg bootstrap -f
+  pkg update
+  pkg upgrade -y
 fi
 
 ## These packages are MUST have; use the python3 metaport.
@@ -75,7 +75,7 @@ fi
 # for compatibility with the mono build scripts, ideally shouldn't be necessary
 ln -s /usr/local/bin/bash /bin/bash
 # fix for gen-descriptor-tests.py
-if ! command -v python3 ; then
+if ! command -v python3; then
   if [ -f /usr/local/bin/python3.7 ]; then
     ln -s /usr/local/bin/python3.7 /usr/local/bin/python3
   elif [ -f /usr/local/bin/python3.6 ]; then
