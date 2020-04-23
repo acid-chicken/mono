@@ -19,7 +19,7 @@ fi
 ######################################################################
 ## Set up our kernel modules
 for km in fdescfs linprocfs; do
-  kldload $km || true
+  kldload "$km" || true
 done
 ## Set up the appropriate mounts prior to pkg installation. It's easier this way.
 if [ ! -e /dev/fd ]; then
@@ -46,7 +46,7 @@ if ! pkg info > /dev/null; then
   exit 1
 fi
 ## As of 2020Q1, need to update pkg itself due to pkg itself being upgraded.
-if [ $(date +%s) -gt 158625000 ]; then
+if [ "$(date +%s)" -gt 158625000 ]; then
 	sed -i '' -E '/.?IGNORE_OSVERSION.*/d' /usr/local/etc/pkg.conf
 	echo 'IGNORE_OSVERSION = true;' >> /usr/local/etc/pkg.conf
 	/usr/bin/env ASSUME_ALWAYS_YES=yes /usr/sbin/pkg bootstrap -f
@@ -63,7 +63,7 @@ fi
 
 ## These packages are NICE to have, so be more graceful.
 for pn in gettext-runtime gettext-tools cairo libdrm mesa-dri mesa-libs openjdk8 libgdiplus unixODBC sqlite3 xorgproto pango libinotify; do
-  pkg install -y $pn || true
+  pkg install -y "$pn" || true
 done
 
 ## Jan 7 2020 - work around image having mangled perl defaults
