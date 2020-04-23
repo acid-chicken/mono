@@ -4,25 +4,26 @@
  * just a thin wrapper mono_foo => mono_foo_internal.
  *
  * Copyright 2018 Microsoft
- * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ * Licensed under the MIT license. See LICENSE file in the project root for full
+ * license information.
  */
 
 // FIXME In order to confirm this is all extern_only,
 // a variant of the runtime should be linked without it.
 
-#include "config.h"
-#include "class-internals.h"
-#include "domain-internals.h"
-#include "mono-hash-internals.h"
-#include "mono-config-internals.h"
-#include "object-internals.h"
-#include "class-init.h"
-#include "marshal.h"
-#include "object.h"
-#include "assembly-internals.h"
 #include "external-only.h"
-#include "threads.h"
+#include "assembly-internals.h"
+#include "class-init.h"
+#include "class-internals.h"
+#include "config.h"
+#include "domain-internals.h"
+#include "marshal.h"
+#include "mono-config-internals.h"
+#include "mono-hash-internals.h"
+#include "object-internals.h"
+#include "object.h"
 #include "threads-types.h"
+#include "threads.h"
 
 /**
  * mono_gchandle_new:
@@ -39,22 +40,22 @@
  *
  * \returns a handle that can be used to access the object from unmanaged code.
  */
-uint32_t
-mono_gchandle_new (MonoObject *obj, mono_bool pinned)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (uint32_t, (uint32_t)(size_t)mono_gchandle_new_internal (obj, pinned));
+uint32_t mono_gchandle_new(MonoObject *obj, mono_bool pinned) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(
+      uint32_t, (uint32_t)(size_t)mono_gchandle_new_internal(obj, pinned));
 }
 
-MonoGCHandle
-mono_gchandle_new_v2 (MonoObject *obj, mono_bool pinned)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (MonoGCHandle, mono_gchandle_new_internal (obj, pinned));
+MonoGCHandle mono_gchandle_new_v2(MonoObject *obj, mono_bool pinned) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(MonoGCHandle,
+                               mono_gchandle_new_internal(obj, pinned));
 }
 
 /**
  * mono_gchandle_new_weakref:
  * \param obj managed object to get a handle for
- * \param track_resurrection Determines how long to track the object, if this is set to TRUE, the object is tracked after finalization, if FALSE, the object is only tracked up until the point of finalization.
+ * \param track_resurrection Determines how long to track the object, if this is
+ * set to TRUE, the object is tracked after finalization, if FALSE, the object
+ * is only tracked up until the point of finalization.
  *
  * This returns a weak handle that wraps the object, this is used to
  * keep a reference to a managed object from the unmanaged world.
@@ -72,16 +73,17 @@ mono_gchandle_new_v2 (MonoObject *obj, mono_bool pinned)
  * \returns a handle that can be used to access the object from
  * unmanaged code.
  */
-uint32_t
-mono_gchandle_new_weakref (MonoObject *obj, mono_bool track_resurrection)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (uint32_t, (uint32_t)(size_t)mono_gchandle_new_weakref_internal (obj, track_resurrection));
+uint32_t mono_gchandle_new_weakref(MonoObject *obj,
+                                   mono_bool track_resurrection) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(
+      uint32_t, (uint32_t)(size_t)mono_gchandle_new_weakref_internal(
+                    obj, track_resurrection));
 }
 
-MonoGCHandle
-mono_gchandle_new_weakref_v2 (MonoObject *obj, mono_bool track_resurrection)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (MonoGCHandle, mono_gchandle_new_weakref_internal (obj, track_resurrection));
+MonoGCHandle mono_gchandle_new_weakref_v2(MonoObject *obj,
+                                          mono_bool track_resurrection) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(MonoGCHandle, mono_gchandle_new_weakref_internal(
+                                                 obj, track_resurrection));
 }
 
 /**
@@ -94,16 +96,15 @@ mono_gchandle_new_weakref_v2 (MonoObject *obj, mono_bool track_resurrection)
  * \returns a pointer to the \c MonoObject* represented by the handle or
  * NULL for a collected object if using a weakref handle.
  */
-MonoObject*
-mono_gchandle_get_target (uint32_t gchandle)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (MonoObject*, mono_gchandle_get_target_internal ((MonoGCHandle)(size_t)gchandle));
+MonoObject *mono_gchandle_get_target(uint32_t gchandle) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(
+      MonoObject *,
+      mono_gchandle_get_target_internal((MonoGCHandle)(size_t)gchandle));
 }
 
-MonoObject*
-mono_gchandle_get_target_v2 (MonoGCHandle gchandle)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (MonoObject*, mono_gchandle_get_target_internal (gchandle));
+MonoObject *mono_gchandle_get_target_v2(MonoGCHandle gchandle) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(MonoObject *,
+                               mono_gchandle_get_target_internal(gchandle));
 }
 
 /**
@@ -114,21 +115,18 @@ mono_gchandle_get_target_v2 (MonoGCHandle gchandle)
  * references, the garbage collector can reclaim the memory of the
  * object wrapped.
  */
-void
-mono_gchandle_free (uint32_t gchandle)
-{
-    /* Xamarin.Mac and Xamarin.iOS can call this from a worker thread
-     * that's not attached to the runtime. This is okay for SGen because
-     * the gchandle code is lockfree.  SGen calls back into Mono which
-     * fires a profiler event, so the profiler must be prepared to be
-     * called from threads that aren't attached to Mono. */
-    MONO_EXTERNAL_ONLY_VOID (mono_gchandle_free_internal ((MonoGCHandle)(size_t)gchandle));
+void mono_gchandle_free(uint32_t gchandle) {
+  /* Xamarin.Mac and Xamarin.iOS can call this from a worker thread
+   * that's not attached to the runtime. This is okay for SGen because
+   * the gchandle code is lockfree.  SGen calls back into Mono which
+   * fires a profiler event, so the profiler must be prepared to be
+   * called from threads that aren't attached to Mono. */
+  MONO_EXTERNAL_ONLY_VOID(
+      mono_gchandle_free_internal((MonoGCHandle)(size_t)gchandle));
 }
 
-void
-mono_gchandle_free_v2 (MonoGCHandle gchandle)
-{
-    MONO_EXTERNAL_ONLY_VOID (mono_gchandle_free_internal (gchandle));
+void mono_gchandle_free_v2(MonoGCHandle gchandle) {
+  MONO_EXTERNAL_ONLY_VOID(mono_gchandle_free_internal(gchandle));
 }
 
 /* GC write barriers support */
@@ -141,10 +139,10 @@ mono_gchandle_free_v2 (MonoGCHandle gchandle)
  * Stores an object reference inside another object, executing a write barrier
  * if needed.
  */
-void
-mono_gc_wbarrier_set_field (MonoObject *obj, void* field_ptr, MonoObject* value)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_set_field_internal (obj, field_ptr, value));
+void mono_gc_wbarrier_set_field(MonoObject *obj, void *field_ptr,
+                                MonoObject *value) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_set_field_internal(obj, field_ptr, value));
 }
 
 /**
@@ -155,10 +153,10 @@ mono_gc_wbarrier_set_field (MonoObject *obj, void* field_ptr, MonoObject* value)
  * Stores an object reference inside an array of objects, executing a write
  * barrier if needed.
  */
-void
-mono_gc_wbarrier_set_arrayref (MonoArray *arr, void* slot_ptr, MonoObject* value)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_set_arrayref_internal (arr, slot_ptr, value));
+void mono_gc_wbarrier_set_arrayref(MonoArray *arr, void *slot_ptr,
+                                   MonoObject *value) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_set_arrayref_internal(arr, slot_ptr, value));
 }
 
 /**
@@ -169,10 +167,10 @@ mono_gc_wbarrier_set_arrayref (MonoArray *arr, void* slot_ptr, MonoObject* value
  * Copies \p count references from one array to another, executing a write
  * barrier if needed.
  */
-void
-mono_gc_wbarrier_arrayref_copy (void* dest_ptr, /*const*/ void* src_ptr, int count)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_arrayref_copy_internal (dest_ptr, src_ptr, count));
+void mono_gc_wbarrier_arrayref_copy(void *dest_ptr, /*const*/ void *src_ptr,
+                                    int count) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_arrayref_copy_internal(dest_ptr, src_ptr, count));
 }
 
 /**
@@ -182,10 +180,9 @@ mono_gc_wbarrier_arrayref_copy (void* dest_ptr, /*const*/ void* src_ptr, int cou
  * Stores the \p value object inside the field represented by \p ptr,
  * executing a write barrier if needed.
  */
-void
-mono_gc_wbarrier_generic_store (void* ptr, MonoObject* value)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_generic_store_internal (ptr, value));
+void mono_gc_wbarrier_generic_store(void *ptr, MonoObject *value) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_generic_store_internal(ptr, value));
 }
 
 /**
@@ -193,10 +190,9 @@ mono_gc_wbarrier_generic_store (void* ptr, MonoObject* value)
  * Same as \c mono_gc_wbarrier_generic_store but performs the store
  * as an atomic operation with release semantics.
  */
-void
-mono_gc_wbarrier_generic_store_atomic (void *ptr, MonoObject *value)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_generic_store_atomic_internal (ptr, value));
+void mono_gc_wbarrier_generic_store_atomic(void *ptr, MonoObject *value) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_generic_store_atomic_internal(ptr, value));
 }
 
 /**
@@ -204,10 +200,9 @@ mono_gc_wbarrier_generic_store_atomic (void *ptr, MonoObject *value)
  * Executes a write barrier for an address, informing the GC that
  * the reference stored at that address has been changed.
  */
-void
-mono_gc_wbarrier_generic_nostore (void* ptr)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_generic_nostore_internal (ptr));
+void mono_gc_wbarrier_generic_nostore(void *ptr) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_generic_nostore_internal(ptr));
 }
 
 /**
@@ -219,10 +214,10 @@ mono_gc_wbarrier_generic_nostore (void* ptr)
  * Copies \p count elements of type \p klass from \p src address to
  * \dest address, executing any necessary write barriers.
  */
-void
-mono_gc_wbarrier_value_copy (void* dest, /*const*/ void* src, int count, MonoClass *klass)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_value_copy_internal (dest, src, count, klass));
+void mono_gc_wbarrier_value_copy(void *dest, /*const*/ void *src, int count,
+                                 MonoClass *klass) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_value_copy_internal(dest, src, count, klass));
 }
 
 /**
@@ -232,10 +227,9 @@ mono_gc_wbarrier_value_copy (void* dest, /*const*/ void* src, int count, MonoCla
  * Copies contents of \p src to \p obj, executing any necessary write
  * barriers.
  */
-void
-mono_gc_wbarrier_object_copy (MonoObject* obj, MonoObject *src)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_gc_wbarrier_object_copy_internal (obj, src));
+void mono_gc_wbarrier_object_copy(MonoObject *obj, MonoObject *src) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_gc_wbarrier_object_copy_internal(obj, src));
 }
 
 /**
@@ -255,28 +249,29 @@ mono_gc_wbarrier_object_copy (MonoObject* obj, MonoObject *src)
  * \returns TRUE on success or FALSE if there was a problem in loading
  * the type (incorrect assemblies, missing assemblies, methods, etc).
  */
-mono_bool
-mono_class_init (MonoClass *klass)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (gboolean, mono_class_init_internal (klass));
+mono_bool mono_class_init(MonoClass *klass) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(gboolean, mono_class_init_internal(klass));
 }
 
 /**
  * mono_g_hash_table_new_type:
  */
-MonoGHashTable*
-mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_equal_func, MonoGHashGCType type, MonoGCRootSource source, void *key, const char *msg)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (MonoGHashTable*, mono_g_hash_table_new_type_internal (hash_func, key_equal_func, type, source, key, msg));
+MonoGHashTable *mono_g_hash_table_new_type(GHashFunc hash_func,
+                                           GEqualFunc key_equal_func,
+                                           MonoGHashGCType type,
+                                           MonoGCRootSource source, void *key,
+                                           const char *msg) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(
+      MonoGHashTable *, mono_g_hash_table_new_type_internal(
+                            hash_func, key_equal_func, type, source, key, msg));
 }
 
 /**
  * mono_config_for_assembly:
  */
-void
-mono_config_for_assembly (MonoImage *assembly)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_config_for_assembly_internal (assembly));
+void mono_config_for_assembly(MonoImage *assembly) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_config_for_assembly_internal(assembly));
 }
 
 /**
@@ -288,10 +283,10 @@ mono_config_for_assembly (MonoImage *assembly)
  * \returns the \c MonoProperty with the given name, or NULL if the property
  * does not exist on the \p klass.
  */
-MonoProperty*
-mono_class_get_property_from_name (MonoClass *klass, const char *name)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (MonoProperty*, mono_class_get_property_from_name_internal (klass, name));
+MonoProperty *mono_class_get_property_from_name(MonoClass *klass,
+                                                const char *name) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(
+      MonoProperty *, mono_class_get_property_from_name_internal(klass, name));
 }
 
 /**
@@ -309,14 +304,14 @@ mono_class_get_property_from_name (MonoClass *klass, const char *name)
  * If \p check_interfaces is false, then if \p klass is not an interface,
  * it returns TRUE if the \p klass is a subclass of \p klassc.
  *
- * if \p klass is an interface and \p klassc is \c System.Object, then this function
- * returns TRUE.
+ * if \p klass is an interface and \p klassc is \c System.Object, then this
+ * function returns TRUE.
  *
  */
-gboolean
-mono_class_is_subclass_of (MonoClass *klass, MonoClass *klassc, gboolean check_interfaces)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE (gboolean, mono_class_is_subclass_of_internal (klass, klassc, check_interfaces));
+gboolean mono_class_is_subclass_of(MonoClass *klass, MonoClass *klassc,
+                                   gboolean check_interfaces) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE(gboolean, mono_class_is_subclass_of_internal(
+                                             klass, klassc, check_interfaces));
 }
 
 /**
@@ -325,10 +320,9 @@ mono_class_is_subclass_of (MonoClass *klass, MonoClass *klassc, gboolean check_i
  *
  * Sets the current domain to \p domain.
  */
-void
-mono_domain_set_internal (MonoDomain *domain)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_domain_set_internal_with_options (domain, TRUE));
+void mono_domain_set_internal(MonoDomain *domain) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_domain_set_internal_with_options(domain, TRUE));
 }
 
 /**
@@ -341,14 +335,13 @@ mono_domain_set_internal (MonoDomain *domain)
  *
  * \returns TRUE on success; FALSE if the domain is unloaded
  */
-gboolean
-mono_domain_set (MonoDomain *domain, gboolean force)
-{
-    if (!force && domain->state == MONO_APPDOMAIN_UNLOADED)
-        return FALSE;
+gboolean mono_domain_set(MonoDomain *domain, gboolean force) {
+  if (!force && domain->state == MONO_APPDOMAIN_UNLOADED)
+    return FALSE;
 
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_domain_set_internal_with_options (domain, TRUE));
-    return TRUE;
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(
+      mono_domain_set_internal_with_options(domain, TRUE));
+  return TRUE;
 }
 
 /**
@@ -358,20 +351,16 @@ mono_domain_set (MonoDomain *domain, gboolean force)
  * Frees the provided assembly name object.
  * (it does not frees the object itself, only the name members).
  */
-void
-mono_assembly_name_free (MonoAssemblyName *aname)
-{
-    if (!aname)
-        return;
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_assembly_name_free_internal (aname));
+void mono_assembly_name_free(MonoAssemblyName *aname) {
+  if (!aname)
+    return;
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(mono_assembly_name_free_internal(aname));
 }
 
 /**
  * mono_thread_manage:
  *
  */
-void
-mono_thread_manage (void)
-{
-    MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID (mono_thread_manage_internal ());
+void mono_thread_manage(void) {
+  MONO_EXTERNAL_ONLY_GC_UNSAFE_VOID(mono_thread_manage_internal());
 }
