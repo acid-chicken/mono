@@ -10,75 +10,79 @@ using System.Reflection;
 
 namespace System.Runtime.Serialization
 {
-    public static class DataContractSerializerExtensions
+public static class DataContractSerializerExtensions
+{
+    public static ISerializationSurrogateProvider GetSerializationSurrogateProvider(this DataContractSerializer serializer)
     {
-        public static ISerializationSurrogateProvider GetSerializationSurrogateProvider(this DataContractSerializer serializer) 
+        SurrogateProviderAdapter adapter = serializer.DataContractSurrogate as SurrogateProviderAdapter;
+        return (adapter == null) ? null : adapter.Provider;
+    }
+
+    public static void SetSerializationSurrogateProvider(this DataContractSerializer serializer, ISerializationSurrogateProvider provider)
+    {
+        // allocate every time, expectation is that this won't happen enough to warrant maintaining a CondtionalWeakTable.
+        IDataContractSurrogate adapter = (provider != null) ? new SurrogateProviderAdapter(provider) : null;
+
+        // DCS doesn't expose a setter, access the field directly as a workaround
+        typeof(DataContractSerializer)
+        .GetField("dataContractSurrogate", BindingFlags.Instance | BindingFlags.NonPublic)
+        .SetValue(serializer, adapter);
+    }
+
+    private class SurrogateProviderAdapter : IDataContractSurrogate
+    {
+        private ISerializationSurrogateProvider _provider;
+        public SurrogateProviderAdapter(ISerializationSurrogateProvider provider)
         {
-            SurrogateProviderAdapter adapter = serializer.DataContractSurrogate as SurrogateProviderAdapter;
-            return (adapter == null) ? null : adapter.Provider;
+            _provider = provider;
         }
 
-        public static void SetSerializationSurrogateProvider(this DataContractSerializer serializer, ISerializationSurrogateProvider provider)
+        public ISerializationSurrogateProvider Provider {
+            get {
+                return _provider;
+            }
+        }
+        public object GetCustomDataToExport(Type clrType, Type dataContractType)
         {
-            // allocate every time, expectation is that this won't happen enough to warrant maintaining a CondtionalWeakTable.
-            IDataContractSurrogate adapter = (provider != null) ? new SurrogateProviderAdapter(provider) : null;
-
-            // DCS doesn't expose a setter, access the field directly as a workaround
-            typeof(DataContractSerializer)
-              .GetField("dataContractSurrogate", BindingFlags.Instance | BindingFlags.NonPublic)
-              .SetValue(serializer, adapter);
+            throw NotImplemented.ByDesign;
         }
 
-        private class SurrogateProviderAdapter : IDataContractSurrogate
+        public object GetCustomDataToExport(MemberInfo memberInfo, Type dataContractType)
         {
-            private ISerializationSurrogateProvider _provider;
-            public SurrogateProviderAdapter(ISerializationSurrogateProvider provider)
-            {
-                _provider = provider;
-            }
+            throw NotImplemented.ByDesign;
+        }
 
-            public ISerializationSurrogateProvider Provider { get { return _provider; } }
-            public object GetCustomDataToExport(Type clrType, Type dataContractType)
-            {
-                throw NotImplemented.ByDesign;
-            }
+        public Type GetDataContractType(Type type)
+        {
+            return _provider.GetSurrogateType(type);
+        }
 
-            public object GetCustomDataToExport(MemberInfo memberInfo, Type dataContractType)
-            {
-                throw NotImplemented.ByDesign;
-            }
+        public object GetDeserializedObject(object obj, Type targetType)
+        {
+            return _provider.GetDeserializedObject(obj, targetType);
+        }
 
-            public Type GetDataContractType(Type type)
-            {
-                return _provider.GetSurrogateType(type);
-            }
+        public void GetKnownCustomDataTypes(Collection<Type> customDataTypes)
+        {
+            throw NotImplemented.ByDesign;
+        }
 
-            public object GetDeserializedObject(object obj, Type targetType)
-            {
-                return _provider.GetDeserializedObject(obj, targetType);
-            }
+        public object GetObjectToSerialize(object obj, Type targetType)
+        {
+            return _provider.GetObjectToSerialize(obj, targetType);
+        }
 
-            public void GetKnownCustomDataTypes(Collection<Type> customDataTypes)
-            {
-                throw NotImplemented.ByDesign;
-            }
-
-            public object GetObjectToSerialize(object obj, Type targetType)
-            {
-                return _provider.GetObjectToSerialize(obj, targetType);
-            }
-
-            public Type GetReferencedTypeOnImport(string typeName, string typeNamespace, object customData)
-            {
-                throw NotImplemented.ByDesign;
-            }
+        public Type GetReferencedTypeOnImport(string typeName, string typeNamespace, object customData)
+        {
+            throw NotImplemented.ByDesign;
+        }
 
 #if !NO_CODEDOM
-            public CodeTypeDeclaration ProcessImportedType(CodeTypeDeclaration typeDeclaration, CodeCompileUnit compileUnit)
-            {
-                throw NotImplemented.ByDesign;
-            }
-#endif
+        public CodeTypeDeclaration ProcessImportedType(CodeTypeDeclaration typeDeclaration, CodeCompileUnit compileUnit)
+        {
+            throw NotImplemented.ByDesign;
         }
+#endif
     }
+}
 }
