@@ -19,28 +19,28 @@
 /*-------------------------------------------*/
 
 struct MonoLMF {
-	gpointer    previous_lmf;
-	gpointer    lmf_addr;
-	MonoMethod *method;
-	gulong      ebp;
-	gulong      eip;
-	gulong	    pregs[6];
-	gulong	    gregs[16];
-	gdouble     fregs[16];
+    gpointer    previous_lmf;
+    gpointer    lmf_addr;
+    MonoMethod *method;
+    gulong      ebp;
+    gulong      eip;
+    gulong	    pregs[6];
+    gulong	    gregs[16];
+    gdouble     fregs[16];
 };
 
 typedef struct MonoCompileArch {
-	int         bkchain_reg;
-	uint32_t    used_fp_regs;
-	int	    fpSize;
+    int         bkchain_reg;
+    uint32_t    used_fp_regs;
+    int	    fpSize;
 } MonoCompileArch;
 
 typedef struct
 {
-	void *prev;
-	void *unused[5];
-	void *regs[8];
-	void *return_address;
+    void *prev;
+    void *unused[5];
+    void *regs[8];
+    void *return_address;
 } MonoS390StackFrame;
 
 #define MONO_ARCH_SIGSEGV_ON_ALTSTACK			1
@@ -164,11 +164,11 @@ typedef struct
 static void inline
 s390_patch_rel (guchar *code, guint64 target)
 {
-	guint32 *offset = (guint32 *) code;
-	
-	if (target != 0) {
-		*offset = (guint32) target;
-	}
+    guint32 *offset = (guint32 *) code;
+
+    if (target != 0) {
+        *offset = (guint32) target;
+    }
 }
 
 /*========================= End of Function ========================*/
@@ -184,11 +184,11 @@ s390_patch_rel (guchar *code, guint64 target)
 static void inline
 s390_patch_addr (guchar *code, guint64 target)
 {
-	guint64 *offset = (guint64 *) code;
-	
-	if (target != 0) {
-		*offset = target;
-	}
+    guint64 *offset = (guint64 *) code;
+
+    if (target != 0) {
+        *offset = target;
+    }
 }
 
 /*========================= End of Function ========================*/
@@ -235,4 +235,4 @@ s390_patch_addr (guchar *code, guint64 target)
 
 /*========================= End of Function ========================*/
 
-#endif /* __MONO_MINI_S390X_H__ */  
+#endif /* __MONO_MINI_S390X_H__ */

@@ -343,17 +343,17 @@ MONO_JIT_ICALL (count) \
 typedef enum MonoJitICallId
 {
 #define MONO_JIT_ICALL(x) MONO_JIT_ICALL_ ## x,
-MONO_JIT_ICALLS
+    MONO_JIT_ICALLS
 #undef MONO_JIT_ICALL
 } MonoJitICallId;
 
 typedef union MonoJitICallInfos {
-	struct {
+    struct {
 #define MONO_JIT_ICALL(x) MonoJitICallInfo x;
-MONO_JIT_ICALLS
+        MONO_JIT_ICALLS
 #undef MONO_JIT_ICALL
-	};
-	MonoJitICallInfo array [MONO_JIT_ICALL_count];
+    };
+    MonoJitICallInfo array [MONO_JIT_ICALL_count];
 } MonoJitICallInfos;
 
 extern MonoJitICallInfos mono_jit_icall_info;
@@ -370,12 +370,12 @@ extern MonoJitICallInfos mono_jit_icall_info;
 static inline MonoJitICallInfo*
 mono_find_jit_icall_info (MonoJitICallId id)
 {
-	const guint index = (guint)id;
+    const guint index = (guint)id;
 
-	g_assert (index < MONO_JIT_ICALL_count);
-	g_static_assert (MONO_JIT_ICALL_count < 0x200); // fits in 9 bits
+    g_assert (index < MONO_JIT_ICALL_count);
+    g_static_assert (MONO_JIT_ICALL_count < 0x200); // fits in 9 bits
 
-	return &mono_get_jit_icall_info ()->array [index];
+    return &mono_get_jit_icall_info ()->array [index];
 }
 
 #if __cplusplus
@@ -384,6 +384,6 @@ mono_find_jit_icall_info (MonoJitICallId id)
 inline MonoJitICallInfo*
 mono_find_jit_icall_info (gsize id)
 {
-	return mono_find_jit_icall_info ((MonoJitICallId)id);
+    return mono_find_jit_icall_info ((MonoJitICallId)id);
 }
 #endif
