@@ -78,100 +78,100 @@
 	}
 
 typedef enum {
-	s390_r0 = 0,
-	s390_r1,
-	s390_r2,
-	s390_r3,
-	s390_r4,
-	s390_r5,
-	s390_r6,
-	s390_r7,
-	s390_r8,
-	s390_r9,
-	s390_r10,
-	s390_r11,
-	s390_r12,
-	s390_r13,
-	s390_r14,
-	s390_r15,
+    s390_r0 = 0,
+    s390_r1,
+    s390_r2,
+    s390_r3,
+    s390_r4,
+    s390_r5,
+    s390_r6,
+    s390_r7,
+    s390_r8,
+    s390_r9,
+    s390_r10,
+    s390_r11,
+    s390_r12,
+    s390_r13,
+    s390_r14,
+    s390_r15,
 } S390IntRegister;
 
 typedef enum {
-	s390_f0 = 0,
-	s390_f1,
-	s390_f2,
-	s390_f3,
-	s390_f4,
-	s390_f5,
-	s390_f6,
-	s390_f7,
-	s390_f8,
-	s390_f9,
-	s390_f10,
-	s390_f11,
-	s390_f12,
-	s390_f13,
-	s390_f14,
-	s390_f15,
+    s390_f0 = 0,
+    s390_f1,
+    s390_f2,
+    s390_f3,
+    s390_f4,
+    s390_f5,
+    s390_f6,
+    s390_f7,
+    s390_f8,
+    s390_f9,
+    s390_f10,
+    s390_f11,
+    s390_f12,
+    s390_f13,
+    s390_f14,
+    s390_f15,
 } S390FloatRegister;
 
 typedef enum {
-	s390_a0 = 0,
-	s390_a1,
-	s390_a2,
-	s390_a3,
-	s390_a4,
-	s390_a5,
-	s390_a6,
-	s390_a7,
-	s390_a8,
-	s390_a9,
-	s390_a10,
-	s390_a11,
-	s390_a12,
-	s390_a13,
-	s390_a14,
-	s390_a15,
+    s390_a0 = 0,
+    s390_a1,
+    s390_a2,
+    s390_a3,
+    s390_a4,
+    s390_a5,
+    s390_a6,
+    s390_a7,
+    s390_a8,
+    s390_a9,
+    s390_a10,
+    s390_a11,
+    s390_a12,
+    s390_a13,
+    s390_a14,
+    s390_a15,
 } S390AccRegister;
 
 typedef enum {
-	s390_fpc = 256,
+    s390_fpc = 256,
 } S390SpecialRegister;
 
 typedef enum {
-	s390_VR0 = 0,
-	s390_VR1 = 1,
-	s390_VR2 = 2,
-	s390_VR3 = 3,
-	s390_VR4 = 4,
-	s390_VR5 = 5,
-	s390_VR6 = 6,
-	s390_VR7 = 7,
-	s390_VR8 = 8,
-	s390_VR9 = 9,
-	s390_VR10 = 10,
-	s390_VR11 = 11,
-	s390_VR12 = 12,
-	s390_VR13 = 13,
-	s390_VR14 = 14,
-	s390_VR15 = 15,
-	s390_VR16 = 16,
-	s390_VR17 = 17,
-	s390_VR18 = 18,
-	s390_VR19 = 19,
-	s390_VR20 = 20,
-	s390_VR21 = 21,
-	s390_VR22 = 22,
-	s390_VR23 = 23,
-	s390_VR24 = 24,
-	s390_VR25 = 25,
-	s390_VR26 = 26,
-	s390_VR27 = 27,
-	s390_VR28 = 28,
-	s390_VR29 = 29,
-	s390_VR30 = 30,
-	s390_VR31 = 31,
-	s390_VR_NREG = 32,
+    s390_VR0 = 0,
+    s390_VR1 = 1,
+    s390_VR2 = 2,
+    s390_VR3 = 3,
+    s390_VR4 = 4,
+    s390_VR5 = 5,
+    s390_VR6 = 6,
+    s390_VR7 = 7,
+    s390_VR8 = 8,
+    s390_VR9 = 9,
+    s390_VR10 = 10,
+    s390_VR11 = 11,
+    s390_VR12 = 12,
+    s390_VR13 = 13,
+    s390_VR14 = 14,
+    s390_VR15 = 15,
+    s390_VR16 = 16,
+    s390_VR17 = 17,
+    s390_VR18 = 18,
+    s390_VR19 = 19,
+    s390_VR20 = 20,
+    s390_VR21 = 21,
+    s390_VR22 = 22,
+    s390_VR23 = 23,
+    s390_VR24 = 24,
+    s390_VR25 = 25,
+    s390_VR26 = 26,
+    s390_VR27 = 27,
+    s390_VR28 = 28,
+    s390_VR29 = 29,
+    s390_VR30 = 30,
+    s390_VR31 = 31,
+    s390_VR_NREG = 32,
 } s390_VR_Reg_No;
 
 #define s390_is_imm16(val) 		((glong)val >= (glong) SHRT_MIN && \
@@ -235,565 +235,565 @@ typedef enum {
 } while (0)
 
 typedef struct {
-	short 	op;
+    short 	op;
 } E_Format;
 
 typedef struct {
-	char	op;
-	int	im;
+    char	op;
+    int	im;
 } I_Format;
 
 typedef struct {
-	short	op;
-	char	xx;
-	char	ri1 : 4;
-	char	ri2 : 4;
+    short	op;
+    char	xx;
+    char	ri1 : 4;
+    char	ri2 : 4;
 } IE_Format;
 
 typedef struct {
-	short	op;
-	short	m1 : 4;
-	short	ri2 : 12;
-	short	i3;	
+    short	op;
+    short	m1 : 4;
+    short	ri2 : 12;
+    short	i3;
 } MII_Format;
 
 typedef struct {
-	char 	op;
-	char	r1 : 4;
-	char 	r2 : 4;
+    char 	op;
+    char	r1 : 4;
+    char 	r2 : 4;
 } RR_Format;
 
 typedef struct {
-	short	op;
-	char	r1 : 4;
-	char	xx : 4;
-	char	r3 : 4;
-	char	r4 : 4;
+    short	op;
+    char	r1 : 4;
+    char	xx : 4;
+    char	r3 : 4;
+    char	r4 : 4;
 } __attribute__ ((__packed__)) RRD_Format;
 
 typedef struct {
-	short	op;
-	char	xx;
-	char	r1 : 4;
-	char	r2 : 4;
+    short	op;
+    char	xx;
+    char	r1 : 4;
+    char	r2 : 4;
 } RRE_Format;
 
 typedef struct {
-	short	op;
-	char	r1 : 4;
-	char	xx : 4;
-	char	r3 : 4;
-	char	r2 : 4;
+    short	op;
+    char	r1 : 4;
+    char	xx : 4;
+    char	r3 : 4;
+    char	r2 : 4;
 } RRF_Format_1;
 
 typedef struct {
-	short	op;
-	char	m3 : 4;
-	char	xx : 4;
-	char	r1 : 4;
-	char	r2 : 4;
+    short	op;
+    char	m3 : 4;
+    char	xx : 4;
+    char	r1 : 4;
+    char	r2 : 4;
 } RRF_Format_2;
 
 typedef struct {
-	short	op;
-	char	r3 : 4;
-	char	m4 : 4;
-	char	r1 : 4;
-	char	r2 : 4;
+    short	op;
+    char	r3 : 4;
+    char	m4 : 4;
+    char	r1 : 4;
+    char	r2 : 4;
 } RRF_Format_3;
 
 typedef struct {
-	short	op;
-	char	m3 : 4;
-	char	m4 : 4;
-	char	r1 : 4;
-	char	r2 : 4;
+    short	op;
+    char	m3 : 4;
+    char	m4 : 4;
+    char	r1 : 4;
+    char	r2 : 4;
 } RRF_Format_4;
 
 typedef struct {
-	char	op1;
-	char	r1 : 4;
-	char	r2 : 4;
-	short	b4 : 4;
-	short	d4 : 12;
-	char	m3 : 4;
-	char	xx : 4;
-	char	op2;
+    char	op1;
+    char	r1 : 4;
+    char	r2 : 4;
+    short	b4 : 4;
+    short	d4 : 12;
+    char	m3 : 4;
+    char	xx : 4;
+    char	op2;
 } RRS_Format;
 
 typedef struct {
-	char	op;
-	char	r1 : 4;
-	char	x2 : 4;
-	short	b2 : 4;
-	short	d2 : 12;
+    char	op;
+    char	r1 : 4;
+    char	x2 : 4;
+    short	b2 : 4;
+    short	d2 : 12;
 } RX_Format;
 
 typedef struct {
-	char 	op1;
-	char	r3 : 4;
-	char	x2 : 4;
-	short	b2 : 4;
-	short	d2 : 12;
-	char	r1 : 4;
-	char	xx : 4;
-	char	op2;
+    char 	op1;
+    char	r3 : 4;
+    char	x2 : 4;
+    short	b2 : 4;
+    short	d2 : 12;
+    char	r1 : 4;
+    char	xx : 4;
+    char	op2;
 } RXF_Format;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	x2 : 4;
-	int 	b2 : 4;
-	int	d2 : 20;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	x2 : 4;
+    int 	b2 : 4;
+    int	d2 : 20;
+    char	op2;
 } __attribute__ ((__packed__)) RXY_Format;
 
 typedef struct {
-	char 	op;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	b2 : 4;
-	short	d2 : 12;
+    char 	op;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	b2 : 4;
+    short	d2 : 12;
 } RS_Format_1;
 
 typedef struct {
-	char 	op;
-	char	r1 : 4;
-	char	m3 : 4;
-	short	b2 : 4;
-	short	d2 : 12;
+    char 	op;
+    char	r1 : 4;
+    char	m3 : 4;
+    short	b2 : 4;
+    short	d2 : 12;
 } RS_Format_2;
 
 typedef struct {
-	char 	op;
-	char	r1 : 4;
-	char	xx : 4;
-	short	b2 : 4;
-	short	dl2 : 12;
-	char	dh2;
+    char 	op;
+    char	r1 : 4;
+    char	xx : 4;
+    short	b2 : 4;
+    short	dl2 : 12;
+    char	dh2;
 } RS_Format_3;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	b2 : 4;
-	short	dl2 : 12;
-	char	dh2;
-	char 	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	b2 : 4;
+    short	dl2 : 12;
+    char	dh2;
+    char 	op2;
 } __attribute__ ((__packed__)) RSY_Format_1;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	m3 : 4;
-	short	b2 : 4;
-	short	dl2 : 12;
-	char	dh2;
-	char 	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	m3 : 4;
+    short	b2 : 4;
+    short	dl2 : 12;
+    char	dh2;
+    char 	op2;
 } __attribute__ ((__packed__)) RSY_Format_2;
 
 typedef struct {
-	char 	op1;
-	char	l1 : 4;
-	char	xx : 4;
-	short	b1 : 4;
-	short	d1 : 12;
-	char	yy;
-	char 	op2;
+    char 	op1;
+    char	l1 : 4;
+    char	xx : 4;
+    short	b1 : 4;
+    short	d1 : 12;
+    char	yy;
+    char 	op2;
 } __attribute__ ((__packed__)) RSL_Format;
 
 typedef struct {
-	char 	op;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	i2;
+    char 	op;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	i2;
 } __attribute__ ((__packed__)) RSI_Format;
 
 typedef struct {
-	char 	op1;
-	char	m1 : 4;
-	char	op2 : 4;
-	short	i2;
+    char 	op1;
+    char	m1 : 4;
+    char	op2 : 4;
+    short	i2;
 } __attribute__ ((__packed__)) RI_Format;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	i2;
-	char	xx;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	i2;
+    char	xx;
+    char	op2;
 } __attribute__ ((__packed__)) RIE_Format_1;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	i2;
-	char	m2 : 4;
-	char    xx : 4;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	i2;
+    char	m2 : 4;
+    char    xx : 4;
+    char	op2;
 } __attribute__ ((__packed__)) RIE_Format_2;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	d;
-	char	i;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	d;
+    char	i;
+    char	op2;
 } __attribute__ ((__packed__)) RIE_Format_3;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	yy : 4;
-	short	i2;
-	char	m3 : 4;
-	char	xx : 4;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	yy : 4;
+    short	i2;
+    char	m3 : 4;
+    char	xx : 4;
+    char	op2;
 } __attribute__ ((__packed__)) RIE_Format_4;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	ri2;
-	char	xx;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	ri2;
+    char	xx;
+    char	op2;
 } __attribute__ ((__packed__)) RIE_Format_5;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	r2 : 4;
-	char	i3;
-	char	i4;
-	char	i5;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	r2 : 4;
+    char	i3;
+    char	i4;
+    char	i5;
+    char	op2;
 } __attribute__ ((__packed__)) RIE_Format_6;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	m3 : 4;
-	short	i2;
-	char	xx;
-	char	op2;
+    char 	op1;
+    char	r1 : 4;
+    char	m3 : 4;
+    short	i2;
+    char	xx;
+    char	op2;
 } __attribute__ ((__packed__)) RIE_Format_7;
 
 typedef struct {
-	char	op1;
-	char	r1 : 4;
-	char	m3 : 4;
-	int	b4 : 4;
-	int	d4 : 12;
-	char	i2;
-	char	op2;
+    char	op1;
+    char	r1 : 4;
+    char	m3 : 4;
+    int	b4 : 4;
+    int	d4 : 12;
+    char	i2;
+    char	op2;
 } __attribute__ ((__packed__)) RIS_Format;
 
 typedef struct {
-	char 	op1;
-	char	r1 : 4;
-	char	op2 : 4;
-	int	i2;
+    char 	op1;
+    char	r1 : 4;
+    char	op2 : 4;
+    int	i2;
 } __attribute__ ((__packed__)) RIL_Format_1;
 
 typedef struct {
-	char 	op1;
-	char	m1 : 4;
-	char	op2 : 4;
-	int	i2;
+    char 	op1;
+    char	m1 : 4;
+    char	op2 : 4;
+    int	i2;
 } __attribute__ ((__packed__)) RIL_Format_2;
 
 typedef struct {
-	short	op1;
-	char	r1 : 4;
-	char	x2 : 4;
-	short	b2 : 4;
-	short	d1 : 12;
-	char	m3 : 4;
-	char	xx : 4;
-	char	op2;
+    short	op1;
+    char	r1 : 4;
+    char	x2 : 4;
+    short	b2 : 4;
+    short	d1 : 12;
+    char	m3 : 4;
+    char	xx : 4;
+    char	op2;
 } __attribute__ ((__packed__)) RXE_Format;
 
 typedef struct {
-	char	op;
-	char	i2;
-	short	b1 : 4;
-	short	d1 : 12;
+    char	op;
+    char	i2;
+    short	b1 : 4;
+    short	d1 : 12;
 } __attribute__ ((__packed__)) SI_Format;
 
 typedef struct {
-	short	op;
-	char	b1 : 4;
-	short	d1 : 12;
-	short	i2;
+    short	op;
+    char	b1 : 4;
+    short	d1 : 12;
+    short	i2;
 } __attribute__ ((__packed__)) SIL_Format;
 
 typedef struct {
-	char	op1;
-	char	i2;
-	char	b1 : 4;
-	int	d1 : 20;
-	char	op2;
+    char	op1;
+    char	i2;
+    char	b1 : 4;
+    int	d1 : 20;
+    char	op2;
 } __attribute__ ((__packed__)) SIY_Format;
 
 typedef struct {
-	char	op1;
-	char	m1 : 4;
-	char	xx : 4;
-	short	b3 : 4;
-	short	d3 : 12;
-	short	ri2;
+    char	op1;
+    char	m1 : 4;
+    char	xx : 4;
+    short	b3 : 4;
+    short	d3 : 12;
+    short	ri2;
 } __attribute__ ((__packed__)) SMI_Format;
 
 typedef struct {
-	short	op;
-	short	b2 : 4;
-	short	d2 : 12;
+    short	op;
+    short	b2 : 4;
+    short	d2 : 12;
 } __attribute__ ((__packed__)) S_Format;
 
 typedef struct {
-	char	op;
-	char	ll;
-	short	b1 : 4;
-	short	d1 : 12;
-	short	b2 : 4;
-	short	d2 : 12;
+    char	op;
+    char	ll;
+    short	b1 : 4;
+    short	d1 : 12;
+    short	b2 : 4;
+    short	d2 : 12;
 } __attribute__ ((__packed__)) SS_Format_1;
 
 typedef struct {
-	char	op;
-	char	l1 : 4;
-	char	l2 : 4;
-	short	b1 : 4;	
-	short	d1 : 12;
-	short	b2 : 4;
-	short	d2 : 12;
+    char	op;
+    char	l1 : 4;
+    char	l2 : 4;
+    short	b1 : 4;
+    short	d1 : 12;
+    short	b2 : 4;
+    short	d2 : 12;
 } __attribute__ ((__packed__)) SS_Format_2;
 
 typedef struct {
-	char	op;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	b1 : 4;	
-	short	d1 : 12;
-	short	b2 : 4;
-	short	d2 : 12;
-} __attribute__ ((__packed__)) SS_Format_3;	
+    char	op;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	b1 : 4;
+    short	d1 : 12;
+    short	b2 : 4;
+    short	d2 : 12;
+} __attribute__ ((__packed__)) SS_Format_3;
 
 typedef struct {
-	char	op;
-	char	r1 : 4;
-	char	r3 : 4;
-	short	b2 : 4;	
-	short	d2 : 12;
-	short	b4 : 4;
-	short	d4 : 12;
-} __attribute__ ((__packed__)) SS_Format_4;	
+    char	op;
+    char	r1 : 4;
+    char	r3 : 4;
+    short	b2 : 4;
+    short	d2 : 12;
+    short	b4 : 4;
+    short	d4 : 12;
+} __attribute__ ((__packed__)) SS_Format_4;
 
 typedef struct {
-	short	op;
-	short	tb1 : 4;
-	short	d1 : 12;
-	short	b2 : 4;
-	short	d2 : 12;
+    short	op;
+    short	tb1 : 4;
+    short	d1 : 12;
+    short	b2 : 4;
+    short	d2 : 12;
 } __attribute__ ((__packed__)) SSE_Format;
 
 typedef struct {
-	short	op;
-	char	r3 : 4;
-	char	o2 : 4;
-	short	b1 : 4;
-	short	d1 : 12;
-	short	b2 : 4;
-	short	d2 : 12;
+    short	op;
+    char	r3 : 4;
+    char	o2 : 4;
+    short	b1 : 4;
+    short	d1 : 12;
+    short	b2 : 4;
+    short	d2 : 12;
 } __attribute__ ((__packed__)) SSF_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	xx : 4;
-	short	i2;
-	char	m3 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	xx : 4;
+    short	i2;
+    char	m3 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRIa_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	xx : 4;
-	char	i2;
-	char	i3;
-	char	m4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	xx : 4;
+    char	i2;
+    char	i3;
+    char	m4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRIb_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v3 : 4;
-	short	i2;
-	char	m4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v3 : 4;
+    short	i2;
+    char	m4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRIc_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	char	v3 : 4;
-	char	xx : 4;
-	char	i4;
-	char	m5 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    char	v3 : 4;
+    char	xx : 4;
+    char	i4;
+    char	m5 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRId_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	short	i3 : 12;
-	char	m5 : 4;
-	char	m4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    short	i3 : 12;
+    char	m5 : 4;
+    char	m4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRIe_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	char	xx;
-	char	m5 : 4;
-	char	m4 : 4;
-	char	m3 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    char	xx;
+    char	m5 : 4;
+    char	m4 : 4;
+    char	m3 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRRa_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	char	v3 : 4;
-	char	xx : 4;
-	char	m5 : 4;
-	char	yy : 4;
-	char	m4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    char	v3 : 4;
+    char	xx : 4;
+    char	m5 : 4;
+    char	yy : 4;
+    char	m4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRRb_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	char	v3 : 4;
-	char	xx : 4;
-	char	m5 : 4;
-	char	m4 : 4;
-	char	m3 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    char	v3 : 4;
+    char	xx : 4;
+    char	m5 : 4;
+    char	m4 : 4;
+    char	m3 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRRc_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	char	v3 : 4;
-	char	m5 : 4;
-	char	m6 : 4;
-	char	xx : 4;
-	char	v4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    char	v3 : 4;
+    char	m5 : 4;
+    char	m6 : 4;
+    char	xx : 4;
+    char	v4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRRd_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	char	v3 : 4;
-	char	m6 : 4;
-	char	xx : 4;
-	char	m5 : 4;
-	char	v4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    char	v3 : 4;
+    char	m6 : 4;
+    char	xx : 4;
+    char	m5 : 4;
+    char	v4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRRe_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	r2 : 4;
-	char	r3 : 4;
-	short	xx;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	r2 : 4;
+    char	r3 : 4;
+    short	xx;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRRf_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v3 : 4;
-	char	b2 : 4;
-	short	d2 : 12;
-	char	m4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v3 : 4;
+    char	b2 : 4;
+    short	d2 : 12;
+    char	m4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRSa_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	r3 : 4;
-	char	b2 : 4;
-	short	d2 : 12;
-	char	m4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	r3 : 4;
+    char	b2 : 4;
+    short	d2 : 12;
+    char	m4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRSb_Format;
 
 typedef struct {
-	short	op1;
-	char	r1 : 4;
-	char	v3 : 4;
-	char	b2 : 4;
-	short	d2 : 12;
-	char	m4 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	r1 : 4;
+    char	v3 : 4;
+    char	b2 : 4;
+    short	d2 : 12;
+    char	m4 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRSc_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	v2 : 4;
-	char	b2 : 4;
-	short	d2 : 12;
-	char	m3 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	v2 : 4;
+    char	b2 : 4;
+    short	d2 : 12;
+    char	m3 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRV_Format;
 
 typedef struct {
-	short	op1;
-	char	v1 : 4;
-	char	x2 : 4;
-	char	b2 : 4;
-	short	d2 : 12;
-	char	m3 : 4;
-	char	rxb : 4;
-	char	op2;
+    short	op1;
+    char	v1 : 4;
+    char	x2 : 4;
+    char	b2 : 4;
+    short	d2 : 12;
+    char	m3 : 4;
+    char	rxb : 4;
+    char	op2;
 } __attribute__ ((__packed__)) VRX_Format;
 
 #define s390_emit16(c, x) do 			\
@@ -814,7 +814,7 @@ typedef struct {
 
 #define S390_RR(c,opc,g1,g2)		s390_emit16(c, (opc << 8 | (g1) << 4 | g2))
 
-#define S390_RRE(c,opc,g1,g2)		s390_emit32(c, (opc << 16 | (g1) << 4 | g2)) 
+#define S390_RRE(c,opc,g1,g2)		s390_emit32(c, (opc << 16 | (g1) << 4 | g2))
 
 #define S390_RRF_1(c,opc,g1,g2,g3)	s390_emit32(c, (opc << 16 | (g3) << 12 | (g1) << 4 | g2))
 
@@ -841,7 +841,7 @@ typedef struct {
 			(opc & 0xff)));				\
 } while (0)
 
-#define S390_RS_1(c,opc,g1,g3,s2,p2) 	s390_emit32(c, (opc << 24 | (g1) << 20 | (g3) << 16 | (s2) << 12 | ((p2) & 0xfff))) 
+#define S390_RS_1(c,opc,g1,g3,s2,p2) 	s390_emit32(c, (opc << 24 | (g1) << 20 | (g3) << 16 | (s2) << 12 | ((p2) & 0xfff)))
 
 #define S390_RS_2(c,opc,g1,k3,s2,p2)	s390_emit32(c, (opc << 24 | (g1) << 20 | (k3) << 16 | (s2) << 12 | ((p2) & 0xfff)))
 
@@ -1425,14 +1425,14 @@ typedef struct {
 #define s390_ng(c, r, x, b, d)		S390_RXY(c, 0xe380, r, x, b, d)
 #define s390_ngr(c, r1, r2)		S390_RRE(c, 0xb980, r1, r2)
 #define s390_ngrk(c, r1, r2, r3)	S390_RRF_1(c, 0xb9e4, r1, r2, r3)
-#define s390_ni(c, b, d, v)		S390_SI(c, 0x94, b, d, v) 
+#define s390_ni(c, b, d, v)		S390_SI(c, 0x94, b, d, v)
 #define s390_nihf(c, r, v)		S390_RIL_1(c, 0xc0a, r, v)
 #define s390_nihh(c, r, v)		S390_RI(c, 0xa54, r, v)
 #define s390_nihl(c, r, v)		S390_RI(c, 0xa55, r, v)
 #define s390_nilf(c, r, v)		S390_RIL_1(c, 0xc0b, r, v)
 #define s390_nilh(c, r, v)		S390_RI(c, 0xa56, r, v)
 #define s390_nill(c, r, v)		S390_RI(c, 0xa57, r, v)
-#define s390_niy(c, b, d, v)		S390_SIY(c, 0xeb54, b, d, v) 
+#define s390_niy(c, b, d, v)		S390_SIY(c, 0xeb54, b, d, v)
 #define s390_nop(c)  			S390_RR(c, 0x07, 0x0, 0)
 #define s390_mem(c)  			S390_RR(c, 0x07, 0xe, 0)
 #define s390_nr(c, r1, r2)		S390_RR(c, 0x14, r1, r2)
@@ -1445,7 +1445,7 @@ typedef struct {
 #define s390_oilf(c, r, v)		S390_RIL_1(c, 0xc0d, r, v)
 #define s390_oilh(c, r, v)		S390_RI(c, 0xa5a, r, v)
 #define s390_oill(c, r, v)		S390_RI(c, 0xa5b, r, v)
-#define s390_oiy(c, b, d, v)		S390_SIY(c, 0xeb56 b, d, v) 
+#define s390_oiy(c, b, d, v)		S390_SIY(c, 0xeb56 b, d, v)
 #define s390_og(c, r, x, b, d)		S390_RXY(c, 0xe381, r, x, b, d)
 #define s390_ogr(c, r1, r2)		S390_RRE(c, 0xb981, r1, r2)
 #define s390_ogrk(c, r1, r2, r3)	S390_RRF_1(c, 0xb9e6, r1, r2, r3)
@@ -1460,13 +1460,13 @@ typedef struct {
 #define s390_sgr(c, r1, r2)		S390_RRE(c, 0xb909, r1, r2)
 #define s390_sgrk(c, r1, r2, r3)	S390_RRF_1(c, 0xb9e9, r1, r2, r3)
 #define s390_sl(c, r, x, b, d)		S390_RX(c, 0x5f, r, x, b, d)
-#define s390_sla(c, r, b, d)		S390_RS_3(c, 0x8b, r, b, d) 
-#define s390_slag(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0b, r1, r2, b, d) 
+#define s390_sla(c, r, b, d)		S390_RS_3(c, 0x8b, r, b, d)
+#define s390_slag(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0b, r1, r2, b, d)
 #define s390_slbg(c, r, x, b, d)	S390_RXY(c, 0xe389, r, x, b, d)
 #define s390_slbgr(c, r1, r2)		S390_RRE(c, 0xb989, r1, r2)
 #define s390_slbr(c, r1, r2)		S390_RRE(c, 0xb999, r1, r2)
-#define s390_slda(c, r, b, d)		S390_RS_3(c, 0x8f, r, b, d) 
-#define s390_sldl(c, r, b, d)		S390_RS_3(c, 0x8d, r, b, d) 
+#define s390_slda(c, r, b, d)		S390_RS_3(c, 0x8f, r, b, d)
+#define s390_sldl(c, r, b, d)		S390_RS_3(c, 0x8d, r, b, d)
 #define s390_slfi(c, r, v)		S390_RIL_1(c, 0xc25, r, v)
 #define s390_slg(c, r, x, b, d)		S390_RXY(c, 0xe30b, r, x, b, d)
 #define s390_slgf(c, r, x, b, d)	S390_RXY(c, 0xe31b, r, x, b, d)
@@ -1474,20 +1474,20 @@ typedef struct {
 #define s390_slgfi(c, r, v)		S390_RIL_1(c, 0xc24, r, v)
 #define s390_slgr(c, r1, r2)		S390_RRE(c, 0xb90b, r1, r2)
 #define s390_slgrk(c, r1, r2, r3)	S390_RRF_1(c, 0xb9eb, r1, r2, r3)
-#define s390_sll(c, r, b, d)		S390_RS_3(c, 0x89, r, b, d) 
-#define s390_sllg(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0d, r1, r2, b, d) 
+#define s390_sll(c, r, b, d)		S390_RS_3(c, 0x89, r, b, d)
+#define s390_sllg(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0d, r1, r2, b, d)
 #define s390_slr(c, r1, r2)		S390_RR(c, 0x1f, r1, r2)
 #define s390_slrk(c, r1, r2, r3)	S390_RRF_1(c, 0xb9fb, r1, r2, r3)
 #define s390_sqdbr(c, r1, r2)		S390_RRE(c, 0xb315, r1, r2)
 #define s390_sqebr(c, r1, r2)		S390_RRE(c, 0xb314, r1, r2)
-#define s390_sra(c, r, b, d)		S390_RS_3(c, 0x8a, r, b, d) 
-#define s390_srag(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0a, r1, r2, b, d) 
+#define s390_sra(c, r, b, d)		S390_RS_3(c, 0x8a, r, b, d)
+#define s390_srag(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0a, r1, r2, b, d)
 #define s390_sr(c, r1, r2)		S390_RR(c, 0x1b, r1, r2)
-#define s390_srda(c, r, b, d)		S390_RS_3(c, 0x8e, r, b, d) 
-#define s390_srdl(c, r, b, d)		S390_RS_3(c, 0x8c, r, b, d) 
+#define s390_srda(c, r, b, d)		S390_RS_3(c, 0x8e, r, b, d)
+#define s390_srdl(c, r, b, d)		S390_RS_3(c, 0x8c, r, b, d)
 #define s390_srk(c, r1, r2, r3)		S390_RRF_1(c, 0xb9f9, r1, r2, r3)
-#define s390_srl(c, r, b, d)		S390_RS_3(c, 0x88, r, b, d) 
-#define s390_srlg(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0c, r1, r2, b, d) 
+#define s390_srl(c, r, b, d)		S390_RS_3(c, 0x88, r, b, d)
+#define s390_srlg(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb0c, r1, r2, b, d)
 #define s390_st(c, r, x, b, d)		S390_RX(c, 0x50, r, x, b, d)
 #define s390_stam(c, r1, r2, b, d)	S390_RS_1(c, 0x9b, r1, r2, b, d)
 #define s390_stamy(c, r1, r2, b, d)	S390_RSY_1(c, 0xeb9b, r1, r2, b, d)
